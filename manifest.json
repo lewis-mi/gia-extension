@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "Gia — Mindful 20-20-20",
+  "version": "0.1.0",
+  "description": "Every 20 minutes, take a 20-second break and look 20 feet away.",
+  "permissions": ["alarms", "storage"],
+  "optional_permissions": ["tts"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["ui/reminder.html", "styles/card.css", "assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "assets/icons/icon16.png",
+    "48": "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+  "action": { "default_title": "Gia" }
+}

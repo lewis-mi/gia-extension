@@ -1,0 +1,55 @@
+/* backdrop */
+#gia-break-card .gia-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(16,24,32,.35);
+  backdrop-filter: blur(2px);
+  z-index: 2147483646;
+}
+
+/* card */
+#gia-break-card .gia-card {
+  position: fixed; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(.98);
+  width: 420px; max-width: 90vw;
+  padding: 28px 32px;
+  border-radius: 24px;
+  background: linear-gradient(180deg,#E8F1F4 0%,#DDEAF1 100%);
+  box-shadow: 0 16px 48px rgba(0,0,0,.18);
+  z-index: 2147483647;
+  opacity: 0;
+  transition: opacity .32s ease, transform .32s ease;
+  text-align: center;
+  color: #25303A;
+  font-family: system-ui,-apple-system,"Inter",sans-serif;
+}
+#gia-break-card .gia-card.enter { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+#gia-break-card .gia-card.exit  { opacity: 0; transform: translate(-50%,-50%) scale(.98); }
+
+/* type */
+#gia-break-card .gia-pretitle { margin: 0 0 6px; font-size: 12px; letter-spacing: .12em; color:#5A6B78; }
+#gia-break-card .gia-title    { margin: 0 0 4px; font-size: 24px; font-weight: 800; }
+#gia-break-card .gia-subtitle { margin: 0 0 2px; font-weight: 600; color:#4A5E6C; }
+#gia-break-card .gia-instruction { margin: 8px 0 10px; color:#5C7080; }
+#gia-break-card .gia-hint { margin: 6px 0 0; font-style: italic; color:#6F7F8C; }
+
+/* starburst animation (replace with SVG if you prefer) */
+#gia-break-card .gia-starburst {
+  width: 200px; height: 200px; margin: 0 auto 10px;
+  background: radial-gradient(ellipse at center, #A0D1C2 0%, #6BA4B3 70%);
+  border-radius: 50%;
+  opacity: .95;
+  animation: gia-rotate 20s ease-in-out forwards, gia-breathe 20s ease-in-out forwards;
+}
+
+@keyframes gia-rotate { from { transform: rotate(0deg);} to { transform: rotate(24deg);} }
+@keyframes gia-breathe {
+  0% { opacity: 1; }
+  50% { opacity: .7; transform: rotate(12deg) scale(1.05); }
+  100% { opacity: 1; }
+}
+
+/* motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  #gia-break-card .gia-starburst { animation: none; }
+  #gia-break-card .gia-card { transition: none; }
+}
