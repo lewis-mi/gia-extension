@@ -1,10 +1,40 @@
 <div class="gia-backdrop" role="presentation"></div>
-<div class="gia-card" role="dialog" aria-labelledby="gia-title">
-  <div class="gia-starburst" aria-hidden="true"></div>
+
+<div class="gia-card" role="dialog" aria-labelledby="gia-title" aria-modal="true">
+  <button class="gia-close" aria-label="Close break reminder">×</button>
+
+  <!-- Static hero: green icon + countdown inside -->
+  <div class="gia-hero">
+    <img class="gia-hero-img" src="" alt="" aria-hidden="true" />
+    <span class="gia-hero-count" aria-live="polite">20s</span>
+  </div>
 
   <p id="gia-pretitle" class="gia-pretitle">TO PREVENT DIGITAL EYE STRAIN</p>
   <h2 id="gia-title" class="gia-title">TAKE A 20-SECOND BREAK</h2>
   <p class="gia-subtitle">EVERY 20 MINUTES</p>
   <p class="gia-instruction">LOOK AT SOMETHING 20 FEET AWAY</p>
-  <p class="gia-hint">Pause. Let your eyes rest.</p>
+
+  <p class="gia-hint">Press Esc or click outside to close.</p>
+</div>
+<div class="gia-backdrop" role="presentation"></div>
+
+<div class="gia-card" role="dialog" aria-labelledby="gia-title" aria-modal="true">
+  <button class="gia-close" aria-label="Close break reminder">×</button>
+
+  <div class="gia-hero">
+    <img class="gia-hero-img" src="" alt="" aria-hidden="true" />
+    <span class="gia-hero-count" aria-live="polite">20s</span>
+  </div>
+
+  <p id="gia-pretitle" class="gia-pretitle">TO PREVENT DIGITAL EYE STRAIN</p>
+  <h2 id="gia-title" class="gia-title">TAKE A 20-SECOND BREAK</h2>
+  <p class="gia-subtitle">EVERY 20 MINUTES</p>
+  <p class="gia-instruction">Look 20 feet away and soften your gaze.</p>
+
+  <div class="gia-voice">
+    <button class="gia-mic" aria-label="Start voice command" hidden>🎤</button>
+    <span class="gia-mic-status" hidden>Listening…</span>
+  </div>
+
+  <p class="gia-hint">Press Esc or click outside to close.</p>
 </div>
