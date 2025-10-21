@@ -1,0 +1,164 @@
+/* ===== GIA CORNER LOGO ===== */
+
+#gia-corner-logo {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  z-index: 2147483645;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0.6;
+}
+
+#gia-corner-logo:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.gia-corner-logo-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.15));
+}
+
+/* Stage-based opacity and glow */
+#gia-corner-logo.stage-0 {
+  opacity: 0.5;
+}
+
+#gia-corner-logo.stage-1 {
+  opacity: 0.6;
+}
+
+#gia-corner-logo.stage-2 {
+  opacity: 0.7;
+  filter: drop-shadow(0 0 8px rgba(126, 196, 189, 0.3));
+}
+
+#gia-corner-logo.stage-3 {
+  opacity: 0.85;
+  filter: drop-shadow(0 0 12px rgba(126, 196, 189, 0.5));
+}
+
+#gia-corner-logo.stage-4 {
+  opacity: 1;
+  filter: drop-shadow(0 0 16px rgba(126, 196, 189, 0.7));
+}
+
+/* Pulse animation for stages 3-4 */
+#gia-corner-logo.pulse {
+  animation: gia-pulse 2s ease-in-out infinite;
+}
+
+@keyframes gia-pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 12px rgba(126, 196, 189, 0.5));
+  }
+  50% {
+    transform: scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(126, 196, 189, 0.8));
+  }
+}
+
+/* Tooltip */
+.gia-corner-tooltip {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 12px;
+  background: rgba(30, 58, 58, 0.95);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-family: system-ui, -apple-system, sans-serif;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+#gia-corner-logo:hover .gia-corner-tooltip {
+  opacity: 1;
+}
+
+.gia-corner-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  right: 15px;
+  border: 6px solid transparent;
+  border-top-color: rgba(30, 58, 58, 0.95);
+}
+
+.gia-tooltip-time {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.gia-tooltip-hint {
+  font-size: 11px;
+  opacity: 0.85;
+  color: #b8d4d2;
+}
+
+/* Context Menu */
+.gia-context-menu {
+  position: fixed;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  min-width: 200px;
+  z-index: 2147483646;
+  font-family: system-ui, -apple-system, sans-serif;
+  animation: gia-menu-appear 0.15s ease;
+}
+
+@keyframes gia-menu-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.gia-context-item {
+  padding: 10px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  font-size: 14px;
+  color: #2d4a48;
+}
+
+.gia-context-item:hover {
+  background: #f0f9f8;
+}
+
+.gia-context-item:active {
+  background: #e0f0ee;
+}
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce) {
+  #gia-corner-logo,
+  .gia-corner-tooltip,
+  .gia-context-menu {
+    animation: none;
+    transition: none;
+  }
+  
+  #gia-corner-logo.pulse {
+    animation: none;
+  }
+}

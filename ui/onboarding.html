@@ -1,0 +1,96 @@
+cat > ui/onboarding.html <<'ENDFILE'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Gia</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #e8f5f3 0%, #d4ebe8 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      border-radius: 24px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+      max-width: 600px;
+      width: 100%;
+      padding: 60px 50px;
+      text-align: center;
+    }
+    .logo {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+    }
+    h1 {
+      font-size: 32px;
+      color: #1e3a3a;
+      margin-bottom: 12px;
+      font-weight: 300;
+    }
+    .tagline {
+      color: #5a8582;
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+    .rule {
+      background: #f0f9f8;
+      border-left: 4px solid #7ec4bd;
+      padding: 20px 24px;
+      margin: 30px 0;
+      border-radius: 8px;
+      text-align: left;
+      line-height: 1.7;
+      color: #2d4a48;
+    }
+    button {
+      background: #7ec4bd;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    button:hover {
+      background: #6ab3aa;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(126, 196, 189, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="../assets/icons/icon_0_start_128.png" alt="Gia" class="logo">
+    <h1>Welcome to Gia</h1>
+    <p class="tagline">Your mindful break companion</p>
+    
+    <div class="rule">
+      <strong style="font-size: 16px; display: block; margin-bottom: 12px;">Following the 20-20-20 rule:</strong>
+      Every <strong>20 minutes</strong>, look <strong>20 feet away</strong> for <strong>20 seconds</strong> to prevent digital eye strain and maintain healthy vision.
+    </div>
+
+    <button onclick="startSession()">Get Started</button>
+  </div>
+
+  <script>
+    function startSession() {
+      // Save that onboarding is complete
+      chrome.storage.local.set({ onboardingComplete: true });
+      // Close this tab
+      window.close();
+    }
+  </script>
+</body>
+</html>
+

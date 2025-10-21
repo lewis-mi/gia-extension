@@ -1,47 +1,60 @@
+
 {
   "manifest_version": 3,
   "name": "Gia — Mindful 20-20-20",
-  "version": "0.3.3",
-  "description": "Every 20 minutes, take a 20-second break and look 20 feet away. Built with Chrome's Built-in AI for mindful microbreaks.",
+  "version": "1.0.0",
+  "description": "Every 20 minutes, take a 20-second break and look 20 feet away. Built with Chrome's Built-in AI for mindful breaks.",
   "minimum_chrome_version": "138.0.0.0",
 
-  "permissions": ["alarms", "storage", "tts"],
+  "permissions": [
+    "alarms",
+    "storage",
+    "tts",
+    "contextMenus"
+  ],
 
-  "background": { "service_worker": "background.js" },
+  "background": {
+    "service_worker": "background.js"
+  },
 
-  ""action": {
-  "default_title": "Gia",
-  "default_popup": "ui/popup.html",
-  "default_icon": {
+  "action": {
+    "default_title": "Gia — Mindful Breaks",
+    "default_popup": "ui/popup.html",
+    "default_icon": {
+      "16": "assets/icons/icon_0_start.png",
+      "32": "assets/icons/icon_0_start_32.png",
+      "48": "assets/icons/icon_0_start_48.png",
+      "128": "assets/icons/icon_0_start_128.png"
+    }
+  },
+
+  "icons": {
     "16": "assets/icons/icon_0_start.png",
     "32": "assets/icons/icon_0_start_32.png",
     "48": "assets/icons/icon_0_start_48.png",
     "128": "assets/icons/icon_0_start_128.png"
-  }
-},
-
+  },
 
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "js": ["content.js"],
+      "css": ["styles/corner-logo.css", "styles/card.css"],
       "run_at": "document_idle"
     }
   ],
 
   "web_accessible_resources": [
     {
-      "resources": ["ui/reminder.html", "styles/card.css", "assets/*"],
+      "resources": [
+        "ui/*.html",
+        "styles/*.css",
+        "assets/icons/*",
+        "assets/logo.png"
+      ],
       "matches": ["<all_urls>"]
     }
   ],
-
-  "icons": {
-    "16":  "assets/icons/icon_0_start.png",
-    "32":  "assets/icons/icon_0_start_32.png",
-    "48":  "assets/icons/icon_0_start_48.png",
-    "128": "assets/icons/icon_0_start_128.png"
-  },
 
   "host_permissions": ["<all_urls>"],
 
@@ -49,25 +62,4 @@
     "AvdnaqGrVK1B7bHm1S38h7yo8VY7aTo5kxcQo5KCx4HEYr5M9BWNZ5rQOsID1AamBGPV3CVAcKcnSNLg3w5aRQoAAABueyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vYmVpa21nZWRrY3Bva2lqbWhpZW1ranBrbXBrYWloZ2YiLCJmZWF0dXJlIjoiQUlSZXdyaXRlckFQSSIsImV4cGlyeSI6MTc2OTQ3MjAwMH0="
   ]
 }
-const voiceEnabled = document.getElementById('voiceEnabled');
-const grantMic = document.getElementById('grantMic');
-const micStatus = document.getElementById('micStatus');
 
-(async () => {
-  const { voiceEnabled: v = false } = await chrome.storage.local.get('voiceEnabled');
-  voiceEnabled.checked = !!v;
-})();
-
-voiceEnabled.addEventListener('change', async () => {
-  await chrome.storage.local.set({ voiceEnabled: !!voiceEnabled.checked });
-});
-
-grantMic.addEventListener('click', async () => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    stream.getTracks().forEach(t => t.stop());
-    micStatus.textContent = 'Microphone granted ✓';
-  } catch (e) {
-    micStatus.textContent = 'Microphone denied';
-  }
-});

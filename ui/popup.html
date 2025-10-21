@@ -6,42 +6,70 @@
   <style>
     body {
       font: 14px system-ui, sans-serif;
-      margin: 14px;
+      margin: 0;
+      padding: 16px;
       color: #24333e;
-      width: 260px;
+      width: 320px;
+      background: linear-gradient(180deg, #f8fbfc 0%, #f2f6f8 100%);
     }
     h1 {
-      font-size: 16px;
-      margin: 0 0 12px;
-      font-weight: 600;
+      font-size: 18px;
+      margin: 0 0 16px;
+      font-weight: 700;
+      color: #1c2230;
+      text-align: center;
+    }
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
     }
     label {
       display: flex;
       align-items: center;
-      gap: 8px;
-      margin: 8px 0;
+      gap: 10px;
+      margin: 10px 0;
+      cursor: pointer;
+      font-size: 14px;
     }
     input[type="checkbox"] {
-      transform: scale(1.2);
+      width: 18px;
+      height: 18px;
       cursor: pointer;
+      accent-color: #3a7c72;
     }
     button {
+      width: 100%;
       background: #3a7c72;
       color: white;
       border: none;
       border-radius: 8px;
-      padding: 8px 10px;
+      padding: 12px;
       font-size: 14px;
+      font-weight: 600;
       cursor: pointer;
-      width: 100%;
+      transition: background 0.2s;
+      margin-top: 8px;
     }
     button:hover { background: #2f6d64; }
-    .small { font-size: 12px; color: #6f7f8c; margin-top: 8px; }
+    .small { font-size: 12px; color: #6f7f8c; margin-top: 8px; line-height: 1.4; }
   </style>
 </head>
 <body>
-  <h1>Gia Settings</h1>
-
-  <label>
-    <input id="voiceEnabled" type="checkbox" />
-
+  <h1>⏰ Gia Settings</h1>
+  <div class="section">
+    <label>
+      <input id="voiceEnabled" type="checkbox" />
+      <span>Enable voice commands</span>
+    </label>
+    <div class="small">Say "snooze" or "dismiss" during breaks.</div>
+  </div>
+  <div class="section">
+    <p class="small"><strong>20-20-20 Rule:</strong> Every 20 minutes, look 20 feet away for 20 seconds.</p>
+  </div>
+  <button id="takeBreakNow">Take Break Now</button>
+  <script src="popup.js"></script>
+</body>
+</html>
