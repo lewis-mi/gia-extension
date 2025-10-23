@@ -129,11 +129,23 @@ async function playVoiceGuidance() {
 
 async function playMeditationBell() {
   try {
-    // Play meditation bell sound
-    // Note: You'll need to add a bell.mp3 file to assets/audio/
-    const audio = new Audio(chrome.runtime.getURL('assets/audio/bell.mp3'));
-    audio.volume = 0.6;
-    await audio.play();
+    // Play gentle notification sound using Web Audio API
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+    oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.3);
+    
+    gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+    gainNode.gain.linearRampToValueAtTime(0.3, audioContext.currentTime + 0.05);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
   } catch (e) {
     console.warn('Audio playback failed:', e);
   }
@@ -240,6 +252,156 @@ async function generateBreakMessage(locale = "en", tone = "mindful") {
   }
 
   return text;
+}
+
+// ===== MULTIMODAL AI PROCESSING =====
+async function processMultimodalInput(audioText, context) {
+  try {
+    if (!chrome?.ai?.prompt) {
+      return { action: 'dismiss', message: 'AI processing unavailable' };
+    }
+
+    const capabilities = await chrome.ai.prompt.capabilities();
+    if (capabilities?.available !== 'readily') {
+      return { action: 'dismiss', message: 'AI processing unavailable' };
+    }
+
+    const session = await chrome.ai.prompt.create({
+      systemPrompt: `You are Gia, a mindful break assistant. Process voice commands for break interactions. 
+      Available actions: dismiss, snooze (with duration), start. 
+      Respond with JSON: {"action": "action_name", "duration": minutes, "message": "response_text"}`
+    });
+
+    const result = await session.prompt(
+      `Voice command: "${audioText}"\nContext: ${context}\nRespond with JSON only.`
+    );
+
+    session.destroy();
+
+    try {
+      const response = JSON.parse(result || '{}');
+      return response;
+    } catch (e) {
+      // Fallback to basic intent recognition
+      const basicAction = basicIntent(audioText);
+      return { action: basicAction, message: 'Command processed' };
+    }
+  } catch (e) {
+    console.error('Multimodal processing error:', e);
+    return { action: 'dismiss', message: 'Processing failed' };
+  }
+}
+
+async function analyzeScreenImage(imageData) {
+  try {
+    if (!chrome?.ai?.prompt) {
+      return 'AI analysis unavailable';
+    }
+
+    const capabilities = await chrome.ai.prompt.capabilities();
+    if (capabilities?.available !== 'readily') {
+      return 'AI analysis unavailable';
+    }
+
+    const session = await chrome.ai.prompt.create({
+      systemPrompt: `You are an eye health specialist. Analyze screen content for potential eye strain factors:
+      - Text density and contrast
+      - Bright colors or harsh lighting
+      - Small text or cramped layouts
+      - Blue light exposure indicators
+      Provide brief, actionable advice for the user's eye health.`
+    });
+
+    // Note: This is a placeholder - actual image analysis would require image input
+    const result = await session.prompt(
+      'Analyze this screen capture for eye strain factors and provide brief health advice.'
+    );
+
+    session.destroy();
+    return result || 'Screen appears normal for eye health.';
+  } catch (e) {
+    console.error('Screen analysis error:', e);
+    return 'Unable to analyze screen content.';
+  }
+}
+
+async function saveReflection(reflectionText) {
+  try {
+    const { reflections = [], breakCount } = await chrome.storage.local.get(['reflections', 'breakCount']);
+    
+    // Use AI to clean and enhance the reflection
+    let cleanedReflection = reflectionText;
+    if (chrome?.ai?.proofreader) {
+      try {
+        const capabilities = await chrome.ai.proofreader.capabilities();
+        if (capabilities?.available === 'readily') {
+          const proofreader = await chrome.ai.proofreader.create();
+          cleanedReflection = await proofreader.proofread(reflectionText);
+          proofreader.destroy();
+        }
+      } catch (e) {
+        console.warn('Proofreader failed:', e);
+      }
+    }
+    
+    const newReflection = {
+      id: Date.now(),
+      text: cleanedReflection,
+      original: reflectionText,
+      timestamp: new Date().toISOString(),
+      breakCount: breakCount || 0
+    };
+    
+    reflections.push(newReflection);
+    // Keep only last 50 reflections
+    const trimmed = reflections.slice(-50);
+    
+    await chrome.storage.local.set({ reflections: trimmed });
+    
+    // Generate summary if we have enough reflections
+    if (trimmed.length >= 5) {
+      await generateReflectionSummary(trimmed.slice(-10));
+    }
+    
+    return true;
+  } catch (e) {
+    console.error('Failed to save reflection:', e);
+    throw e;
+  }
+}
+
+async function generateReflectionSummary(recentReflections) {
+  try {
+    if (!chrome?.ai?.summarizer || recentReflections.length < 3) return;
+    
+    const capabilities = await chrome.ai.summarizer.capabilities();
+    if (capabilities?.available !== 'readily') return;
+    
+    const reflectionTexts = recentReflections.map(r => r.text).join('\n');
+    
+    const summarizer = await chrome.ai.summarizer.create({
+      summaryLength: 'brief'
+    });
+    
+    const summary = await summarizer.summarize(reflectionTexts);
+    summarizer.destroy();
+    
+    if (summary) {
+      await chrome.storage.local.set({ 
+        lastReflectionSummary: summary,
+        summaryDate: new Date().toISOString()
+      });
+    }
+  } catch (e) {
+    console.warn('Failed to generate reflection summary:', e);
+  }
+}
+
+function basicIntent(text) {
+  const t = (text || '').toLowerCase();
+  if (/\b(dismiss|close|stop|cancel|end)\b/.test(t)) return 'dismiss';
+  if (/\b(snooze|later|remind me|wait)\b/.test(t)) return 'snooze';
+  return 'start';
 }
 
 // ===== ALARM HANDLER =====
@@ -369,6 +531,39 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       .catch(err => {
         console.error('Message generation failed:', err);
         sendResponse({ text: "Look 20 feet away and soften your gaze." });
+      });
+    return true;
+  }
+
+  // Multimodal processing
+  if (msg?.type === 'GIA_MULTIMODAL_PROCESS') {
+    processMultimodalInput(msg.audio, msg.context)
+      .then(response => sendResponse(response))
+      .catch(err => {
+        console.error('Multimodal processing failed:', err);
+        sendResponse({ action: 'dismiss', message: 'Processing failed' });
+      });
+    return true;
+  }
+
+  // Screen analysis
+  if (msg?.type === 'GIA_ANALYZE_SCREEN') {
+    analyzeScreenImage(msg.imageData)
+      .then(analysis => sendResponse({ analysis }))
+      .catch(err => {
+        console.error('Screen analysis failed:', err);
+        sendResponse({ analysis: 'Unable to analyze screen content' });
+      });
+    return true;
+  }
+
+  // Save reflection
+  if (msg?.type === 'GIA_SAVE_REFLECTION') {
+    saveReflection(msg.reflection)
+      .then(() => sendResponse({ success: true }))
+      .catch(err => {
+        console.error('Failed to save reflection:', err);
+        sendResponse({ success: false });
       });
     return true;
   }

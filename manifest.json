@@ -10,7 +10,8 @@
     "alarms",
     "storage",
     "tts",
-    "contextMenus"
+    "contextMenus",
+    "activeTab"
   ],
 
   "background": {
@@ -50,7 +51,7 @@
         "ui/*.html",
         "styles/*.css",
         "assets/icons/*",
-        "assets/logo.png"
+        "assets/icons/icon_0_start_32.png"
       ],
       "matches": ["<all_urls>"]
     }

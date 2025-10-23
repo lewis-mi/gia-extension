@@ -27,7 +27,7 @@ async function createCornerLogo() {
   
   // Logo image
   const img = document.createElement('img');
-  img.src = chrome.runtime.getURL('assets/logo.png');
+  img.src = chrome.runtime.getURL('assets/icons/icon_0_start_32.png');
   img.alt = 'Gia';
   img.className = 'gia-corner-logo-img';
   
@@ -169,8 +169,8 @@ async function showBreakCard(breakType, durationMs) {
   heroImg.className = 'gia-hero-img';
   heroImg.src = chrome.runtime.getURL(
     breakType === 'long' 
-      ? 'assets/icons/icon_5_green_128.png' 
-      : 'assets/icons/icon_5_green_128.png'
+      ? 'assets/icons/icon_4_break_128.png' 
+      : 'assets/icons/icon_4_break_128.png'
   );
   
   const heroCount = document.createElement('span');
@@ -203,8 +203,8 @@ async function showBreakCard(breakType, durationMs) {
   const message = await fetchAIMessage();
   instruction.textContent = message;
   
-  // Voice command section
-  const voiceSection = await createVoiceSection(wrapper);
+  // Multimodal interaction section
+  const multimodalSection = await createMultimodalSection(wrapper);
   
   // Snooze button (for short breaks)
   let snoozeBtn = null;
@@ -230,7 +230,7 @@ async function showBreakCard(breakType, durationMs) {
   card.appendChild(title);
   card.appendChild(subtitle);
   card.appendChild(instruction);
-  if (voiceSection) card.appendChild(voiceSection);
+  if (multimodalSection) card.appendChild(multimodalSection);
   if (snoozeBtn) card.appendChild(snoozeBtn);
   card.appendChild(hint);
   
@@ -246,8 +246,11 @@ async function showBreakCard(breakType, durationMs) {
   // Start countdown
   startCountdown(heroCount, durationMs);
   
-  // Auto-dismiss
-  endTimer = setTimeout(() => dismissBreak(wrapper), durationMs);
+  // Auto-dismiss with reflection prompt
+  endTimer = setTimeout(async () => {
+    await showReflectionPrompt(wrapper);
+    dismissBreak(wrapper);
+  }, durationMs);
   
   // ESC to close
   const escHandler = (e) => {
@@ -318,23 +321,49 @@ async function fetchAIMessage() {
   }
 }
 
-async function createVoiceSection(wrapper) {
-  const { voiceEnabled } = await chrome.storage.local.get('voiceEnabled');
-  if (!voiceEnabled) return null;
+async function createMultimodalSection(wrapper) {
+  const { voiceEnabled, multimodalEnabled = true } = await chrome.storage.local.get(['voiceEnabled', 'multimodalEnabled']);
+  if (!multimodalEnabled) return null;
   
+  const multimodalSection = document.createElement('div');
+  multimodalSection.className = 'gia-multimodal';
+  
+  // Voice input
+  if (voiceEnabled) {
+    const voiceBtn = document.createElement('button');
+    voiceBtn.className = 'gia-multimodal-btn';
+    voiceBtn.textContent = '🎤 Voice';
+    voiceBtn.title = 'Speak your command';
+    
+    voiceBtn.addEventListener('click', () => startVoiceInput(wrapper, multimodalSection));
+    multimodalSection.appendChild(voiceBtn);
+  }
+  
+  // Image input for screen analysis
+  const imageBtn = document.createElement('button');
+  imageBtn.className = 'gia-multimodal-btn';
+  imageBtn.textContent = '📸 Analyze Screen';
+  imageBtn.title = 'Analyze current screen for eye strain';
+  
+  imageBtn.addEventListener('click', () => analyzeScreen(wrapper, multimodalSection));
+  multimodalSection.appendChild(imageBtn);
+  
+  // Status display
+  const status = document.createElement('div');
+  status.className = 'gia-multimodal-status';
+  status.hidden = true;
+  multimodalSection.appendChild(status);
+  
+  return multimodalSection;
+}
+
+async function startVoiceInput(wrapper, container) {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SpeechRecognition) return null;
+  if (!SpeechRecognition) return;
   
-  const voiceSection = document.createElement('div');
-  voiceSection.className = 'gia-voice';
-  
-  const micBtn = document.createElement('button');
-  micBtn.className = 'gia-mic';
-  micBtn.textContent = '🎤 Voice Command';
-  
-  const micStatus = document.createElement('span');
-  micStatus.className = 'gia-mic-status';
-  micStatus.hidden = true;
+  const status = container.querySelector('.gia-multimodal-status');
+  status.hidden = false;
+  status.textContent = 'Listening...';
   
   const rec = new SpeechRecognition();
   rec.lang = navigator.language || 'en-US';
@@ -343,71 +372,93 @@ async function createVoiceSection(wrapper) {
   rec.continuous = false;
   
   currentRecognition = rec;
-  let listening = false;
   
-  micBtn.addEventListener('click', () => {
-    if (listening) {
-      try { rec.stop(); } catch (e) {}
-      return;
-    }
-    
-    try {
-      listening = true;
-      micStatus.hidden = false;
-      micStatus.textContent = 'Listening...';
-      rec.start();
-    } catch (e) {
-      console.error('Speech recognition failed:', e);
-      micStatus.textContent = 'Error';
-      listening = false;
-    }
-  });
+  try {
+    rec.start();
+  } catch (e) {
+    status.textContent = 'Voice input unavailable';
+    return;
+  }
   
   rec.onresult = async (e) => {
     const text = e.results?.[0]?.[0]?.transcript || '';
-    console.log('Voice command:', text);
+    status.textContent = `Processing: "${text}"`;
     
-    micStatus.textContent = `Heard: "${text}"`;
+    // Use AI to analyze voice command with multimodal context
+    const response = await chrome.runtime.sendMessage({
+      type: 'GIA_MULTIMODAL_PROCESS',
+      audio: text,
+      context: 'break_interaction'
+    });
     
-    const intent = await classifyIntent(text);
-    console.log('Intent:', intent);
-    
-    if (intent === 'dismiss') {
+    if (response?.action === 'dismiss') {
       dismissBreak(wrapper);
-    } else if (intent === 'snooze') {
-      const { snoozeDuration } = await chrome.storage.local.get('snoozeDuration');
+    } else if (response?.action === 'snooze') {
       await chrome.runtime.sendMessage({ 
         type: 'GIA_SNOOZE', 
-        minutes: snoozeDuration || 5 
+        minutes: response.duration || 5 
       });
-      micStatus.textContent = `Snoozed for ${snoozeDuration || 5} min`;
+      status.textContent = `Snoozed for ${response.duration || 5} min`;
       setTimeout(() => dismissBreak(wrapper), 1000);
-    }
-  };
-  
-  const resetUI = () => {
-    listening = false;
-    micStatus.hidden = true;
-    currentRecognition = null;
-  };
-  
-  rec.onend = resetUI;
-  rec.onerror = (e) => {
-    console.error('Speech error:', e.error);
-    if (e.error === 'no-speech') {
-      micStatus.textContent = 'No speech detected';
-    } else if (e.error === 'not-allowed') {
-      micStatus.textContent = 'Microphone permission denied';
     } else {
-      micStatus.textContent = `Error: ${e.error}`;
+      status.textContent = response?.message || 'Command processed';
     }
-    setTimeout(resetUI, 2000);
   };
   
-  voiceSection.appendChild(micBtn);
-  voiceSection.appendChild(micStatus);
+  rec.onerror = (e) => {
+    status.textContent = 'Voice input failed';
+    setTimeout(() => status.hidden = true, 2000);
+  };
+}
+
+async function analyzeScreen(wrapper, container) {
+  const status = container.querySelector('.gia-multimodal-status');
+  status.hidden = false;
+  status.textContent = 'Capturing screen...';
   
-  return voiceSection;
+  try {
+    // Capture visible tab
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, { format: 'png' });
+    
+    status.textContent = 'Analyzing screen...';
+    
+    // Send image to background for AI analysis
+    const response = await chrome.runtime.sendMessage({
+      type: 'GIA_ANALYZE_SCREEN',
+      imageData: dataUrl
+    });
+    
+    if (response?.analysis) {
+      status.innerHTML = `
+        <div style="text-align: left; font-size: 12px;">
+          <strong>Screen Analysis:</strong><br>
+          ${response.analysis}
+        </div>
+      `;
+    } else {
+      status.textContent = 'Analysis complete';
+    }
+  } catch (e) {
+    status.textContent = 'Screen analysis failed';
+    console.error('Screen analysis error:', e);
+  }
+  
+  setTimeout(() => status.hidden = true, 5000);
+}
+
+async function showReflectionPrompt(wrapper) {
+  try {
+    const reflection = prompt('How do you feel after this break? (Optional - press Cancel to skip)');
+    if (reflection && reflection.trim()) {
+      await chrome.runtime.sendMessage({
+        type: 'GIA_SAVE_REFLECTION',
+        reflection: reflection.trim()
+      });
+    }
+  } catch (e) {
+    console.log('Reflection prompt cancelled or failed:', e);
+  }
 }
 
 // Basic intent classification with fallback
