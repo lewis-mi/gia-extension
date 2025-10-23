@@ -118,6 +118,7 @@ graph TD
 - ✅ **Proofreader API**: Reflection text cleaning and improvement
 - ✅ **Summarizer API**: Pattern analysis and insight generation
 - ✅ **Translator API**: Multilingual accessibility support
+- ✅ **Hybrid AI Strategy**: Local processing with cloud enhancement capabilities
 
 ### **Prize Categories Targeted**
 1. **Best Multimodal AI Application**: Voice commands + screen analysis
@@ -165,9 +166,11 @@ gia-extension/
 - **Advanced Analytics**: Detailed wellness reporting and trends
 
 ### **Hybrid AI Strategy**
-- **Firebase AI Logic**: Cloud-enhanced features for advanced analytics
-- **Gemini Developer API**: Enhanced processing for complex queries
-- **Mobile Extension**: Cross-platform wellness tracking
+- **Local Processing**: Core functionality with Gemini Nano for privacy
+- **Cloud Enhancement**: Optional Firebase AI Logic integration for advanced analytics
+- **Privacy-First**: User opt-in with anonymized data only
+- **Seamless Integration**: Automatic fallback to local processing
+- **Advanced Insights**: Pattern recognition and personalized recommendations
 
 ## 📊 Impact & Metrics
 

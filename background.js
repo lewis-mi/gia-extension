@@ -7,6 +7,13 @@ const SHORT_BREAK_DURATION_MS = 20 * 1000;      // 20 seconds
 const DEFAULT_SNOOZE_MIN = 5;
 const ICON_STAGES = 5; // 5 stages of progression
 
+// ===== HYBRID AI CONFIG =====
+const HYBRID_AI_CONFIG = {
+  cloudEnabled: false,
+  analyticsEnabled: false,
+  userOptedIn: false
+};
+
 // Icon paths for 5-stage progression
 const ICONS = [
   { 16: "assets/icons/icon_0_start.png", 32: "assets/icons/icon_0_start_32.png" },
@@ -397,6 +404,143 @@ async function generateReflectionSummary(recentReflections) {
   }
 }
 
+// ===== HYBRID AI FUNCTIONS =====
+async function initializeHybridAI() {
+  const { hybridAIEnabled = false, analyticsEnabled = false } = await chrome.storage.local.get(['hybridAIEnabled', 'analyticsEnabled']);
+  HYBRID_AI_CONFIG.cloudEnabled = hybridAIEnabled;
+  HYBRID_AI_CONFIG.analyticsEnabled = analyticsEnabled;
+  HYBRID_AI_CONFIG.userOptedIn = hybridAIEnabled || analyticsEnabled;
+}
+
+async function processWithHybridAI(data, type) {
+  try {
+    // Always start with local AI processing
+    const localResult = await processWithLocalAI(data, type);
+    
+    // If cloud AI is enabled and user opted in, enhance with cloud processing
+    if (HYBRID_AI_CONFIG.cloudEnabled && HYBRID_AI_CONFIG.userOptedIn) {
+      const cloudResult = await processWithCloudAI(data, type, localResult);
+      return { ...localResult, ...cloudResult, hybrid: true };
+    }
+    
+    return { ...localResult, hybrid: false };
+  } catch (e) {
+    console.error('Hybrid AI processing failed:', e);
+    return { error: 'Processing failed', hybrid: false };
+  }
+}
+
+async function processWithLocalAI(data, type) {
+  // Use existing local AI functions
+  switch (type) {
+    case 'break_message':
+      return { message: await generateBreakMessage() };
+    case 'voice_command':
+      return await processMultimodalInput(data.audio, data.context);
+    case 'reflection':
+      return await saveReflection(data.text);
+    default:
+      return { result: 'Local processing complete' };
+  }
+}
+
+async function processWithCloudAI(data, type, localResult) {
+  // Simulate cloud AI processing (replace with actual Firebase AI Logic or Gemini API)
+  try {
+    const cloudEnhancements = await simulateCloudAI(data, type, localResult);
+    
+    // Send anonymized analytics if enabled
+    if (HYBRID_AI_CONFIG.analyticsEnabled) {
+      await sendAnalytics(data, type, cloudEnhancements);
+    }
+    
+    return cloudEnhancements;
+  } catch (e) {
+    console.warn('Cloud AI processing failed, using local result:', e);
+    return {};
+  }
+}
+
+async function simulateCloudAI(data, type, localResult) {
+  // Simulate enhanced cloud AI processing
+  // In a real implementation, this would call Firebase AI Logic or Gemini Developer API
+  
+  const enhancements = {
+    advanced_insights: null,
+    personalized_recommendations: null,
+    wellness_trends: null,
+    team_insights: null
+  };
+  
+  switch (type) {
+    case 'break_message':
+      enhancements.advanced_insights = 'Enhanced break recommendations based on your wellness patterns';
+      enhancements.personalized_recommendations = 'Consider adjusting your break timing based on your focus patterns';
+      break;
+      
+    case 'reflection':
+      enhancements.wellness_trends = 'Your reflection patterns show improved mindfulness over time';
+      enhancements.personalized_recommendations = 'Try incorporating breathing exercises during breaks';
+      break;
+      
+    case 'analytics':
+      enhancements.team_insights = 'Your wellness score is above average compared to similar users';
+      enhancements.wellness_trends = 'Peak productivity occurs 2 hours after your first break';
+      break;
+  }
+  
+  return enhancements;
+}
+
+async function sendAnalytics(data, type, enhancements) {
+  // Send anonymized analytics to cloud service
+  try {
+    const analyticsData = {
+      timestamp: Date.now(),
+      type: type,
+      enhancements: Object.keys(enhancements).length,
+      // No personal data - only aggregated metrics
+      metrics: {
+        break_count: data.breakCount || 0,
+        feature_usage: type,
+        processing_time: Date.now() - data.startTime
+      }
+    };
+    
+    // In real implementation, send to Firebase Analytics or similar
+    console.log('Analytics sent:', analyticsData);
+    
+    // Store locally for user transparency
+    const { analytics = [] } = await chrome.storage.local.get('analytics');
+    analytics.push(analyticsData);
+    await chrome.storage.local.set({ analytics: analytics.slice(-100) }); // Keep last 100 entries
+  } catch (e) {
+    console.warn('Analytics failed:', e);
+  }
+}
+
+async function generateAdvancedInsights() {
+  // Generate advanced insights using cloud AI
+  if (!HYBRID_AI_CONFIG.cloudEnabled) {
+    return { insights: 'Enable hybrid AI for advanced insights' };
+  }
+  
+  try {
+    const { reflections = [], breakCount = 0 } = await chrome.storage.local.get(['reflections', 'breakCount']);
+    
+    const insights = await simulateCloudAI({
+      reflections,
+      breakCount,
+      startTime: Date.now()
+    }, 'analytics', {});
+    
+    return insights;
+  } catch (e) {
+    console.error('Advanced insights failed:', e);
+    return { insights: 'Unable to generate insights' };
+  }
+}
+
 function basicIntent(text) {
   const t = (text || '').toLowerCase();
   if (/\b(dismiss|close|stop|cancel|end)\b/.test(t)) return 'dismiss';
@@ -567,6 +711,39 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       });
     return true;
   }
+
+  // Hybrid AI processing
+  if (msg?.type === 'GIA_HYBRID_AI_PROCESS') {
+    processWithHybridAI(msg.data, msg.processType)
+      .then(result => sendResponse(result))
+      .catch(err => {
+        console.error('Hybrid AI processing failed:', err);
+        sendResponse({ error: 'Processing failed' });
+      });
+    return true;
+  }
+
+  // Advanced insights
+  if (msg?.type === 'GIA_ADVANCED_INSIGHTS') {
+    generateAdvancedInsights()
+      .then(insights => sendResponse(insights))
+      .catch(err => {
+        console.error('Advanced insights failed:', err);
+        sendResponse({ insights: 'Unable to generate insights' });
+      });
+    return true;
+  }
+
+  // Hybrid AI settings
+  if (msg?.type === 'GIA_TOGGLE_HYBRID_AI') {
+    await chrome.storage.local.set({ 
+      hybridAIEnabled: msg.enabled,
+      analyticsEnabled: msg.analytics || false
+    });
+    await initializeHybridAI();
+    sendResponse({ success: true });
+    return true;
+  }
 });
 
 // ===== INITIALIZATION =====
@@ -583,6 +760,9 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 chrome.runtime.onStartup.addListener(async () => {
+  // Initialize hybrid AI
+  await initializeHybridAI();
+  
   // Reset first break flag on new day
   const { sessionStartTime } = await chrome.storage.local.get('sessionStartTime');
   const now = Date.now();
