@@ -6,14 +6,14 @@
   "description": "Voice-guided 20-20-20 with optional long resets and on-device AI tips.",
   "icons": { "128": "assets/logo.png", "48": "assets/logo.png", "32": "assets/logo.png", "16": "assets/logo.png" },
 
-  "action": { "default_title": "Gia", "default_popup": "popup.html" },
+  "action": { "default_title": "Gia", "default_popup": "ui/popup.html" },
 
   "background": { "service_worker": "background.js", "type": "module" },
 
   "permissions": [
     "alarms", "notifications", "storage", "tts", "offscreen"
   ],
-  "optional_permissions": ["tts"],
+  "optional_permissions": [],
   "host_permissions": ["<all_urls>"],
 
   "commands": {

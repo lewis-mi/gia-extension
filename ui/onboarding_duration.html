@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to Gia</title>
+  <title>Duration & Long Breaks</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -64,40 +64,37 @@
       line-height: 32px;
     }
     
-    .explainer {
-      font-size: 14px;
-      color: var(--Schemes-On-Surface-Variant);
-      margin-bottom: 24px;
-      line-height: 20px;
-      letter-spacing: 0.25px;
-    }
-    
-    .toggle-section {
+    .section {
       margin-bottom: 20px;
     }
     
-    .toggle-label {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    
-    .toggle-label-text {
+    .label {
       font-size: 14px;
       color: var(--Schemes-On-Surface);
+      margin-bottom: 8px;
+      display: block;
       font-weight: 400;
-      flex: 1;
     }
     
-    .toggle-label-badge {
+    .helper {
       font-size: 12px;
-      color: var(--Schemes-Outline);
-      margin-left: 8px;
+      color: var(--Schemes-On-Surface-Variant);
+      margin-top: 4px;
       font-weight: 400;
     }
     
-    .toggle {
+    .time-input {
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: var(--Schemes-On-Surface);
+      width: 100%;
+      cursor: pointer;
+    }
+    
+    .toggle-section {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -105,19 +102,11 @@
       background: white;
       border-radius: 16px;
       border: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 8px;
     }
     
     .toggle-info {
-      display: flex;
-      flex-direction: column;
       flex: 1;
-    }
-    
-    .toggle-helper {
-      font-size: 12px;
-      color: var(--Schemes-On-Surface-Variant);
-      margin-top: 4px;
-      font-weight: 400;
     }
     
     .toggle-switch {
@@ -150,23 +139,50 @@
       transform: translateX(20px);
     }
     
-    .dropdown {
+    .duration-selects {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .duration-select {
+      flex: 1;
       padding: 12px 16px;
       background: white;
       border-radius: 16px;
       border: 1px solid rgba(0,0,0,0.1);
       font-size: 14px;
       color: var(--Schemes-On-Surface);
-      width: 100%;
       cursor: pointer;
+    }
+    
+    .checkbox-section {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-top: 12px;
+    }
+    
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: var(--Schemes-Primary);
+    }
+    
+    .checkbox-info {
+      flex: 1;
     }
     
     .button-container {
       margin-top: 32px;
       display: flex;
-      gap: 12px;
+      gap: 8px;
       justify-content: space-between;
-      align-items: center;
     }
     
     .button {
@@ -180,6 +196,15 @@
       transition: all 0.2s;
     }
     
+    .button-outline {
+      background: transparent;
+      color: var(--Schemes-Outline);
+    }
+    
+    .button-outline:hover {
+      background: rgba(0,0,0,0.05);
+    }
+    
     .button-primary {
       background: var(--Schemes-Primary);
       color: white;
@@ -189,71 +214,74 @@
     .button-primary:hover {
       background: #5a43a0;
     }
+    
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
   <div class="main-container">
     <div class="container">
-      <div class="progress-indicator">Step 1 of 3</div>
+      <div class="progress-indicator">Step 3 of 3</div>
       
-      <h1>Setup</h1>
-      <p class="explainer">Keep your digital wellness in check with eye breaks to prevent strain.</p>
+      <h1>Duration & Long Breaks</h1>
       
-      <!-- Toggle for audio reminders -->
-      <div class="toggle-section">
-        <div class="toggle-label">
-          <span class="toggle-label-text">Read reminders out loud?</span>
-          <span class="toggle-label-badge">Recommended</span>
-        </div>
-        <div class="toggle" id="audioToggle">
-          <div class="toggle-info">
-            <div class="toggle-helper">Hear break reminders read aloud</div>
-          </div>
-          <div class="toggle-switch active">
-            <div class="toggle-switch-knob"></div>
-          </div>
-        </div>
+      <!-- End time -->
+      <div class="section">
+        <label class="label">End time</label>
+        <input type="time" id="endTime" class="time-input" value="18:00">
+        <div class="helper">Local time zone</div>
       </div>
       
-      <!-- Toggle for voice commands -->
-      <div class="toggle-section">
-        <div class="toggle-label">
-          <span class="toggle-label-text">Enable voice commands?</span>
-        </div>
-        <div class="toggle" id="voiceCommandsToggle">
+      <!-- Toggle for longer breaks -->
+      <div class="section">
+        <div class="toggle-section" id="longBreaksToggle">
           <div class="toggle-info">
-            <div class="toggle-helper">Say "snooze" or "dismiss" during breaks</div>
+            <div class="label">Would you like to also take long breaks?</div>
+            <div class="helper">Recommended for extended work sessions</div>
           </div>
           <div class="toggle-switch">
             <div class="toggle-switch-knob"></div>
           </div>
         </div>
+        
+        <!-- Duration selects (hidden by default) -->
+        <div id="durationControls" class="hidden">
+          <div class="duration-selects">
+            <select id="breakLength" class="duration-select">
+              <option value="2">2 min</option>
+              <option value="5" selected>5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+            </select>
+            <select id="breakFrequency" class="duration-select">
+              <option value="40">Every 40 min</option>
+              <option value="60" selected>Every 60 min</option>
+              <option value="90">Every 90 min</option>
+              <option value="120">Every 120 min</option>
+            </select>
+          </div>
+        </div>
       </div>
       
-      <!-- Language dropdown -->
-      <div class="toggle-section">
-        <div class="toggle-label">
-          <span class="toggle-label-text">Language</span>
+      <!-- Phone haptics checkbox -->
+      <div class="checkbox-section">
+        <input type="checkbox" id="phoneHaptics" class="checkbox">
+        <div class="checkbox-info">
+          <div class="label">Phone haptics</div>
+          <div class="helper">Feel gentle buzz cues during long breaks</div>
         </div>
-        <select class="dropdown" id="languageSelect">
-          <option value="auto">Auto-detect</option>
-          <option value="en">English</option>
-          <option value="es">Español</option>
-          <option value="fr">Français</option>
-          <option value="de">Deutsch</option>
-        </select>
       </div>
       
       <div class="button-container">
-        <div>
-          <button id="demoBtn" class="button button-outline">🚀 Try Demo</button>
-          <div style="font-size: 11px; color: var(--Schemes-Outline); margin-top: 4px; margin-left: 4px;">Skip setup and try Gia now</div>
-        </div>
-        <button id="continueBtn" class="button button-primary">Continue</button>
+        <button id="backBtn" class="button button-outline">← Back</button>
+        <button id="completeBtn" class="button button-primary">Get Started</button>
       </div>
     </div>
   </div>
 
-  <script src="onboarding.js"></script>
+  <script src="onboarding_duration.js"></script>
 </body>
 </html>
+

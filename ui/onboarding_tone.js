@@ -22,34 +22,17 @@ function init() {
   const skipBtn = document.getElementById('skipBtn');
   const successMessage = document.getElementById('successMessage');
   
-  // Handle tone selection and complete onboarding
-  async function completeOnboarding(tone, showSuccess = true) {
+  // Handle tone selection and navigate to next screen
+  async function proceedToNextScreen(tone) {
     if (hasCompleted) return; // Prevent double-submission
     hasCompleted = true;
-    
-    // Show success message
-    if (showSuccess && successMessage) {
-      successMessage.classList.add('show');
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      successMessage.classList.remove('show');
-      await new Promise(resolve => setTimeout(resolve, 300));
-    }
     
     // Save the selected tone
     await setSettings({ tipTone: tone });
     
-    // Mark onboarding as complete
-    await chrome.storage.local.set({ onboardingComplete: true });
-    
-    // Start the session
-    try {
-      await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
-    } catch (e) {
-      console.warn('Could not send reschedule message:', e);
-    }
-    
-    // Close the tab
-    window.close();
+    // Navigate to duration/schedule screen
+    const durationPageUrl = chrome.runtime.getURL('ui/onboarding_duration.html');
+    window.location.href = durationPageUrl;
   }
   
   // Handle tone selection (don't auto-complete, just select)
@@ -82,10 +65,10 @@ function init() {
     });
   }
   
-  // Skip button - use default Mindful tone
+  // Skip button - use default Mindful tone and proceed
   if (skipBtn) {
     skipBtn.addEventListener('click', async () => {
-      await completeOnboarding('mindful', true);
+      await proceedToNextScreen('mindful');
     });
   }
   
@@ -93,16 +76,16 @@ function init() {
   if (goofyBtn) {
     goofyBtn.addEventListener('click', () => {
       selectTone('goofy');
-      // Auto-complete after 1 second
-      setTimeout(() => completeOnboarding('goofy', true), 1000);
+      // Navigate to next screen after brief delay
+      setTimeout(() => proceedToNextScreen('goofy'), 1000);
     });
   }
   
   if (mindfulBtn) {
     mindfulBtn.addEventListener('click', () => {
       selectTone('mindful');
-      // Auto-complete after 1 second
-      setTimeout(() => completeOnboarding('mindful', true), 1000);
+      // Navigate to next screen after brief delay
+      setTimeout(() => proceedToNextScreen('mindful'), 1000);
     });
   }
 }

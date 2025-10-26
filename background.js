@@ -120,21 +120,26 @@ async function notifyLongBreak() {
   });
 }
 
-chrome.notifications.onButtonClicked.addListener(async (notifId, btnIdx) => {
-  if (!notifId.startsWith("gia-")) return;
+// Register notifications button click listener
+chrome.notifications?.onButtonClicked?.addListener(async (notifId, btnIdx) => {
+  if (!notifId?.startsWith("gia-")) return;
 
-  if (btnIdx === 0) {
-    chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
-      const url = chrome.runtime.getURL(
-        `leaveoff.html?title=${encodeURIComponent(tab?.title || "")}&url=${encodeURIComponent(tab?.url || "")}`
-      );
-      await chrome.tabs.create({ url });
-      chrome.notifications.clear(notifId);
-    });
-  } else if (btnIdx === 1) {
-    await clearMainAlarm();
-    await createMainAlarm(SNOOZE_MIN);  // resume 20-min cadence after snooze
-    chrome.notifications.clear(notifId);
+  try {
+    if (btnIdx === 0) {
+      chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
+        const url = chrome.runtime.getURL(
+          `ui/leaveoff.html?title=${encodeURIComponent(tab?.title || "")}&url=${encodeURIComponent(tab?.url || "")}`
+        );
+        await chrome.tabs.create({ url });
+        chrome.notifications?.clear(notifId);
+      });
+    } else if (btnIdx === 1) {
+      await clearMainAlarm();
+      await createMainAlarm(SNOOZE_MIN);  // resume 20-min cadence after snooze
+      chrome.notifications?.clear(notifId);
+    }
+  } catch (e) {
+    console.warn('Error handling notification button:', e);
   }
 });
 
@@ -179,20 +184,13 @@ chrome.commands.onCommand.addListener(async (cmd) => {
     chrome.runtime.sendMessage({ type: paused ? "gia.resume" : "gia.pause" }, () => {});
   });
 });
-const PWA_URL = "https://giaext-1c5cd.web.app"; // same as above
+const PWA_URL = "https://giaext-1c5cd.web.app";
 
 async function openPwaVibrate(kind = "start") {
-  try { await chrome.tabs.create({ url: `${PWA_URL}?vibrate=${encodeURIComponent(kind)}` }); } catch {}
-}
-// when long break starts:
-openPwaVibrate("start");
-
-// when long break ends:
-openPwaVibrate("end");
-const params = new URLSearchParams(location.search);
-const vibe = params.get('vibrate');
-if ('vibrate' in navigator) {
-  if (vibe === 'start') navigator.vibrate([120,80,120]);
-  if (vibe === 'end')   navigator.vibrate([200,120,200,120,200]);
+  try { 
+    await chrome.tabs.create({ url: `${PWA_URL}?vibrate=${encodeURIComponent(kind)}` }); 
+  } catch (e) {
+    console.warn('Could not open PWA:', e);
+  }
 }
 

@@ -6,12 +6,23 @@
 <button id="enable">Enable vibration</button>
 <button id="ping">Ping vibration</button>
 <script>
+  // Handle vibrate parameter from URL
+  const params = new URLSearchParams(location.search);
+  const vibe = params.get('vibrate');
+  
+  if ('vibrate' in navigator && vibe) {
+    if (vibe === 'start') navigator.vibrate([120, 80, 120]);
+    if (vibe === 'end') navigator.vibrate([200, 120, 200, 120, 200]);
+  }
+  
   document.getElementById('enable').onclick = async () => {
     const perm = await Notification.requestPermission().catch(()=>{});
     alert(`Notifications: ${perm}`);
   };
+  
   document.getElementById('ping').onclick = () => {
     if ('vibrate' in navigator) navigator.vibrate([120, 70, 120]);
   };
+  
   if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
 </script>
