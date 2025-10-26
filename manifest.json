@@ -11,13 +11,7 @@
   "background": { "service_worker": "background.js", "type": "module" },
 
   "permissions": [
-    "alarms", "notifications", "storage", "tts", "offscreen",
-    "ai.generateContent.prompt",
-    "ai.generateContent.writer",
-    "ai.generateContent.rewriter",
-    "ai.generateContent.translator",
-    "ai.generateContent.proofreader",
-    "ai.generateContent.summarizer"
+    "alarms", "notifications", "storage", "tts", "offscreen"
   ],
   "optional_permissions": [],
   "host_permissions": ["<all_urls>"],
