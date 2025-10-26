@@ -12,14 +12,18 @@
 **Built for:** Google Chrome Built-in AI Challenge 2025
 
 **APIs Used:**
-- ✅ **Writer API**: Generates dynamic, personalized break reminders
-- ✅ **Rewriter API**: Adapts message tone (Mindful/Goofy)
-- ✅ **Translator API**: Multilingual break reminders
+- ✅ **Writer API**: Generates dynamic, personalized break reminder messages
+- ✅ **Rewriter API**: Adapts message tone (Mindful/Goofy) based on user preference
+- ✅ **Translator API**: Multilingual support for break reminders
 - ✅ **Proofreader API**: Cleans user reflection journal entries
-- ✅ **Summarizer API**: Generates wellness insights from reflections
-- ✅ **Prompt API**: Voice command classification for voice commands
+- ✅ **Summarizer API**: Generates wellness insights from reflection patterns
+- ✅ **Prompt API**: Voice command classification for natural language interaction
 
-**Demo:** [Watch Demo Video](#) - *Coming Soon*
+**Problem Solved:** Digital eye strain affects 90% of computer users, leading to headaches, blurred vision, and long-term damage. The proven 20-20-20 rule (every 20 minutes, look 20 feet away for 20 seconds) is effective but requires consistent reminders that most people forget during focused work sessions.
+
+**Demo Video:** [Coming Soon - Will be uploaded to YouTube/Vimeo]()
+
+---
 
 ## 🎯 Problem Statement
 
@@ -29,63 +33,74 @@ Digital eye strain affects **90% of computer users** and can lead to headaches, 
 - 🤖 **AI-powered reminders** that adapt to your preferences
 - 🎤 **Multimodal interaction** with voice and screen analysis
 - 📝 **Intelligent reflection** system for mindfulness tracking
-- 🔒 **100% private** - all AI processing happens locally
+- 🔒 **100% private** - all AI processing happens locally with Gemini Nano
+
+---
+
+## 🔬 Scientific Foundation & Design Rationale
+
+Gia — Mindful 20-20-20 is grounded in peer-reviewed ocular research and official optometric guidance. Its design translates evidence-based insights about visual ergonomics, comfort, and behavior change into a user-friendly Chrome experience.
+
+### 1. Preventing Digital Eye Strain
+
+The **American Optometric Association (AOA)** recommends the 20-20-20 Rule—taking a 20-second break every 20 minutes to look at something approximately 20 feet away—to reduce digital eye strain.
+
+Research published in *Contact Lens & Anterior Eye* (2024) found that such structured gaze breaks improved tear-film stability and reduced symptoms of fatigue, dryness, and blurred vision compared to continuous screen use.
+
+**Takeaway:** Regular, brief visual pauses restore blink rate and ocular moisture—principles Gia automates with gentle, time-based prompts.
+
+### 2. Mindful Resets for Comfort and Recovery
+
+Findings from *Hot Towels: The Bedrock of Meibomian Gland Dysfunction Therapy* (2023) show that warmth and rest improve tear-film lipid flow and comfort. Gia's longer "reset" breaks are conceptually inspired by this effect, encouraging users to step away and recalibrate attention.
+
+### 3. Behavioral Adherence Through Emotional Design
+
+*Evidence-Based Teaching in Contact Lenses Education* (2022) highlights that multimodal, tone-adapted feedback increases engagement and adherence. Gia applies this insight through selectable tone modes—Mindful or Goofy—that keep the experience personal and sustainable.
+
+### Evidence Translation Table
+
+| Evidence Source | Design Translation |
+|----------------|-------------------|
+| AOA 20-20-20 guideline | 20-second short-break timer |
+| Tear-film studies | Eye-health rationale for gaze shifts |
+| Warm-compress research | Inspiration for long resets |
+| Behavioral cue research | Tone-adaptive reminders for adherence |
+
+**Design Philosophy:** Gia combines ocular science with human-centered design, transforming routine screen breaks into meaningful, evidence-informed digital wellbeing habits.
+
+---
 
 ## ✨ Features
 
-### 🤖 **Comprehensive AI Integration**
-- **Prompt API**: Dynamic, context-aware break reminders
-- **Writer API**: Original wellness tips and motivational content
-- **Rewriter API**: Tone adaptation (Mindful/Motivating/Professional/Friendly)
-- **Proofreader API**: Clean and enhance user reflections
-- **Summarizer API**: Generate insights from reflection patterns
-- **Translator API**: Multilingual support for global accessibility
+### **Built with Chrome Built-in AI APIs**
 
-### 🎤 **Multimodal AI Capabilities**
-- **Voice Commands**: "Snooze", "Dismiss", "Start break" with natural language processing
-- **Screen Analysis**: AI-powered analysis of screen content for eye strain factors
-- **Audio Feedback**: TTS guidance and meditation bell sounds
+All AI features run locally using Gemini Nano for complete privacy:
 
-### 📊 **Smart Analytics & Reflection**
-- **Progress Tracking**: Break frequency and consistency metrics
-- **Reflection Journal**: AI-enhanced note-taking with automatic summarization
-- **Personalized Insights**: Pattern recognition and wellness recommendations
-- **Privacy-First**: All data stays on your device
+- **Writer API**: Creates unique, personalized break reminders that adapt to context and work duration
+- **Rewriter API**: Seamlessly switches tone between Mindful and Goofy styles
+- **Translator API**: Supports multiple languages for global accessibility
+- **Proofreader API**: Enhances user reflection journal entries while preserving voice
+- **Summarizer API**: Identifies wellness patterns and provides encouraging insights
+- **Prompt API**: Classifies voice commands ("snooze", "dismiss", "start") with natural language processing
 
-### 🎨 **Beautiful User Experience**
-- **Progressive Visual Cues**: 5-stage icon progression with gentle animations
-- **Adaptive Design**: Responsive break cards with accessibility features
-- **Corner Logo**: Subtle, non-intrusive presence with smart tooltips
-- **Motion Accessibility**: Respects user's motion preferences
+### **User Experience**
 
-## 🏗️ Technical Architecture
-
-### **Core Technologies**
-- **Chrome Extension Manifest v3** with service worker architecture
-- **Chrome Built-in AI APIs** powered by Gemini Nano (local processing)
-- **Web Audio API** for meditation sounds and TTS
-- **Speech Recognition API** for voice commands
-- **Chrome Tabs API** for screen capture and analysis
-
-### **AI Processing Pipeline**
-```mermaid
-graph TD
-    A[Break Trigger] --> B[AI Message Generation]
-    B --> C[Prompt API]
-    B --> D[Writer API]
-    B --> E[Rewriter API]
-    B --> F[Translator API]
-    G[User Reflection] --> H[Proofreader API]
-    H --> I[Summarizer API]
-    J[Voice Input] --> K[Multimodal Processing]
-    L[Screen Capture] --> M[Image Analysis]
-```
+- **3-Screen Onboarding**: Quick setup with Demo Mode for instant testing
+- **Tone Customization**: Choose between Mindful 🧘‍♀️ or Goofy 🤪 personalities
+- **Voice Commands**: Natural language interaction without rigid structures
+- **Smart Break Timing**: Adapts to your work schedule and preferences
+- **Long Breaks**: Optional extended resets every 40-120 minutes
+- **Reflection Journal**: AI-enhanced wellness tracking and insights
+- **Material Design 3**: Beautiful, accessible interface throughout
 
 ### **Privacy & Security**
+
 - ✅ **Local Processing**: All AI runs on-device with Gemini Nano
 - ✅ **No Data Transmission**: User data never leaves the browser
 - ✅ **Encrypted Storage**: Local data encrypted with Chrome's secure storage
 - ✅ **Minimal Permissions**: Only requests necessary permissions
+
+---
 
 ## 🚀 Installation & Setup
 
@@ -94,145 +109,181 @@ graph TD
 - Chrome Built-in AI Early Preview Program access
 
 ### **Installation (For Judges)**
-1. Clone this repository: `git clone https://github.com/lewis-mi/gia-extension.git`
-2. Open Chrome Extensions (`chrome://extensions/`)
-3. Enable "Developer mode" (toggle in top right)
-4. Click "Load unpacked" and select the `gia-extension` folder
-5. Grant necessary permissions when prompted
+
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/lewis-mi/gia-extension.git
+   cd gia-extension
+   ```
+
+2. Open Chrome Extensions:
+   - Navigate to `chrome://extensions/`
+   - Enable "Developer mode" (toggle in top right)
+
+3. Load the extension:
+   - Click "Load unpacked"
+   - Select the `gia-extension` folder
+   - Grant necessary permissions when prompted
 
 ### **Quick Demo Mode**
-1. After installation, click **"🚀 Try Demo"** on the first screen
-2. Extension starts immediately with demo settings
-3. Try the popup, corner logo, and break notifications
-4. Configure later or go through full 3-screen setup
 
-### **First Use (Full Setup)**
-1. Complete the 3-screen onboarding:
-   - **Screen 1**: Choose audio, voice commands, and language
-   - **Screen 2**: Pick your tone (Mindful 🧘‍♀️ or Goofy 🤪)
-   - **Screen 3**: Set end time, long breaks, and haptics
-2. Extension starts automatically
-3. Start your first mindful session!
+Click **"🚀 Try Demo"** on the first screen to:
+- Skip setup and start immediately
+- Try all features with default settings
+- Experience AI-generated break reminders
+- Configure later if desired
+
+### **Full Setup**
+
+Complete the 3-screen onboarding:
+- **Screen 1**: Choose audio, voice commands, and language
+- **Screen 2**: Pick your tone (Mindful 🧘‍♀️ or Goofy 🤪)
+- **Screen 3**: Set end time, long breaks, and phone haptics
+
+---
 
 ## 🎮 Usage Guide
 
 ### **Basic Interaction**
-- **Automatic Breaks**: Every 20 minutes, Gia reminds you to take a break
-- **Manual Breaks**: Click the corner logo or use "Take Break Now" button
-- **Voice Commands**: Say "snooze", "dismiss", or "start break" during breaks
-- **Screen Analysis**: Click "📸 Analyze Screen" for eye strain insights
 
-### **Reflection System**
-- After each break, optionally share how you feel
-- AI cleans and enhances your reflections
-- Automatic summarization of patterns and insights
-- View progress in the extension popup
+- **Break Notifications**: Appears every 20 minutes (automatically)
+- **Voice Commands**: Say "snooze", "dismiss", or "start" during breaks
+- **Popup Controls**: Click the extension icon for pause/resume/exit
+- **Keyboard Shortcut**: `Ctrl+Shift+G` (or `Cmd+Shift+G` on Mac)
 
-### **Customization**
-- **Tone Preferences**: Choose between Mindful, Motivating, Professional, or Friendly
-- **Voice Settings**: Enable/disable voice commands and audio feedback
-- **Break Scheduling**: Adjust timing and frequency preferences
+### **AI-Powered Features**
 
-## 🏆 Hackathon Submission
+- **Dynamic Messages**: Every break reminder is uniquely generated using the Writer API
+- **Tone Adaptation**: Switch between Mindful and Goofy anytime (Rewriter API)
+- **Multilingual**: Break reminders in your preferred language (Translator API)
+- **Reflection Journal**: Enhanced with proofreading and insights (Proofreader & Summarizer APIs)
 
-### **APIs Used**
-- ✅ **Prompt API**: Dynamic break reminders and voice command processing
-- ✅ **Writer API**: Original wellness tips and motivational content
-- ✅ **Rewriter API**: Tone adaptation and content enhancement
-- ✅ **Proofreader API**: Reflection text cleaning and improvement
-- ✅ **Summarizer API**: Pattern analysis and insight generation
-- ✅ **Translator API**: Multilingual accessibility support
-- ✅ **Hybrid AI Strategy**: Local processing with cloud enhancement capabilities
+### **Settings**
 
-### **Prize Categories Targeted**
-1. **Best Multimodal AI Application**: Voice commands + screen analysis
-2. **Most Helpful Chrome Extension**: Comprehensive wellness solution
-3. **Best Hybrid AI Application**: Local processing with cloud enhancement potential
-
-### **Innovation Highlights**
-- **First-of-its-kind** multimodal wellness assistant for Chrome
-- **Privacy-first** AI implementation with local processing
-- **Comprehensive** reflection system with pattern recognition
-- **Accessibility-focused** design with voice and keyboard support
-
-## 🔧 Development
-
-### **Project Structure**
-```
-gia-extension/
-├── manifest.json          # Extension configuration
-├── background.js          # Service worker with AI processing
-├── content.js            # Content script with UI components
-├── ui/
-│   ├── popup.html        # Extension popup interface
-│   ├── popup.js          # Popup functionality
-│   └── onboarding.html   # First-time user experience
-├── styles/
-│   ├── card.css          # Break card styling
-│   └── corner-logo.css   # Corner logo styling
-└── assets/
-    └── icons/            # Progressive icon set
-```
-
-### **Key Functions**
-- `generateBreakMessage()`: AI-powered message generation
-- `processMultimodalInput()`: Voice command processing
-- `analyzeScreenImage()`: Screen content analysis
-- `saveReflection()`: Reflection storage and AI enhancement
-- `generateReflectionSummary()`: Pattern analysis and insights
-
-## 🌟 Future Enhancements
-
-### **Planned Features**
-- **Calendar Integration**: Smart break scheduling around meetings
-- **Focus Mode Detection**: Automatic break adjustments based on activity
-- **Team Wellness**: Shared break sessions for remote teams
-- **Advanced Analytics**: Detailed wellness reporting and trends
-
-### **Hybrid AI Strategy**
-- **Local Processing**: Core functionality with Gemini Nano for privacy
-- **Cloud Enhancement**: Optional Firebase AI Logic integration for advanced analytics
-- **Privacy-First**: User opt-in with anonymized data only
-- **Seamless Integration**: Automatic fallback to local processing
-- **Advanced Insights**: Pattern recognition and personalized recommendations
-
-## 📊 Impact & Metrics
-
-### **User Benefits**
-- **Reduced Eye Strain**: 20-20-20 rule compliance
-- **Improved Focus**: Mindful break habits
-- **Better Well-being**: Reflection and mindfulness tracking
-- **Privacy Assurance**: No data sharing or tracking
-
-### **Technical Achievements**
-- **6 Chrome AI APIs** integrated seamlessly
-- **Multimodal interaction** with voice and visual input
-- **Local AI processing** with Gemini Nano
-- **Zero external dependencies** for core functionality
-
-## 🤝 Contributing
-
-We welcome contributions to make Gia even better! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
-
-### **Areas for Contribution**
-- **Accessibility**: Enhanced screen reader support
-- **Internationalization**: Additional language support
-- **Analytics**: Advanced wellness metrics
-- **UI/UX**: Design improvements and new features
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- **Google Chrome Team** for the innovative Built-in AI APIs
-- **Gemini Nano** for powerful local AI processing
-- **Digital Wellness Community** for inspiration and feedback
-- **Open Source Contributors** who make projects like this possible
+Access settings via the extension popup to:
+- Toggle audio/voice commands
+- Switch tone preferences
+- Adjust break timing
+- Enable long breaks and haptics
 
 ---
 
-**Built with ❤️ for digital wellness and privacy-first AI innovation.**
+## 🏗️ Technical Architecture
 
-*Gia - Good Intentions Assistant*
+### **Core Technologies**
+- **Chrome Extension Manifest v3** with service worker architecture
+- **Chrome Built-in AI APIs** powered by Gemini Nano (local processing)
+- **Material Design 3** for consistent, accessible UI
+- **Chrome Storage API** for persistent settings
+- **Chrome Alarms API** for break scheduling
+- **Chrome Notifications API** for gentle reminders
+
+### **AI Integration Points**
+
+1. **Break Message Generation** (`ai/breakMessageGenerator.js`)
+   - Writer API creates personalized reminders
+   - Rewriter API adapts tone dynamically
+   - Translator API supports multilingual output
+
+2. **Voice Interaction** (`content.js`)
+   - Prompt API classifies intent from natural language
+   - Supports "snooze", "dismiss", "start" commands
+
+3. **Reflection Processing** (`ai/breakMessageGenerator.js`)
+   - Proofreader API cleans and enhances journal entries
+   - Summarizer API identifies wellness patterns
+
+### **File Structure**
+```
+gia-extension/
+├── background.js              # Service worker & break scheduling
+├── content.js                 # Voice commands & break cards
+├── manifest.json              # Extension configuration
+├── ai/
+│   └── breakMessageGenerator.js  # All 6 AI API implementations
+├── ui/
+│   ├── popup.html/js          # Main controls
+│   ├── onboarding.html/js     # Screen 1: Setup
+│   ├── onboarding_tone.html/js # Screen 2: Tone selection
+│   └── onboarding_duration.html/js # Screen 3: Duration & Long Breaks
+└── data/
+    ├── tone_profiles.json     # Mindful/Goofy definitions
+    └── evidence_summaries.json # Wellness tips
+```
+
+---
+
+## 🧪 Testing
+
+### **Manual Testing**
+
+1. Install the extension (see Installation above)
+2. Use Demo Mode for quick testing
+3. Wait 20 minutes for first break (or manually trigger)
+4. Test voice commands: say "snooze" or "dismiss"
+5. Try tone switching in settings
+6. Check reflection journal functionality
+
+### **Automated Testing**
+
+```bash
+# Run Playwright tests
+npm run pw:test
+
+# Run Cypress tests
+npm run cy:run
+```
+
+---
+
+## 📚 Documentation
+
+- [SUBMISSION.md](SUBMISSION.md) - Detailed API usage and hackathon entry
+- [HACKATHON_CHECKLIST.md](HACKATHON_CHECKLIST.md) - Pre-submission checklist
+- [LICENSE](LICENSE) - MIT License
+
+---
+
+## 🎯 Prize Categories
+
+This submission targets:
+
+- **Most Helpful - Chrome Extension** ($14,000)
+- **Best Hybrid AI Application** ($9,000)
+- **Best Multimodal AI Application** ($9,000)
+
+**Why Gia Qualifies:**
+
+- **Most Helpful**: Addresses universal eye strain problem affecting 90% of users
+- **Hybrid AI**: Local Gemini Nano processing with optional cloud integration
+- **Multimodal**: Voice commands, text-to-speech, visual cards, and haptic feedback
+
+---
+
+## 🤝 Contributing
+
+This is a hackathon submission project. For contributions, please open an issue or pull request.
+
+---
+
+## 📝 License
+
+MIT License - See [LICENSE](LICENSE) file
+
+---
+
+## 👤 Author
+
+**Michael Lewis**
+- GitHub: [@lewis-mi](https://github.com/lewis-mi)
+- Repository: https://github.com/lewis-mi/gia-extension
+- Built for: Google Chrome Built-in AI Challenge 2025
+
+---
+
+## 🙏 Acknowledgments
+
+- Google Chrome team for Built-in AI APIs
+- Gemini Nano for on-device AI processing
+- Material Design 3 for UI guidelines
+- All users fighting digital eye strain
