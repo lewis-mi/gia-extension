@@ -1,0 +1,17 @@
+{
+  "projects": { "default": "giaext-1c5cd" }
+cat > .firebaserc <<'EOF'
+{
+  "projects": { "default": "giaext-1c5cd" }
+}
+cat > firebase.json <<'EOF'
+{
+  "hosting": {
+    "public": "pwa",
+    "ignore": ["**/.*", "**/node_modules/**"],
+    "cleanUrls": true,
+    "headers": [
+      { "source": "/sw.js", "headers": [{ "key": "Cache-Control", "value": "no-cache" }] }
+    ]
+  }
+}
