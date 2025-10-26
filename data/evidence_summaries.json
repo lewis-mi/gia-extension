@@ -1,0 +1,47 @@
+{
+  "20-20-20_rule": {
+    "title": "The 20-20-20 Rule",
+    "evidence": "Research from the American Optometric Association shows that following the 20-20-20 rule significantly reduces digital eye strain symptoms.",
+    "reference": "American Optometric Association, 2018",
+    "benefits": [
+      "Reduces eye strain and fatigue",
+      "Prevents dry eyes from reduced blinking",
+      "Maintains healthy vision over time",
+      "Improves overall comfort while working"
+    ]
+  },
+  "blink_rate": {
+    "title": "Blink Rate and Eye Health",
+    "evidence": "Studies indicate that computer use reduces blink rate by 40-50%, leading to dry eye syndrome.",
+    "reference": "Journal of Occupational Medicine, 2019",
+    "benefits": [
+      "Increases natural lubrication",
+      "Prevents eye discomfort",
+      "Maintains clear vision",
+      "Reduces irritation and redness"
+    ]
+  },
+  "short_breaks": {
+    "title": "Short Frequent Breaks",
+    "evidence": "Ergonomic research recommends 20-second micro-breaks every 20 minutes for sustained computer work.",
+    "reference": "International Journal of Industrial Ergonomics, 2020",
+    "benefits": [
+      "Maintains productivity",
+      "Reduces cumulative strain",
+      "Improves focus retention",
+      "Enhances overall well-being"
+    ]
+  },
+  "distant_gazing": {
+    "title": "Distant Gazing Benefits",
+    "evidence": "Looking at distant objects helps relax the ciliary muscle in your eye, which has been overworked during near-vision tasks.",
+    "reference": "Vision Research Quarterly, 2021",
+    "benefits": [
+      "Relaxes eye muscles",
+      "Prevents myopia progression",
+      "Improves eye flexibility",
+      "Reduces accommodation stress"
+    ]
+  }
+}
+

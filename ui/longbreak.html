@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Take a Longer Break</title>
+  <link rel="stylesheet" href="../styles/card.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .container {
+      background: white;
+      border-radius: 24px;
+      padding: 60px 50px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+    }
+    h1 {
+      font-size: 36px;
+      color: #1e3a3a;
+      margin-bottom: 20px;
+    }
+    .duration {
+      font-size: 48px;
+      color: #764ba2;
+      font-weight: 700;
+      margin: 20px 0;
+    }
+    .message {
+      font-size: 18px;
+      color: #5a8582;
+      line-height: 1.6;
+      margin: 30px 0;
+    }
+    button {
+      background: #764ba2;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 10px;
+    }
+    button:hover {
+      background: #5d3880;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(118, 75, 162, 0.4);
+    }
+    .activities {
+      margin-top: 40px;
+      text-align: left;
+    }
+    .activities h3 {
+      color: #1e3a3a;
+      margin-bottom: 16px;
+    }
+    .activities ul {
+      list-style: none;
+      padding: 0;
+    }
+    .activities li {
+      padding: 12px;
+      margin: 8px 0;
+      background: #f0f9f8;
+      border-radius: 8px;
+      color: #2d4a48;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="../assets/icons/icon_4_break_128.png" alt="Gia" class="icon">
+    <h1>Take a Longer Break</h1>
+    <div class="duration" id="countdown">10 minutes</div>
+    
+    <div class="message" id="aiMessage">
+      You've been working hard. Let's stretch your eyes, your body, and your mind.
+    </div>
+
+    <div class="activities">
+      <h3>Suggested Activities:</h3>
+      <ul id="activities">
+        <li>👁️ Look far into the distance and focus on something 20 feet away</li>
+        <li>💆 Close your eyes and gently massage your temples</li>
+        <li>🏃 Stand up and stretch your arms to the sky</li>
+        <li>🧘 Take 5 deep, slow breaths</li>
+        <li>☕ Get a glass of water</li>
+      </ul>
+    </div>
+
+    <button id="skip">Skip Break</button>
+    <button id="extend">Extend 5 Minutes</button>
+  </div>
+
+  <script src="longbreak.js"></script>
+</body>
+</html>
+

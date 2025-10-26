@@ -1,0 +1,51 @@
+{
+  "mindful": {
+    "name": "Mindful",
+    "description": "Calm and peaceful reminders",
+    "systemPrompt": "You create calm, peaceful break reminders focused on mindfulness and relaxation.",
+    "tts": {
+      "rate": 0.85,
+      "pitch": 0.95,
+      "volume": 0.8
+    },
+    "color": "#3a7c72",
+    "icon": "🧘"
+  },
+  "motivating": {
+    "name": "Motivating",
+    "description": "Energetic and encouraging",
+    "systemPrompt": "You create energetic, encouraging break reminders that boost motivation.",
+    "tts": {
+      "rate": 1.0,
+      "pitch": 1.1,
+      "volume": 0.85
+    },
+    "color": "#f5576c",
+    "icon": "💪"
+  },
+  "professional": {
+    "name": "Professional",
+    "description": "Concise workplace wellness",
+    "systemPrompt": "You create concise, professional break reminders for workplace wellness.",
+    "tts": {
+      "rate": 0.9,
+      "pitch": 1.0,
+      "volume": 0.75
+    },
+    "color": "#667eea",
+    "icon": "💼"
+  },
+  "friendly": {
+    "name": "Friendly",
+    "description": "Warm and supportive",
+    "systemPrompt": "You create warm, friendly break reminders with a casual, supportive tone.",
+    "tts": {
+      "rate": 0.95,
+      "pitch": 1.05,
+      "volume": 0.8
+    },
+    "color": "#f093fb",
+    "icon": "😊"
+  }
+}
+

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Your Session</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: system-ui, -apple-system, sans-serif;
+    }
+    .container {
+      background: white;
+      border-radius: 24px;
+      padding: 50px 40px;
+      max-width: 500px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .icon {
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 30px;
+    }
+    h1 {
+      font-size: 32px;
+      color: #1e3a3a;
+      margin-bottom: 16px;
+    }
+    .message {
+      font-size: 16px;
+      color: #5a8582;
+      line-height: 1.6;
+      margin: 30px 0;
+    }
+    .stats {
+      background: #f0f9f8;
+      border-radius: 12px;
+      padding: 20px;
+      margin: 30px 0;
+    }
+    .stat {
+      display: flex;
+      justify-content: space-between;
+      margin: 12px 0;
+      font-size: 14px;
+      color: #2d4a48;
+    }
+    .stat strong {
+      color: #1e3a3a;
+    }
+    button {
+      background: #f5576c;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 16px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 10px;
+      width: 100%;
+    }
+    button:hover {
+      background: #e5455a;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+    }
+    .tips {
+      text-align: left;
+      margin-top: 30px;
+      padding: 20px;
+      background: #fef4f4;
+      border-radius: 12px;
+      border-left: 4px solid #f5576c;
+    }
+    .tips h3 {
+      margin: 0 0 12px;
+      color: #1e3a3a;
+      font-size: 16px;
+    }
+    .tips ul {
+      margin: 0;
+      padding-left: 20px;
+      color: #5a8582;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="../assets/icons/icon_0_start_128.png" alt="Gia" class="icon">
+    <h1>Welcome Back!</h1>
+    
+    <div class="message">
+      Your Gia session was paused. Ready to resume and protect your eye health?
+    </div>
+
+    <div class="stats" id="stats">
+      <div class="stat">
+        <span>Total Breaks Taken:</span>
+        <strong id="totalBreaks">0</strong>
+      </div>
+      <div class="stat">
+        <span>Session Streak:</span>
+        <strong id="streak">0 days</strong>
+      </div>
+      <div class="stat">
+        <span>Last Activity:</span>
+        <strong id="lastActivity">Never</strong>
+      </div>
+    </div>
+
+    <button id="resume">Resume Session</button>
+    <button id="restart" style="background: #6c757d;">Start Fresh</button>
+
+    <div class="tips">
+      <h3>💡 Remember:</h3>
+      <ul>
+        <li>20-20-20 rule: Every 20 minutes, look 20 feet away for 20 seconds</li>
+        <li>Keep breaks consistent to build healthy habits</li>
+        <li>Your eyes will thank you!</li>
+      </ul>
+    </div>
+  </div>
+
+  <script src="resume.js"></script>
+</body>
+</html>
+

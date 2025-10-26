@@ -1,70 +1,30 @@
-
 {
   "manifest_version": 3,
   "name": "Gia — Mindful 20-20-20",
-  "version": "1.0.0",
-  "description": "Every 20 minutes, take a 20-second break and look 20 feet away. Built with Chrome's Built-in AI for mindful breaks.",
-  "minimum_chrome_version": "138.0.0.0",
+  "version": "0.6.0",
+  "minimum_chrome_version": "138",
+  "description": "Voice-guided 20-20-20 with optional long resets and on-device AI tips.",
+  "icons": { "128": "icon.png" },
+
+  "action": { "default_title": "Gia", "default_popup": "popup.html" },
+
+  "background": { "service_worker": "background.js", "type": "module" },
 
   "permissions": [
-    "alarms",
-    "storage",
-    "tts",
-    "contextMenus",
-    "activeTab"
+    "alarms", "notifications", "storage", "tts", "offscreen"
   ],
-
-  "content_security_policy": {
-    "extension_pages": "script-src 'self'; object-src 'self';"
-  },
-
-  "background": {
-    "service_worker": "background.js"
-  },
-
-  "action": {
-    "default_title": "Gia — Mindful Breaks",
-    "default_popup": "ui/popup.html",
-    "default_icon": {
-      "16": "assets/icons/icon_0_start.png",
-      "32": "assets/icons/icon_0_start_32.png",
-      "48": "assets/icons/icon_0_start_48.png",
-      "128": "assets/icons/icon_0_start_128.png"
-    }
-  },
-
-  "icons": {
-    "16": "assets/icons/icon_0_start.png",
-    "32": "assets/icons/icon_0_start_32.png",
-    "48": "assets/icons/icon_0_start_48.png",
-    "128": "assets/icons/icon_0_start_128.png"
-  },
-
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"],
-      "css": ["styles/corner-logo.css", "styles/card.css"],
-      "run_at": "document_idle"
-    }
-  ],
-
-  "web_accessible_resources": [
-    {
-      "resources": [
-        "ui/*.html",
-        "styles/*.css",
-        "assets/icons/*",
-        "assets/icons/icon_0_start_32.png"
-      ],
-      "matches": ["<all_urls>"]
-    }
-  ],
-
+  "optional_permissions": ["tts"],
   "host_permissions": ["<all_urls>"],
 
+  "commands": {
+    "toggle-pause": {
+      "suggested_key": { "default": "Ctrl+Shift+G", "mac": "Command+Shift+G" },
+      "description": "Pause/Resume Gia"
+    }
+  },
+
   "trial_tokens": [
-    "AvdnaqGrVK1B7bHm1S38h7yo8VY7aTo5kxcQo5KCx4HEYr5M9BWNZ5rQOsID1AamBGPV3CVAcKcnSNLg3w5aRQoAAABueyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vYmVpa21nZWRrY3Bva2lqbWhpZW1ranBrbXBrYWloZ2YiLCJmZWF0dXJlIjoiQUlSZXdyaXRlckFQSSIsImV4cGlyeSI6MTc2OTQ3MjAwMH0="
+    "PASTE_PROOFREADER_TOKEN_IF_USED",
+    "PASTE_REWRITER_TOKEN_IF_USED"
   ]
 }
-

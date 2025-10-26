@@ -1,0 +1,17 @@
+<!doctype html>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<link rel="manifest" href="./manifest.webmanifest"/>
+<title>Gia Haptics</title>
+<button id="enable">Enable vibration</button>
+<button id="ping">Ping vibration</button>
+<script>
+  document.getElementById('enable').onclick = async () => {
+    const perm = await Notification.requestPermission().catch(()=>{});
+    alert(`Notifications: ${perm}`);
+  };
+  document.getElementById('ping').onclick = () => {
+    if ('vibrate' in navigator) navigator.vibrate([120, 70, 120]);
+  };
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');
+</script>

@@ -1,0 +1,33 @@
+{
+  "eye_health": [
+    "Adjust your screen brightness to match your environment",
+    "Position your monitor 20-26 inches from your eyes",
+    "Use the largest comfortable font size",
+    "Ensure your screen is at or slightly below eye level"
+  ],
+  "ergonomics": [
+    "Keep your feet flat on the floor",
+    "Maintain a 90-degree angle at your elbows and knees",
+    "Position your keyboard at elbow height",
+    "Use a chair with good lumbar support"
+  ],
+  "wellness": [
+    "Stay hydrated throughout the day",
+    "Practice deep breathing during breaks",
+    "Incorporate light stretching every hour",
+    "Keep healthy snacks nearby for energy"
+  ],
+  "mindfulness": [
+    "Notice your breathing during breaks",
+    "Feel the weight of your body in your chair",
+    "Observe sounds around you",
+    "Acknowledge your thoughts without judgment"
+  ],
+  "productivity": [
+    "Use breaks to plan your next task",
+    "Stand up and walk around briefly",
+    "Get a glass of water or light snack",
+    "Tidy your workspace for 30 seconds"
+  ]
+}
+

@@ -79,17 +79,10 @@
       Every <strong>20 minutes</strong>, look <strong>20 feet away</strong> for <strong>20 seconds</strong> to prevent digital eye strain and maintain healthy vision.
     </div>
 
-    <button onclick="startSession()">Get Started</button>
+    <button id="startBtn">Get Started</button>
   </div>
 
-  <script>
-    function startSession() {
-      // Save that onboarding is complete
-      chrome.storage.local.set({ onboardingComplete: true });
-      // Close this tab
-      window.close();
-    }
-  </script>
+  <script src="onboarding.js"></script>
 </body>
 </html>
 

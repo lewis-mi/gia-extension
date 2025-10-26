@@ -1,0 +1,10 @@
+{
+  "name": "Gia Haptics",
+  "short_name": "Gia Haptics",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7bbfa3",
+  "icons": []
+}
