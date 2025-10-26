@@ -2,6 +2,8 @@
 
 > **Your AI-powered digital wellness companion that helps build healthier screen habits through mindful breaks and intelligent reflection.**
 
+Gia — Mindful 20-20-20 is based on research showing that 20-second gaze breaks every 20 minutes reduce digital eye strain and support ocular comfort. Drawing on the AOA's 20-20-20 rule and related studies in *Contact Lens & Anterior Eye*, Gia uses adaptive tone feedback and time-based prompts to turn screen breaks into a simple, science-backed wellness habit.
+
 [![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-v0.6.0-blue.svg)](https://github.com/lewis-mi/gia-extension)
 [![Built with Chrome AI](https://img.shields.io/badge/Built%20with-Chrome%20Built--in%20AI-green.svg)](https://developer.chrome.com/docs/web-platform/built-in-ai)
 [![Privacy First](https://img.shields.io/badge/Privacy-First%20Design-purple.svg)](#privacy--security)
