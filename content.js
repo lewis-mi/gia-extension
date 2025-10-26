@@ -27,7 +27,7 @@ async function createCornerLogo() {
   
   // Logo image
   const img = document.createElement('img');
-  img.src = chrome.runtime.getURL('assets/icons/icon_0_start_32.png');
+  img.src = chrome.runtime.getURL('assets/logo.png');
   img.alt = 'Gia';
   img.className = 'gia-corner-logo-img';
   
@@ -167,11 +167,7 @@ async function showBreakCard(breakType, durationMs) {
   
   const heroImg = document.createElement('img');
   heroImg.className = 'gia-hero-img';
-  heroImg.src = chrome.runtime.getURL(
-    breakType === 'long' 
-      ? 'assets/icons/icon_4_break_128.png' 
-      : 'assets/icons/icon_4_break_128.png'
-  );
+  heroImg.src = chrome.runtime.getURL('assets/logo.png');
   
   const heroCount = document.createElement('span');
   heroCount.className = 'gia-hero-count';

@@ -1,7 +1,7 @@
 {
   "mindful": {
     "name": "Mindful",
-    "description": "Calm and peaceful reminders",
+    "description": "Calm, grounding reminders that encourage focus and breathing.",
     "systemPrompt": "You create calm, peaceful break reminders focused on mindfulness and relaxation.",
     "tts": {
       "rate": 0.85,
@@ -9,19 +9,21 @@
       "volume": 0.8
     },
     "color": "#3a7c72",
-    "icon": "🧘"
+    "icon": "🧘‍♀️",
+    "example": "Let's take a deep breath and rest your eyes for 20 seconds."
   },
-  "motivating": {
-    "name": "Motivating",
-    "description": "Energetic and encouraging",
-    "systemPrompt": "You create energetic, encouraging break reminders that boost motivation.",
+  "goofy": {
+    "name": "Goofy",
+    "description": "Light-hearted humor that turns breaks into moments of laughter.",
+    "systemPrompt": "You create playful, humorous break reminders with light-hearted jokes and puns that make taking breaks fun and memorable. Use your sense of humor while staying positive.",
     "tts": {
-      "rate": 1.0,
-      "pitch": 1.1,
+      "rate": 1.05,
+      "pitch": 1.0,
       "volume": 0.85
     },
-    "color": "#f5576c",
-    "icon": "💪"
+    "color": "#FFC107",
+    "icon": "🤪",
+    "example": "Knock knock! Who's there? Alpaca. Alpaca who? Alpaca your stress away — time for a break!"
   },
   "professional": {
     "name": "Professional",

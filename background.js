@@ -62,8 +62,22 @@ async function createMainAlarm(delayMinutes = 0) {
 async function clearMainAlarm() { await chrome.alarms.clear(ALARM_MAIN); }
 
 // ===== Install/Startup =====
-chrome.runtime.onInstalled.addListener(async () => {
+chrome.runtime.onInstalled.addListener(async (details) => {
   await migrateSettings();
+  
+  // Check if this is the first install (not an update)
+  if (details.reason === 'install') {
+    // Check if onboarding has been completed
+    const { onboardingComplete } = await chrome.storage.local.get('onboardingComplete');
+    
+    if (!onboardingComplete) {
+      // Open onboarding page for new users
+      await chrome.tabs.create({
+        url: chrome.runtime.getURL('ui/onboarding.html')
+      });
+    }
+  }
+  
   await createMainAlarm();
 });
 chrome.runtime.onStartup.addListener(async () => {
@@ -97,7 +111,7 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
 async function notifyLongBreak() {
   chrome.notifications.create(`gia-long-${Date.now()}`, {
     type: "basic",
-    iconUrl: "icon.png",
+    iconUrl: "assets/logo.png",
     title: "Time for a longer reset",
     message: "Save where you’re leaving off, then take a few minutes away.",
     requireInteraction: true,
@@ -133,7 +147,7 @@ async function runShortBreak() {
   } else {
     chrome.notifications.create(`gia-short-${Date.now()}`, {
       type: "basic",
-      iconUrl: "icon.png",
+      iconUrl: "assets/logo.png",
       title: "20-20-20 break",
       message: "Look ~20 feet away and blink gently for 20 seconds.",
       silent: true
@@ -153,6 +167,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
     if (msg?.type === "gia.resume") { await setSettings({ paused: false }); await createMainAlarm();                 sendResponse({ paused: false }); }
     if (msg?.type === "gia.exit")   { await setSettings({ paused: true });  await clearMainAlarm(); await stopAllAudioAndNotifs(); sendResponse({ paused: true, exited: true }); }
     if (msg?.type === "gia.status") { const s = await getSettings(); sendResponse({ paused: !!s.paused }); }
+    if (msg?.type === "GIA_RESCHEDULE") { await clearMainAlarm(); await createMainAlarm(); sendResponse({ success: true }); }
   })();
   return true;
 });
@@ -164,4 +179,20 @@ chrome.commands.onCommand.addListener(async (cmd) => {
     chrome.runtime.sendMessage({ type: paused ? "gia.resume" : "gia.pause" }, () => {});
   });
 });
+const PWA_URL = "https://giaext-1c5cd.web.app"; // same as above
+
+async function openPwaVibrate(kind = "start") {
+  try { await chrome.tabs.create({ url: `${PWA_URL}?vibrate=${encodeURIComponent(kind)}` }); } catch {}
+}
+// when long break starts:
+openPwaVibrate("start");
+
+// when long break ends:
+openPwaVibrate("end");
+const params = new URLSearchParams(location.search);
+const vibe = params.get('vibrate');
+if ('vibrate' in navigator) {
+  if (vibe === 'start') navigator.vibrate([120,80,120]);
+  if (vibe === 'end')   navigator.vibrate([200,120,200,120,200]);
+}
 

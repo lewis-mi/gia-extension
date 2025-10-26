@@ -1,64 +1,122 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gia Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --Schemes-On-Surface: #1D1B20;
+      --Schemes-On-Surface-Variant: #49454F;
+      --Schemes-Outline: #79747E;
+      --Schemes-Primary: #6750A4;
+      --Schemes-Surface: #FFFBFE;
+      --Schemes-Surface-Variant: #E7E0EC;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
-      font: 14px system-ui, sans-serif;
+      font-family: Roboto, system-ui, -apple-system, sans-serif;
       margin: 0;
       padding: 16px;
-      color: #24333e;
+      color: var(--Schemes-On-Surface);
       width: 320px;
-      background: linear-gradient(180deg, #f8fbfc 0%, #f2f6f8 100%);
+      background: var(--Schemes-Surface);
+      font-size: 14px;
+      line-height: 20px;
     }
+    
     h1 {
-      font-size: 18px;
+      font-size: 20px;
+      font-weight: 500;
       margin: 0 0 16px;
-      font-weight: 700;
-      color: #1c2230;
+      color: var(--Schemes-On-Surface);
       text-align: center;
+      letter-spacing: 0.15px;
     }
+    
     .section {
       background: white;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 16px;
       margin-bottom: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      box-shadow: 0 2px 4px rgba(0,0,0,.08);
     }
+    
+    .section h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 0 0 12px;
+      color: var(--Schemes-On-Surface);
+      letter-spacing: 0.1px;
+    }
+    
     label {
       display: flex;
       align-items: center;
-      gap: 10px;
-      margin: 10px 0;
+      gap: 12px;
+      margin: 12px 0;
       cursor: pointer;
       font-size: 14px;
+      color: var(--Schemes-On-Surface);
+      font-weight: 400;
     }
+    
     input[type="checkbox"] {
-      width: 18px;
-      height: 18px;
+      width: 20px;
+      height: 20px;
       cursor: pointer;
-      accent-color: #3a7c72;
+      accent-color: var(--Schemes-Primary);
     }
+    
+    .small {
+      font-size: 12px;
+      color: var(--Schemes-On-Surface-Variant);
+      margin-top: 8px;
+      line-height: 16px;
+      letter-spacing: 0.4px;
+    }
+    
+    .small strong {
+      font-weight: 500;
+      color: var(--Schemes-On-Surface);
+    }
+    
     button {
       width: 100%;
-      background: #3a7c72;
+      background: var(--Schemes-Primary);
       color: white;
       border: none;
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 20px;
+      padding: 12px 24px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 500;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: all 0.2s;
       margin-top: 8px;
+      letter-spacing: 0.1px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.12);
     }
-    button:hover { background: #2f6d64; }
-    .small { font-size: 12px; color: #6f7f8c; margin-top: 8px; line-height: 1.4; }
+    
+    button:hover {
+      background: #5a43a0;
+      box-shadow: 0 2px 6px rgba(103, 80, 164, 0.2);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
   </style>
 </head>
 <body>
   <h1>⏰ Gia Settings</h1>
+  
   <div class="section">
     <label>
       <input id="voiceEnabled" type="checkbox" />
@@ -66,6 +124,7 @@
     </label>
     <div class="small">Say "snooze" or "dismiss" during breaks.</div>
   </div>
+  
   <div class="section">
     <label>
       <input id="hybridAIEnabled" type="checkbox" />
@@ -78,14 +137,17 @@
     </label>
     <div class="small">Help improve Gia with anonymous usage data.</div>
   </div>
+  
   <div class="section">
     <p class="small"><strong>20-20-20 Rule:</strong> Every 20 minutes, look 20 feet away for 20 seconds.</p>
   </div>
+  
   <div class="section">
     <h3>Your Progress</h3>
     <div id="breakStats" class="small">Loading...</div>
     <div id="reflectionSummary" class="small" style="margin-top: 8px;"></div>
   </div>
+  
   <button id="takeBreakNow">Take Break Now</button>
   <script src="popup.js"></script>
 </body>

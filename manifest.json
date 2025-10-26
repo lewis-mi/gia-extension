@@ -4,7 +4,7 @@
   "version": "0.6.0",
   "minimum_chrome_version": "138",
   "description": "Voice-guided 20-20-20 with optional long resets and on-device AI tips.",
-  "icons": { "128": "icon.png" },
+  "icons": { "128": "assets/logo.png", "48": "assets/logo.png", "32": "assets/logo.png", "16": "assets/logo.png" },
 
   "action": { "default_title": "Gia", "default_popup": "popup.html" },
 

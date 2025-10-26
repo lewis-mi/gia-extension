@@ -4,85 +4,374 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Welcome to Gia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --Schemes-White: #F9F4F5;
+      --Schemes-On-Surface: #1D1B20;
+      --Schemes-On-Surface-Variant: #49454F;
+      --Schemes-Outline: #79747E;
+      --Schemes-Primary: #6750A4;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: system-ui, -apple-system, sans-serif;
-      background: linear-gradient(135deg, #e8f5f3 0%, #d4ebe8 100%);
+      font-family: Roboto, system-ui, -apple-system, sans-serif;
+      background: transparent;
+      margin: 0;
+      padding: 10px;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 0;
-      padding: 20px;
     }
-    .container {
-      background: white;
-      border-radius: 24px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-      max-width: 600px;
+    
+    .main-container {
       width: 100%;
-      padding: 60px 50px;
-      text-align: center;
+      height: 100%;
+      padding: 10px;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 10px;
+      display: inline-flex;
     }
-    .logo {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 30px;
+    
+    .card {
+      width: 100%;
+      height: 333px;
+      max-width: 560px;
+      min-width: 280px;
+      background: var(--Schemes-White);
+      overflow: hidden;
+      border-radius: 28px;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-end;
+      display: flex;
     }
-    h1 {
-      font-size: 32px;
-      color: #1e3a3a;
-      margin-bottom: 12px;
-      font-weight: 300;
+    
+    .content-wrapper {
+      align-self: stretch;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      display: flex;
     }
-    .tagline {
-      color: #5a8582;
-      font-size: 16px;
-      margin-bottom: 40px;
+    
+    .content {
+      align-self: stretch;
+      padding: 24px;
+      overflow: hidden;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: flex-start;
+      gap: 16px;
+      display: flex;
     }
-    .rule {
-      background: #f0f9f8;
-      border-left: 4px solid #7ec4bd;
-      padding: 20px 24px;
-      margin: 30px 0;
-      border-radius: 8px;
-      text-align: left;
-      line-height: 1.7;
-      color: #2d4a48;
+    
+    .heading {
+      align-self: stretch;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-On-Surface);
+      font-size: 24px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 32px;
+      word-wrap: break-word;
+      margin: 0;
     }
-    button {
-      background: #7ec4bd;
-      color: white;
-      border: none;
-      border-radius: 12px;
-      padding: 14px 32px;
-      font-size: 16px;
-      font-weight: 600;
+    
+    .text-content {
+      align-self: stretch;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .text-variant {
+      color: var(--Schemes-On-Surface-Variant);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+      word-wrap: break-word;
+      margin: 0;
+    }
+    
+    .text-outline {
+      color: var(--Schemes-Outline);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+      word-wrap: break-word;
+      margin: 0;
+    }
+    
+    .button-container {
+      align-self: stretch;
+      overflow: hidden;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-end;
+      display: flex;
+    }
+    
+    .buttons {
+      padding: 20px 8px 20px 24px;
+      overflow: hidden;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 8px;
+      display: inline-flex;
+    }
+    
+    .button {
+      height: 48px;
+      border-radius: 100px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: opacity 0.2s;
     }
-    button:hover {
-      background: #6ab3aa;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(126, 196, 189, 0.3);
+    
+    .button:hover {
+      opacity: 0.8;
+    }
+    
+    .button-content {
+      overflow: hidden;
+      border-radius: 100px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+    
+    .button-inner {
+      padding: 10px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      display: flex;
+    }
+    
+    .button-text-outline {
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-Outline);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.10px;
+      word-wrap: break-word;
+    }
+    
+    .button-text-primary {
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-Primary);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.10px;
+      word-wrap: break-word;
+    }
+    
+    #learnMoreBtn {
+      background: transparent;
+      border: none;
+    }
+    
+    #startBtn {
+      background: transparent;
+      border: none;
+    }
+    
+    /* Modal/Alert Dialog */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    
+    .modal-overlay.show {
+      display: flex;
+    }
+    
+    .modal-dialog {
+      background: white;
+      border-radius: 28px;
+      max-width: 400px;
+      width: 90%;
+      max-height: 90vh;
+      overflow: auto;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+    
+    .modal-header {
+      padding: 24px 24px 16px 24px;
+    }
+    
+    .modal-title {
+      color: var(--Schemes-On-Surface);
+      font-size: 24px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 32px;
+      margin: 0;
+    }
+    
+    .modal-body {
+      padding: 0 24px 24px 24px;
+    }
+    
+    .modal-text {
+      color: var(--Schemes-On-Surface-Variant);
+      font-size: 16px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 24px;
+      white-space: pre-line;
+      margin: 0;
+    }
+    
+    .modal-actions {
+      padding: 8px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    
+    .modal-button {
+      padding: 10px 24px;
+      height: 40px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.1px;
+      transition: opacity 0.2s;
+    }
+    
+    .modal-button:hover {
+      opacity: 0.8;
+    }
+    
+    .modal-button-secondary {
+      background: transparent;
+      color: var(--Schemes-Outline);
+    }
+    
+    .modal-button-primary {
+      background: var(--Schemes-Primary);
+      color: white;
+    }
+    
+    /* Progress indicator */
+    .progress-indicator {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: var(--Schemes-Outline);
+      font-size: 12px;
+      font-family: Roboto;
+      font-weight: 500;
+    }
+    
+    .card {
+      position: relative;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <img src="../assets/icons/icon_0_start_128.png" alt="Gia" class="logo">
-    <h1>Welcome to Gia</h1>
-    <p class="tagline">Your mindful break companion</p>
-    
-    <div class="rule">
-      <strong style="font-size: 16px; display: block; margin-bottom: 12px;">Following the 20-20-20 rule:</strong>
-      Every <strong>20 minutes</strong>, look <strong>20 feet away</strong> for <strong>20 seconds</strong> to prevent digital eye strain and maintain healthy vision.
+  <div class="main-container">
+    <div class="card">
+      <div class="progress-indicator">Step 1 of 2</div>
+      <div class="content-wrapper">
+        <div class="content">
+          <h1 class="heading">Welcome to your good intentions assistant.</h1>
+          
+          <div class="text-content">
+            <p class="text-variant">
+              Gentle 20‑20‑20 eye breaks, optional longer resets, and an easy pause when you need it.<br/><br/>
+              Every 20 minutes, take a 20‑second eyes‑off break.<br/>
+              Longer resets every 40–120 minutes (you choose).<br/>
+              Private & local: runs on‑device. Audio is optional<br/>
+            </p>
+            <p class="text-outline">
+              You can change tone and audio later in Settings.
+            </p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="button-container">
+        <div class="buttons">
+          <button id="learnMoreBtn" class="button">
+            <div class="button-content">
+              <div class="button-inner">
+                <div class="button-text-outline">Learn More</div>
+              </div>
+            </div>
+          </button>
+          
+          <button id="startBtn" class="button">
+            <div class="button-content">
+              <div class="button-inner">
+                <div class="button-text-primary">Get Started</div>
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <button id="startBtn">Get Started</button>
+  <!-- Modal/Alert Dialog -->
+  <div id="modalOverlay" class="modal-overlay">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2 class="modal-title">How Gia works</h2>
+      </div>
+      <div class="modal-body">
+        <p class="modal-text">Gia runs locally in your browser. It guides 20‑20‑20 breaks and optional longer resets, with privacy‑first on‑device AI tips.
+
+Short breaks: every 20 minutes, 20 seconds of voice guidance (or soft notifications if audio is off).
+Longer resets: you choose 2–10 minutes every 40–120 minutes. Includes an optional wellness tip.
+Control: pause, resume, or exit anytime from the popup or keyboard shortcut.
+Phone haptics: open the companion PWA to feel gentle buzz cues during long breaks.</p>
+      </div>
+      <div class="modal-actions">
+        <button id="dismissBtn" class="modal-button modal-button-secondary">Close</button>
+      </div>
+    </div>
   </div>
 
   <script src="onboarding.js"></script>
 </body>
 </html>
-

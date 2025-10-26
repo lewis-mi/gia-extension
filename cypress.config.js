@@ -1,18 +1,12 @@
-// ===== CYPRESS CONFIG FOR GIA EXTENSION =====
+const { defineConfig } = require('cypress');
 
-import { defineConfig } from 'cypress';
-
-export default defineConfig({
+module.exports = defineConfig({
+  video: true,
+  screenshotOnRunFailure: true,
+  // Tell Cypress to serve files from the repo root
+  fileServerFolder: '.',
   e2e: {
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
-    },
-    baseUrl: 'http://localhost:3000',
-    supportFile: 'cypress/support/chrome-stub.js',
-    specPattern: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}',
-    video: false,
-    screenshotOnRunFailure: true,
+    // Remove/omit baseUrl so we can cy.visit('ui/...html')
+    supportFile: 'cypress/support/e2e.js',
   },
-  chromeWebSecurity: false,
 });
-

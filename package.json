@@ -1,0 +1,23 @@
+{
+  "name": "gia-extension",
+  "version": "1.0.0",
+  "description": "> **Your AI-powered digital wellness companion that helps build healthier screen habits through mindful breaks and intelligent reflection.**",
+  "main": "background.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "cy:run": "cypress run --config-file cypress.config.js",
+    "cy:open": "cypress open --config-file cypress.config.js",
+    "pw:test": "playwright test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "cypress": "^15.5.0"
+  }
+}

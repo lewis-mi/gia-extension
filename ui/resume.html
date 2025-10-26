@@ -4,101 +4,151 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Resume Your Session</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --Schemes-On-Surface: #1D1B20;
+      --Schemes-On-Surface-Variant: #49454F;
+      --Schemes-Outline: #79747E;
+      --Schemes-Primary: #6750A4;
+      --Schemes-Secondary: #F9F4F5;
+      --Schemes-Tertiary: #7D5260;
+      --Schemes-Surface: #FFFBFE;
+    }
+    
     body {
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      background: var(--Schemes-Primary);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: Roboto, system-ui, -apple-system, sans-serif;
     }
+    
     .container {
-      background: white;
-      border-radius: 24px;
+      background: var(--Schemes-Surface);
+      border-radius: 28px;
       padding: 50px 40px;
       max-width: 500px;
       width: 90%;
       text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     }
+    
     .icon {
       width: 100px;
       height: 100px;
       margin: 0 auto 30px;
     }
+    
     h1 {
       font-size: 32px;
-      color: #1e3a3a;
+      font-weight: 400;
+      color: var(--Schemes-On-Surface);
       margin-bottom: 16px;
+      line-height: 40px;
     }
+    
     .message {
       font-size: 16px;
-      color: #5a8582;
-      line-height: 1.6;
+      font-weight: 400;
+      color: var(--Schemes-On-Surface-Variant);
+      line-height: 24px;
       margin: 30px 0;
+      letter-spacing: 0.5px;
     }
+    
     .stats {
-      background: #f0f9f8;
-      border-radius: 12px;
-      padding: 20px;
+      background: var(--Schemes-Secondary);
+      border-radius: 16px;
+      padding: 24px;
       margin: 30px 0;
     }
+    
     .stat {
       display: flex;
       justify-content: space-between;
       margin: 12px 0;
       font-size: 14px;
-      color: #2d4a48;
+      font-weight: 400;
+      color: var(--Schemes-On-Surface-Variant);
+      line-height: 20px;
+      letter-spacing: 0.25px;
     }
+    
     .stat strong {
-      color: #1e3a3a;
+      color: var(--Schemes-On-Surface);
+      font-weight: 500;
     }
+    
     button {
-      background: #f5576c;
+      background: var(--Schemes-Primary);
       color: white;
       border: none;
-      border-radius: 12px;
-      padding: 16px 40px;
-      font-size: 18px;
-      font-weight: 600;
+      border-radius: 20px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
       cursor: pointer;
       transition: all 0.2s;
       margin: 10px;
       width: 100%;
+      letter-spacing: 0.1px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.12);
     }
+    
     button:hover {
-      background: #e5455a;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(245, 87, 108, 0.4);
+      background: #5a43a0;
+      box-shadow: 0 2px 6px rgba(103, 80, 164, 0.2);
     }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    .secondary {
+      background: var(--Schemes-Outline) !important;
+    }
+    
+    .secondary:hover {
+      background: #6b6b6b !important;
+    }
+    
     .tips {
       text-align: left;
       margin-top: 30px;
       padding: 20px;
-      background: #fef4f4;
-      border-radius: 12px;
-      border-left: 4px solid #f5576c;
+      background: var(--Schemes-Secondary);
+      border-radius: 16px;
+      border-left: 4px solid var(--Schemes-Primary);
     }
+    
     .tips h3 {
-      margin: 0 0 12px;
-      color: #1e3a3a;
       font-size: 16px;
+      font-weight: 500;
+      margin: 0 0 12px;
+      color: var(--Schemes-On-Surface);
+      line-height: 24px;
     }
+    
     .tips ul {
       margin: 0;
       padding-left: 20px;
-      color: #5a8582;
+      color: var(--Schemes-On-Surface-Variant);
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 24px;
+      font-weight: 400;
+      letter-spacing: 0.25px;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="../assets/icons/icon_0_start_128.png" alt="Gia" class="icon">
+    <img src="../assets/logo.png" alt="Gia" class="icon">
     <h1>Welcome Back!</h1>
     
     <div class="message">
@@ -121,7 +171,7 @@
     </div>
 
     <button id="resume">Resume Session</button>
-    <button id="restart" style="background: #6c757d;">Start Fresh</button>
+    <button id="restart" class="secondary">Start Fresh</button>
 
     <div class="tips">
       <h3>💡 Remember:</h3>
@@ -136,4 +186,3 @@
   <script src="resume.js"></script>
 </body>
 </html>
-
