@@ -146,15 +146,28 @@ chrome.notifications?.onButtonClicked?.addListener(async (notifId, btnIdx) => {
 // ===== Short break runner =====
 async function runShortBreak() {
   const s = await getSettings();
+  const { elapsedMin = 0 } = await getCounters();
+  
+  // Import AI message generator
+  let aiMessage = "Take a 20-second break: look 20 feet away and blink gently.";
+  
+  try {
+    const aiModule = await import(chrome.runtime.getURL('ai/breakMessageGenerator.js'));
+    const tone = s.settings?.tipTone || 'mindful';
+    aiMessage = await aiModule.generateBreakMessage(tone, elapsedMin);
+  } catch (e) {
+    console.warn('Could not generate AI message:', e);
+  }
+  
   if (s.audioEnabled !== false) {
     const mod = await import(chrome.runtime.getURL('tts/shortBreak.js'));
-    await mod.playShortBreakTTS();
+    await mod.playShortBreakTTS(aiMessage, tone);
   } else {
     chrome.notifications.create(`gia-short-${Date.now()}`, {
       type: "basic",
       iconUrl: "assets/logo.png",
       title: "20-20-20 break",
-      message: "Look ~20 feet away and blink gently for 20 seconds.",
+      message: aiMessage,
       silent: true
     });
   }

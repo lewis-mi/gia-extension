@@ -16,6 +16,12 @@ const TONE_PROFILES = {
     pitch: 0.95,
     volume: 0.8
   },
+  goofy: {
+    voice: 'default',
+    rate: 1.05,
+    pitch: 1.0,
+    volume: 0.85
+  },
   motivating: {
     voice: 'default',
     rate: 1.0,
@@ -35,6 +41,10 @@ const TONE_PROFILES = {
     volume: 0.8
   }
 };
+
+export async function playShortBreakTTS(message = null, tone = 'mindful') {
+  return await speakBreakMessage(message, tone, false);
+}
 
 async function speakBreakMessage(message = null, tone = 'mindful', isFirstBreak = false) {
   try {

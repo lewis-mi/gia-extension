@@ -2,9 +2,24 @@
 
 > **Your AI-powered digital wellness companion that helps build healthier screen habits through mindful breaks and intelligent reflection.**
 
-[![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-v1.0.0-blue.svg)](https://chrome.google.com/webstore)
+[![Chrome Extension](https://img.shields.io/badge/Chrome%20Extension-v0.6.0-blue.svg)](https://github.com/lewis-mi/gia-extension)
 [![Built with Chrome AI](https://img.shields.io/badge/Built%20with-Chrome%20Built--in%20AI-green.svg)](https://developer.chrome.com/docs/web-platform/built-in-ai)
 [![Privacy First](https://img.shields.io/badge/Privacy-First%20Design-purple.svg)](#privacy--security)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+## 🎓 Hackathon Submission
+
+**Built for:** Google Chrome Built-in AI Challenge 2025
+
+**APIs Used:**
+- ✅ **Writer API**: Generates dynamic, personalized break reminders
+- ✅ **Rewriter API**: Adapts message tone (Mindful/Goofy)
+- ✅ **Translator API**: Multilingual break reminders
+- ✅ **Proofreader API**: Cleans user reflection journal entries
+- ✅ **Summarizer API**: Generates wellness insights from reflections
+- ✅ **Prompt API**: Voice command classification for voice commands
+
+**Demo:** [Watch Demo Video](#) - *Coming Soon*
 
 ## 🎯 Problem Statement
 
@@ -78,16 +93,25 @@ graph TD
 - Chrome 138+ with Built-in AI APIs enabled
 - Chrome Built-in AI Early Preview Program access
 
-### **Installation**
-1. Clone this repository
+### **Installation (For Judges)**
+1. Clone this repository: `git clone https://github.com/lewis-mi/gia-extension.git`
 2. Open Chrome Extensions (`chrome://extensions/`)
-3. Enable "Developer mode"
-4. Click "Load unpacked" and select the extension folder
+3. Enable "Developer mode" (toggle in top right)
+4. Click "Load unpacked" and select the `gia-extension` folder
 5. Grant necessary permissions when prompted
 
-### **First Use**
-1. Complete the onboarding flow
-2. Enable voice commands (optional)
+### **Quick Demo Mode**
+1. After installation, click **"🚀 Try Demo"** on the first screen
+2. Extension starts immediately with demo settings
+3. Try the popup, corner logo, and break notifications
+4. Configure later or go through full 3-screen setup
+
+### **First Use (Full Setup)**
+1. Complete the 3-screen onboarding:
+   - **Screen 1**: Choose audio, voice commands, and language
+   - **Screen 2**: Pick your tone (Mindful 🧘‍♀️ or Goofy 🤪)
+   - **Screen 3**: Set end time, long breaks, and haptics
+2. Extension starts automatically
 3. Start your first mindful session!
 
 ## 🎮 Usage Guide
