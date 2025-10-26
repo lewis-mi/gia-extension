@@ -122,30 +122,24 @@
       <input id="voiceEnabled" type="checkbox" />
       <span>Enable voice commands</span>
     </label>
-    <div class="small">Say "snooze" or "dismiss" during breaks.</div>
+    <div class="small">Say "snooze" or "dismiss" during breaks using Chrome's Prompt API.</div>
   </div>
   
   <div class="section">
     <label>
-      <input id="hybridAIEnabled" type="checkbox" />
-      <span>Enable hybrid AI (optional)</span>
+      <input id="audioEnabled" type="checkbox" />
+      <span>Read reminders out loud</span>
     </label>
-    <div class="small">Enhanced insights with cloud AI. Your data stays private with anonymized analytics.</div>
-    <label style="margin-top: 8px;">
-      <input id="analyticsEnabled" type="checkbox" />
-      <span>Share anonymized analytics</span>
-    </label>
-    <div class="small">Help improve Gia with anonymous usage data.</div>
+    <div class="small">AI-generated messages with text-to-speech using Writer API.</div>
   </div>
   
   <div class="section">
-    <p class="small"><strong>20-20-20 Rule:</strong> Every 20 minutes, look 20 feet away for 20 seconds.</p>
+    <p class="small"><strong>20-20-20 Rule:</strong> Every 20 minutes, look 20 feet away for 20 seconds. Powered by AOA research.</p>
   </div>
   
   <div class="section">
     <h3>Your Progress</h3>
     <div id="breakStats" class="small">Loading...</div>
-    <div id="reflectionSummary" class="small" style="margin-top: 8px;"></div>
   </div>
   
   <button id="takeBreakNow">Take Break Now</button>
