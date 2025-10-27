@@ -135,8 +135,17 @@ function showContextMenu(x, y) {
 }
 
 // ===== BREAK CARD =====
+let isShowingBreak = false;
 async function showBreakCard(breakType, durationMs, toneOverride = null) {
   console.log('showBreakCard called with:', breakType, durationMs, 'toneOverride:', toneOverride);
+  
+  // Prevent duplicate calls
+  if (isShowingBreak) {
+    console.log('Break card already showing, ignoring duplicate call');
+    return;
+  }
+  isShowingBreak = true;
+  
   console.log('Document body:', document.body);
   console.log('Document readyState:', document.readyState);
   
@@ -340,8 +349,9 @@ function dismissBreak(wrapper) {
 
 function removeBreakCard() {
   clearTimeout(endTimer);
-  if (tickRAF) cancelAnimationFrame(tickRAF);
+  if (tickRAF) clearInterval(tickRAF);
   tickRAF = null;
+  isShowingBreak = false;
   
   if (currentRecognition) {
     try { currentRecognition.stop(); } catch (e) {}
