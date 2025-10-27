@@ -60,17 +60,50 @@ async function init() {
         console.log('Waiting for content script...');
         await new Promise(resolve => setTimeout(resolve, 3000));
         
+        // Show multiple demo break cards to showcase different features
+        async function showDemoBreaks() {
+          // 1. Show short break (Mindful tone)
+          console.log('Showing short break (Mindful)...');
+          await chrome.tabs.sendMessage(tab.id, {
+            type: 'GIA_SHOW_BREAK',
+            breakType: 'short',
+            durationMs: 20000,
+            demo: true,
+            tone: 'mindful'
+          });
+          
+          // Wait for user to dismiss or complete
+          await new Promise(resolve => setTimeout(resolve, 25000));
+          
+          // 2. Show short break (Goofy tone)
+          console.log('Showing short break (Goofy)...');
+          await chrome.tabs.sendMessage(tab.id, {
+            type: 'GIA_SHOW_BREAK',
+            breakType: 'short',
+            durationMs: 20000,
+            demo: true,
+            tone: 'goofy'
+          });
+          
+          await new Promise(resolve => setTimeout(resolve, 25000));
+          
+          // 3. Show long break
+          console.log('Showing long break...');
+          await chrome.tabs.sendMessage(tab.id, {
+            type: 'GIA_SHOW_BREAK',
+            breakType: 'long',
+            durationMs: 300000, // 5 minutes
+            demo: true
+          });
+        }
+        
         // Send demo break message to the new tab with retry
         let attempts = 0;
         while (attempts < 10) {
           try {
-            console.log('Sending break message to tab:', tab.id, 'attempt', attempts + 1);
-            await chrome.tabs.sendMessage(tab.id, {
-              type: 'GIA_SHOW_BREAK',
-              breakType: 'short',
-              durationMs: 20000
-            });
-            console.log('Message sent successfully on attempt', attempts + 1);
+            console.log('Triggering demo sequence, attempt', attempts + 1);
+            await showDemoBreaks();
+            console.log('Demo sequence completed');
             break;
           } catch (e) {
             attempts++;
