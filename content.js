@@ -539,14 +539,6 @@ chrome.runtime.onMessage.addListener((msg) => {
     updateTooltip();
   }
   
-  if (msg?.type === 'GIA_TOGGLE_CORNER') {
-    cornerLogoEnabled = msg.enabled;
-    if (cornerLogoEnabled) {
-      createCornerLogo();
-    } else {
-      document.getElementById(CORNER_LOGO_ID)?.remove();
-    }
-  }
 });
 
 // Test function to manually trigger break card
@@ -556,15 +548,4 @@ window.testGiaBreakCard = function() {
 };
 
 // ===== INITIALIZATION =====
-(async function init() {
-  // Wait a bit for page to load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', createCornerLogo);
-  } else {
-    await createCornerLogo();
-  }
-  
-  // Update tooltip every 30 seconds
-  setInterval(updateTooltip, 30000);
-  
-})();
+// Corner logo functionality removed
