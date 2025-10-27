@@ -17,28 +17,18 @@
 **[Show: Click 'Try Demo' button on onboarding]**
 > "Gia includes a Demo Mode that starts immediately without setup - perfect for hackathon judges to see the full experience in under a minute."
 
-**[Show: First break with Mindful tone]**
-> "The first break demonstrates Mindful mode - calm, slower voice guiding you through a 20-second rest period. Notice how the breathing cues help you relax."
+**[Show: First break with Mindful tone - Short break]**
+> "The first break demonstrates Mindful mode - calm, slower voice guiding you through a 20-second rest period with gentle, grounding guidance."
 
-**[Show: Second break with Goofy tone]**
-> "The second break shows Goofy mode - fun knock-knock jokes while you take your break. Same wellness benefits, different personality."
-
-**[Show: Long break]**
-> "Finally, Gia offers optional longer breaks with entertaining messages for extended work sessions."
+**[Show: Long break with Goofy tone]**
+> "Next, Gia shows the long break feature with Goofy mode - fun knock-knock jokes while you take a longer reset. Same wellness benefits, different personality for when you need extended recovery."
 
 #### **2. Voice-Guided Experience (0:50 - 1:10)**
 **[Show: Break card with audio playing]**
-> "Each break reminder is read aloud with text-to-speech. In Mindful mode, you get gentle, slow guidance. In Goofy mode, you get a fun knock-knock joke to lighten the mood."
+> "Each break reminder is read aloud with high-quality text-to-speech. In Mindful mode, you get gentle, slow guidance. In Goofy mode, you get a fun knock-knock joke to lighten the mood."
 
 **[Show: 'Remind me in 5 minutes' button]**
-> "The Rewriter API adapts messages based on your tone preference - creating personalized experiences without any data leaving your device."
-
-#### **3. Reflection System (1:00 - 1:30)**
-**[Show: Reflection prompt after break]**
-> "After each break, optionally share how you feel. The Proofreader API cleans your text, while the Summarizer API identifies patterns over time."
-
-**[Show: Popup with progress and insights]**
-> "View your wellness journey with AI-generated insights and personalized recommendations."
+> "Users can snooze breaks or dismiss them - the system adapts messages based on your tone preference using on-device AI."
 
 ---
 

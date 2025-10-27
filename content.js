@@ -137,7 +137,7 @@ function showContextMenu(x, y) {
 // ===== BREAK CARD =====
 let isShowingBreak = false;
 async function showBreakCard(breakType, durationMs, toneOverride = null) {
-  console.log('showBreakCard called with:', breakType, durationMs, 'toneOverride:', toneOverride);
+  console.log('showBreakCard called with:', breakType, durationMs, 'toneOverride:', toneOverride, 'isShowingBreak:', isShowingBreak);
   
   // Prevent duplicate calls
   if (isShowingBreak) {
@@ -348,10 +348,12 @@ function dismissBreak(wrapper) {
 }
 
 function removeBreakCard() {
+  console.log('removeBreakCard called, isShowingBreak before:', isShowingBreak);
   clearTimeout(endTimer);
   if (tickRAF) clearInterval(tickRAF);
   tickRAF = null;
   isShowingBreak = false;
+  console.log('isShowingBreak after:', isShowingBreak);
   
   if (currentRecognition) {
     try { currentRecognition.stop(); } catch (e) {}
@@ -600,7 +602,7 @@ window.testGiaBreakCard = function() {
 // Auto-trigger demo if on demo page
 (async function init() {
   // Check if we're on the demo page
-  if (window.location.pathname.includes('demo.html')) {
+  if (window.location.pathname.includes('ui/demo.html')) {
     console.log('Demo page detected! Triggering demo sequence...');
     
     // Wait a moment for page to fully load

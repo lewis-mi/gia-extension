@@ -349,24 +349,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
             tone: 'mindful'
           });
 
-          // 2. Goofy Break (after the first one finishes)
-          console.log('Demo: Scheduling Goofy break...');
-          await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
-          
-          // Explicitly dismiss previous card and stop audio
-          try { chrome.tts.stop(); } catch (e) {}
-          await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
-          await new Promise(resolve => setTimeout(resolve, 300));
-          
-          await setSettings({ tipTone: 'goofy' });
-          await chrome.tabs.sendMessage(tabId, {
-            type: 'GIA_SHOW_BREAK',
-            breakType: 'short',
-            durationMs: 20000,
-            tone: 'goofy'
-          });
-
-          // 3. Long Break (after the second one finishes)
+          // 2. Long Break with Goofy tone (after the first one finishes)
           console.log('Demo: Scheduling Long break...');
           await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
           
@@ -375,6 +358,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
           await new Promise(resolve => setTimeout(resolve, 300));
           
+          await setSettings({ tipTone: 'goofy' });
           await chrome.tabs.sendMessage(tabId, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'long',
@@ -386,8 +370,8 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           console.log('Demo sequence complete.');
           if (sendResponse) sendResponse({ success: true });
 
-          // Reset demo flag after sequence
-          const totalDemoTime = 22000 + 22000 + 32000;
+          // Reset demo flag after sequence (20s mindful + 30s goofy long)
+          const totalDemoTime = 22000 + 32000;
           setTimeout(() => { isDemoRunning = false; }, totalDemoTime);
 
         } catch (e) {

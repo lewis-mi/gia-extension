@@ -52,96 +52,9 @@ async function init() {
         // Create a demo page where the break card can be shown
         console.log('Opening demo page...');
         const tab = await chrome.tabs.create({ 
-          url: 'https://www.google.com',
+          url: 'ui/demo.html',
           active: true 
         });
-        
-        // Wait for the content script to inject
-        console.log('Waiting for content script...');
-        await new Promise(resolve => setTimeout(resolve, 3000));
-        
-        // Show multiple demo break cards to showcase different features
-        async function showDemoBreaks() {
-          // 1. Show short break (Mindful tone)
-          console.log('Showing short break (Mindful)...');
-          await chrome.storage.local.set({
-            settings: {
-              audioEnabled: true,
-              voiceCommandsEnabled: false,
-              language: 'auto',
-              tipTone: 'mindful'
-            }
-          });
-          await chrome.tabs.sendMessage(tab.id, {
-            type: 'GIA_SHOW_BREAK',
-            breakType: 'short',
-            durationMs: 20000,
-            demo: true,
-            tone: 'mindful'
-          });
-          
-          // Wait for user to dismiss or complete
-          await new Promise(resolve => setTimeout(resolve, 20000));
-          
-          // 2. Show short break (Goofy tone)
-          console.log('Showing short break (Goofy)...');
-          await chrome.storage.local.set({
-            settings: {
-              audioEnabled: true,
-              voiceCommandsEnabled: false,
-              language: 'auto',
-              tipTone: 'goofy'
-            }
-          });
-          await chrome.tabs.sendMessage(tab.id, {
-            type: 'GIA_SHOW_BREAK',
-            breakType: 'short',
-            durationMs: 20000,
-            demo: true,
-            tone: 'goofy'
-          });
-          
-          await new Promise(resolve => setTimeout(resolve, 20000));
-          
-          // 3. Show long break (goofy tone)
-          console.log('Showing long break (Goofy)...');
-          await chrome.storage.local.set({
-            settings: {
-              audioEnabled: true,
-              voiceCommandsEnabled: false,
-              language: 'auto',
-              tipTone: 'goofy'
-            }
-          });
-          await chrome.tabs.sendMessage(tab.id, {
-            type: 'GIA_SHOW_BREAK',
-            breakType: 'long',
-            durationMs: 300000, // 5 minutes
-            demo: true,
-            tone: 'goofy'
-          });
-        }
-        
-        // Send demo break message to the new tab with retry
-        let attempts = 0;
-        while (attempts < 10) {
-          try {
-            console.log('Triggering demo sequence, attempt', attempts + 1);
-            await showDemoBreaks();
-            console.log('Demo sequence completed');
-            break;
-          } catch (e) {
-            attempts++;
-            console.log('Attempt', attempts, 'failed:', e.message);
-            if (attempts < 10) {
-              await new Promise(resolve => setTimeout(resolve, 300));
-            }
-          }
-        }
-        
-        console.log('Closing onboarding tab...');
-        // Close the onboarding tab
-        window.close();
       } catch (e) {
         console.error('Demo mode error:', e);
         alert('Demo mode failed. Please try the full setup instead.');
