@@ -41,11 +41,16 @@ async function init() {
         
         // Start the session
         console.log('Sending GIA_RESCHEDULE message...');
-        await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
-        console.log('Message sent, waiting...');
+        const response = await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
+        console.log('Message response:', response);
+        
+        // Create immediate demo alarm for quick testing
+        console.log('Creating demo alarm (30 seconds)...');
+        await chrome.alarms.create('gia-demo', { delayInMinutes: 0.5 });
+        console.log('Demo alarm created');
         
         // Wait a moment for alarm to be created
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 200));
         
         console.log('Closing tab...');
         // Close the tab
