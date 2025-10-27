@@ -357,6 +357,12 @@ function startCountdown(element, durationMs) {
   let completeAnnounced = false;
   let lastRemaining = durationMs;
   
+  // Clear any existing interval first
+  if (tickRAF) {
+    clearInterval(tickRAF);
+    tickRAF = null;
+  }
+  
   // Use setInterval to update every 1 second instead of every frame
   const interval = setInterval(() => {
     const remaining = Math.max(0, durationMs - (Date.now() - start));
@@ -395,7 +401,6 @@ function startCountdown(element, durationMs) {
   }, 1000); // Update every 1 second
   
   // Store interval ID to cleanup on dismiss
-  if (tickRAF) clearInterval(tickRAF);
   tickRAF = interval;
 }
 
