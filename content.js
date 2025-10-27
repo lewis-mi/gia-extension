@@ -318,7 +318,9 @@ async function fetchAIMessage() {
 }
 
 async function createMultimodalSection(wrapper) {
-  const { voiceEnabled, multimodalEnabled = true } = await chrome.storage.local.get(['voiceEnabled', 'multimodalEnabled']);
+  const result = await chrome.storage.local.get(['voiceEnabled', 'multimodalEnabled', 'settings']);
+  const voiceEnabled = result.voiceEnabled || result.settings?.voiceCommandsEnabled || false;
+  const multimodalEnabled = result.multimodalEnabled !== false;
   if (!multimodalEnabled) return null;
   
   const multimodalSection = document.createElement('div');
