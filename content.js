@@ -254,11 +254,29 @@ async function showBreakCard(breakType, durationMs) {
     // Start TTS via background script if audio is enabled
     if (settings.audioEnabled !== false) {
       try {
+        // Get tone to adjust voice parameters
+        const { settings = {} } = await chrome.storage.local.get('settings');
+        const tone = settings?.tipTone || 'mindful';
+        
+        let rate, pitch;
+        if (breakType === 'long') {
+          rate = 0.75;
+          pitch = 0.85;
+        } else if (tone === 'mindful') {
+          // Slower, lower pitch for mindful (calmer)
+          rate = 0.72;
+          pitch = 0.85;
+        } else {
+          // Normal for goofy
+          rate = 0.85;
+          pitch = 0.9;
+        }
+        
         await chrome.runtime.sendMessage({
           type: 'GIA_SPEAK',
           text: message,
-          rate: breakType === 'long' ? 0.75 : 0.85,
-          pitch: breakType === 'long' ? 0.85 : 0.9,
+          rate: rate,
+          pitch: pitch,
           volume: 0.9
         });
         console.log('TTS started for break card with message:', message);
