@@ -241,19 +241,22 @@ async function showBreakCard(breakType, durationMs) {
   });
   
   // Fetch AI message and start audio immediately
-  fetchAIMessage().then(message => {
+  const messagePromise = fetchAIMessage();
+  
+  // Start TTS as soon as message is ready
+  messagePromise.then(message => {
     instruction.textContent = message;
     
-    // Start TTS immediately when card appears
+    // Start TTS immediately with the fetched message
     try {
       chrome.tts.speak(message, {
         enqueue: false,
-        rate: 0.85,
-        pitch: 0.9,
+        rate: breakType === 'long' ? 0.75 : 0.85,
+        pitch: breakType === 'long' ? 0.85 : 0.9,
         volume: 0.9,
         requiredEventTypes: ['end']
       });
-      console.log('TTS started for break card');
+      console.log('TTS started for break card with message:', message);
     } catch (e) {
       console.log('TTS not available:', e);
     }
@@ -536,4 +539,15 @@ window.testGiaBreakCard = function() {
   
   // Update tooltip every 30 seconds
   setInterval(updateTooltip, 30000);
+  
+  // Trigger context menu on hover instead of right click
+  const cornerLogo = document.getElementById('gia-corner-logo');
+  if (cornerLogo) {
+    cornerLogo.addEventListener('mouseenter', () => {
+      setTimeout(() => showContextMenu(20, window.innerHeight / 2), 300);
+    });
+    cornerLogo.addEventListener('mouseleave', () => {
+      document.getElementById('gia-context-menu')?.remove();
+    });
+  }
 })();

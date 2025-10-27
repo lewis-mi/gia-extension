@@ -244,12 +244,13 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         
         // Add tone-specific content
         if (tone === 'mindful') {
-          message += "Now let's breathe together. Breathe in slowly... and out. In... and out. In... and out.";
+          message += "Let's breathe together. Inhale slowly through your nose, hold for a moment, exhale gently through your mouth. Inhale... hold... exhale.";
         } else if (tone === 'goofy') {
           const jokes = [
             "Knock knock. Who's there? Boo. Boo who? Don't cry!",
             "Knock knock. Who's there? Lettuce. Lettuce who? Lettuce in!",
-            "Knock knock. Who's there? Hawaii. Hawaii who? I'm fine, Hawaii you?"
+            "Knock knock. Who's there? Hawaii. Hawaii who? I'm fine, Hawaii you?",
+            "Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!"
           ];
           const joke = jokes[Math.floor(Math.random() * jokes.length)];
           message += joke;
