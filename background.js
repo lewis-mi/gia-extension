@@ -235,14 +235,27 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         await createMainAlarm(); 
         if (sendResponse) sendResponse({ success: true }); 
       } else if (msg?.type === "GIA_SPEAK") {
-        // Handle TTS requests from content scripts
+        // Handle TTS requests from content scripts with tone-specific audio
         try {
-          // Try high-quality Prompt API audio first
           const tone = msg.tone || 'mindful';
           
+          // Tone-specific audio profiles
+          const toneProfiles = {
+            mindful: { rate: 0.95, pitch: 1.0 },
+            goofy: { rate: 1.1, pitch: 1.2 }
+          };
+          
+          const profile = toneProfiles[tone] || toneProfiles.mindful;
+          
+          // Try high-quality Prompt API audio first
           if (chrome?.ai?.prompt) {
             try {
-              const prompt = `Rephrase for a ${tone} wellness reminder, brief and friendly: "${msg.text}"`;
+              const toneStyle = tone === 'goofy' 
+                ? 'Speak this line with a lighthearted, goofy tone. Use expressive intonation and cheerful pacing.'
+                : 'Speak this line in a calm, warm tone with steady pacing. Avoid strong emotion; sound mindful and gentle.';
+              
+              const prompt = `${toneStyle}\n"${msg.text}"`;
+              
               const res = await chrome.ai.prompt({
                 prompt,
                 output_audio_format: "wav"
@@ -261,11 +274,11 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
             }
           }
           
-          // Fallback to chrome.tts
+          // Fallback to chrome.tts with tone-specific parameters
           chrome.tts.speak(msg.text, {
             enqueue: false,
-            rate: msg.rate || 0.85,
-            pitch: msg.pitch || 0.9,
+            rate: msg.rate || profile.rate,
+            pitch: msg.pitch || profile.pitch,
             volume: msg.volume || 0.9
           });
           

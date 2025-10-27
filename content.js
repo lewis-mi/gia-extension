@@ -255,18 +255,21 @@ async function showBreakCard(breakType, durationMs) {
         const { settings = {} } = await chrome.storage.local.get('settings');
         const tone = settings?.tipTone || 'mindful';
         
+        // Tone-specific audio profiles
+        const toneProfiles = {
+          mindful: { rate: 0.95, pitch: 1.0 },
+          goofy: { rate: 1.1, pitch: 1.2 }
+        };
+        
         let rate, pitch;
         if (breakType === 'long') {
           rate = 0.75;
           pitch = 0.85;
-        } else if (tone === 'mindful') {
-          // Slower, lower pitch for mindful (calmer)
-          rate = 0.72;
-          pitch = 0.85;
         } else {
-          // Normal for goofy
-          rate = 0.85;
-          pitch = 0.9;
+          // Use tone-specific profile
+          const profile = toneProfiles[tone] || toneProfiles.mindful;
+          rate = profile.rate;
+          pitch = profile.pitch;
         }
         
         try {
