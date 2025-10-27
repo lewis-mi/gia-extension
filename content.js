@@ -135,8 +135,8 @@ function showContextMenu(x, y) {
 }
 
 // ===== BREAK CARD =====
-async function showBreakCard(breakType, durationMs) {
-  console.log('showBreakCard called with:', breakType, durationMs);
+async function showBreakCard(breakType, durationMs, toneOverride = null) {
+  console.log('showBreakCard called with:', breakType, durationMs, 'toneOverride:', toneOverride);
   console.log('Document body:', document.body);
   console.log('Document readyState:', document.readyState);
   
@@ -238,7 +238,7 @@ async function showBreakCard(breakType, durationMs) {
   });
   
   // Fetch AI message and start audio immediately
-  const messagePromise = fetchAIMessage(breakType);
+  const messagePromise = fetchAIMessage(breakType, toneOverride);
   
   // Start TTS as soon as message is ready
   messagePromise.then(async (message) => {
@@ -251,9 +251,9 @@ async function showBreakCard(breakType, durationMs) {
     // Start TTS via background script if audio is enabled
     if (settings.audioEnabled !== false) {
       try {
-        // Get tone to adjust voice parameters
+        // Get tone to adjust voice parameters (use override if in demo)
         const { settings = {} } = await chrome.storage.local.get('settings');
-        const tone = settings?.tipTone || 'mindful';
+        const tone = toneOverride || settings?.tipTone || 'mindful';
         
         // Tone-specific audio profiles with refined characteristics
         const toneProfiles = {
@@ -399,12 +399,13 @@ function startCountdown(element, durationMs) {
   tickRAF = interval;
 }
 
-async function fetchAIMessage(breakType = 'short') {
+async function fetchAIMessage(breakType = 'short', tone = null) {
   try {
     const response = await chrome.runtime.sendMessage({
       type: 'GIA_GET_MESSAGE',
       locale: navigator.language,
-      breakType: breakType
+      breakType: breakType,
+      tone: tone
     });
     return response?.text || "Look 20 feet away and soften your gaze.";
   } catch (e) {
@@ -557,8 +558,8 @@ async function classifyIntent(text) {
 chrome.runtime.onMessage.addListener((msg) => {
   console.log('Content script received message:', msg);
   if (msg?.type === 'GIA_SHOW_BREAK') {
-    console.log('Showing break card with type:', msg.breakType, 'duration:', msg.durationMs);
-    showBreakCard(msg.breakType, msg.durationMs);
+    console.log('Showing break card with type:', msg.breakType, 'duration:', msg.durationMs, 'tone:', msg.tone);
+    showBreakCard(msg.breakType, msg.durationMs, msg.tone);
   }
   
   if (msg?.type === 'GIA_UPDATE_STAGE') {
