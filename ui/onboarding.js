@@ -10,31 +10,38 @@ async function init() {
   // Demo mode - skip onboarding and start immediately
   if (demoBtn) {
     demoBtn.addEventListener('click', async () => {
-      // Set demo settings in the correct structure
-      await chrome.storage.local.set({
-        settings: {
-          audioEnabled: true,
-          voiceCommandsEnabled: false,
-          language: 'auto',
-          tipTone: 'mindful',
-          longEnabled: true,
-          endTime: '18:00',
-          longBreakLength: 5,
-          longBreakFrequency: 60,
-          phoneHapticsEnabled: false
-        },
-        onboardingComplete: true
-      });
-      
-      // Start the session
       try {
+        // Set demo settings in the correct structure
+        await chrome.storage.local.set({
+          settings: {
+            audioEnabled: true,
+            voiceCommandsEnabled: false,
+            language: 'auto',
+            tipTone: 'mindful',
+            longEnabled: false,  // Disable long breaks for demo
+            endTime: '18:00',
+            longBreakLength: 5,
+            longBreakFrequency: 60,
+            phoneHapticsEnabled: false
+          },
+          onboardingComplete: true
+        });
+        
+        // Wait a moment for storage to persist
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Start the session
         await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
+        
+        // Wait a moment for alarm to be created
+        await new Promise(resolve => setTimeout(resolve, 100));
+        
+        // Close the tab
+        window.close();
       } catch (e) {
-        console.warn('Could not send reschedule message:', e);
+        console.error('Demo mode error:', e);
+        alert('Demo mode failed. Please try the full setup instead.');
       }
-      
-      // Close the tab
-      window.close();
     });
   }
   
