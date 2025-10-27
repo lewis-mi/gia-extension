@@ -261,11 +261,8 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           message = "Take 5. Touch grass here's one for the road. Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!";
         } else {
           // Short break messages
-          message = "Take a 20-second break. Look 20 feet away and blink gently. ";
-          
-          // Add tone-specific content for short breaks
           if (tone === 'mindful') {
-            message += "Let's take a little rest. I'll let you know when time is up.";
+            message = "Take a 20-second break. Look 20 feet away and blink gently. Let's take a little rest. I'll let you know when time is up.";
           } else if (tone === 'goofy') {
             const jokes = [
               "Knock knock. Who's there? Boo. Boo who? Don't cry!",
@@ -274,7 +271,9 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
               "Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!"
             ];
             const joke = jokes[Math.floor(Math.random() * jokes.length)];
-            message += joke;
+            message = `Take a 20-second break. Look 20 feet away and blink gently. ${joke}`;
+          } else {
+            message = "Take a 20-second break. Look 20 feet away and blink gently.";
           }
         }
         
