@@ -312,7 +312,7 @@ Do not sound robotic or overly formal.`;
         } else {
           // Short break messages
           if (tone === 'mindful') {
-            message = "Take a 20-second break. Look 20 feet away and blink gently. Let's take a little rest. I'll let you know when time is up.";
+            message = "Take a 20-second break. Look 20 feet away and blink gently. I'll let you know when time is up.";
           } else if (tone === 'goofy') {
             const jokes = [
               "Knock knock. Who's there? Boo. Boo who? Don't cry!",
@@ -374,6 +374,9 @@ Do not sound robotic or overly formal.`;
               });
               
               setTimeout(async () => {
+                // Wait extra time to ensure first break is fully dismissed
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
                 // Stop any existing audio before next break
                 try {
                   chrome.tts.stop();
@@ -383,6 +386,13 @@ Do not sound robotic or overly formal.`;
                 await chrome.storage.local.set({
                   settings: { tipTone: 'goofy' }
                 });
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Make sure break card is dismissed before showing next one
+                await chrome.tabs.sendMessage(tab.id, {
+                  type: 'GIA_DISMISS_BREAK'
+                }).catch(() => {});
+                
                 await new Promise(resolve => setTimeout(resolve, 300));
                 
                 await chrome.tabs.sendMessage(tab.id, {
@@ -392,7 +402,7 @@ Do not sound robotic or overly formal.`;
                   demo: true,
                   tone: 'goofy'
                 });
-              }, 25000);
+              }, 22000);
             }, 1000);
             
             if (sendResponse) sendResponse({ success: true });
