@@ -103,13 +103,22 @@ async function init() {
           
           await new Promise(resolve => setTimeout(resolve, 25000));
           
-          // 3. Show long break
-          console.log('Showing long break...');
+          // 3. Show long break (goofy tone)
+          console.log('Showing long break (Goofy)...');
+          await chrome.storage.local.set({
+            settings: {
+              audioEnabled: true,
+              voiceCommandsEnabled: false,
+              language: 'auto',
+              tipTone: 'goofy'
+            }
+          });
           await chrome.tabs.sendMessage(tab.id, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'long',
             durationMs: 300000, // 5 minutes
-            demo: true
+            demo: true,
+            tone: 'goofy'
           });
         }
         
