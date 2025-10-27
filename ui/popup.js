@@ -9,7 +9,6 @@ const breakLength = document.getElementById('breakLength');
 const breakFrequency = document.getElementById('breakFrequency');
 const endTime = document.getElementById('endTime');
 const takeBreakNow = document.getElementById('takeBreakNow');
-const breakStats = document.getElementById('breakStats');
 
 (async () => {
   const { 
@@ -42,7 +41,6 @@ const breakStats = document.getElementById('breakStats');
   // End time
   endTime.value = settings.endTime || '18:00';
   
-  await loadProgressData();
 })();
 
 // Voice commands toggle
@@ -149,18 +147,4 @@ takeBreakNow.addEventListener('click', async () => {
   window.close();
 });
 
-// Load progress data
-async function loadProgressData() {
-  try {
-    const { 
-      counters = {} 
-    } = await chrome.storage.local.get(['counters']);
-    
-    const breakCount = counters.totalBreaks || 0;
-    
-    breakStats.innerHTML = `<strong>Breaks taken:</strong> ${breakCount}`;
-  } catch (e) {
-    console.error('Failed to load progress data:', e);
-    breakStats.textContent = 'Unable to load progress';
-  }
-}
+// Progress tracking removed
