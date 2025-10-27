@@ -289,8 +289,12 @@ async function showBreakCard(breakType, durationMs) {
   startCountdown(heroCount, durationMs);
   
   // Auto-dismiss without reflection prompt
+  let dismissed = false;
   endTimer = setTimeout(() => {
-    dismissBreak(wrapper);
+    if (!dismissed) {
+      dismissed = true;
+      dismissBreak(wrapper);
+    }
   }, durationMs);
   
   // ESC to close
@@ -329,6 +333,7 @@ function removeBreakCard() {
 function startCountdown(element, durationMs) {
   const start = Date.now();
   const isLong = durationMs > 60000;
+  let completeAnnounced = false;
   
   // Use setInterval to update every 1 second instead of every frame
   const interval = setInterval(() => {
@@ -342,8 +347,9 @@ function startCountdown(element, durationMs) {
       element.textContent = `${secs}s`;
     }
     
-    // Play ping sound and cleanup when countdown reaches zero
-    if (remaining === 0) {
+    // Play ping sound and cleanup when countdown reaches zero (only once)
+    if (remaining === 0 && !completeAnnounced) {
+      completeAnnounced = true;
       clearInterval(interval);
       
       if (!isLong) {
