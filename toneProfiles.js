@@ -14,9 +14,9 @@ Do not sound robotic or overly formal.`,
   },
   goofy: {
     description: "playful, expressive, and cartoonish — like a cheerful friend or sidekick",
-    rate: 1.25,
-    pitch: 1.25,
-    volume: 1.0,
+    rate: 1.0,
+    pitch: 1.1,
+    volume: 0.95,
     promptStyle: `Speak this line in a fun, goofy tone — animated and slightly exaggerated,
 like a cartoon sidekick who's excited to help. Use playful rhythm, upbeat pacing,
 and big vocal expressions (smiles, laughter hints).

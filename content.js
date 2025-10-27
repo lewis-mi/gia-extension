@@ -258,7 +258,7 @@ async function showBreakCard(breakType, durationMs) {
         // Tone-specific audio profiles with refined characteristics
         const toneProfiles = {
           mindful: { rate: 0.9, pitch: 0.9, volume: 0.85 },
-          goofy: { rate: 1.25, pitch: 1.25, volume: 1.0 }
+          goofy: { rate: 1.0, pitch: 1.1, volume: 0.95 }
         };
         
         let rate, pitch, volume;
