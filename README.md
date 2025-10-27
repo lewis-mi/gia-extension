@@ -134,18 +134,29 @@ All AI features run locally using Gemini Nano for complete privacy:
 
 ### **Quick Demo Mode**
 
-Click **"🚀 Try Demo"** on the first screen to:
-- Skip setup and start immediately
-- Try all features with default settings
-- Experience AI-generated break reminders
-- Configure later if desired
+Click **"🚀 Try Demo"** on the first screen for immediate experience:
+
+**Break 1 (Mindful - 20 seconds):**
+- Message: "Let's take a little rest. I'll let you know when time is up."
+- Voice: Slow (0.72x), calm pitch
+- Shows circular countdown timer
+- Audio notification when complete
+
+**Break 2 (Goofy - 20 seconds):**
+- Message: Knock-knock jokes (e.g., "Boo who? Don't cry!")
+- Voice: Normal speed (0.85x), energetic pitch
+- Fun, entertaining content
+
+**Break 3 (Long - 5 minutes):**
+- Message: "Take 5. Touch grass here's one for the road."
+- Extended break demonstration
 
 ### **Full Setup**
 
 Complete the 3-screen onboarding:
 - **Screen 1**: Choose audio, voice commands, and language
 - **Screen 2**: Pick your tone (Mindful 🧘‍♀️ or Goofy 🤪)
-- **Screen 3**: Set end time, long breaks, and phone haptics
+- **Screen 3**: Set end time and long breaks
 
 ---
 
