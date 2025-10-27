@@ -236,17 +236,20 @@
     <div class="setting-row">
       <div class="setting-info">
         <div class="setting-label">Long breaks</div>
-        <div class="setting-helper">Extended resets for work sessions</div>
+        <div class="setting-helper">Take longer breaks during extended work sessions</div>
       </div>
       <input id="longEnabled" type="checkbox" />
     </div>
     <div id="longBreakControls" class="hidden" style="margin-top: 12px; display: none;">
+      <div style="font-size: 12px; color: var(--Schemes-On-Surface-Variant); margin-bottom: 8px;">
+        Break duration and frequency:
+      </div>
       <div class="setting-row">
         <select id="breakLength">
-          <option value="2">2 min</option>
-          <option value="5" selected>5 min</option>
-          <option value="10">10 min</option>
-          <option value="15">15 min</option>
+          <option value="2">2 minutes</option>
+          <option value="5" selected>5 minutes</option>
+          <option value="10">10 minutes</option>
+          <option value="15">15 minutes</option>
         </select>
         <select id="breakFrequency">
           <option value="40">Every 40 min</option>
