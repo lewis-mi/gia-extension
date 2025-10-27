@@ -137,11 +137,14 @@ function showContextMenu(x, y) {
 
 // ===== BREAK CARD =====
 async function showBreakCard(breakType, durationMs) {
+  console.log('showBreakCard called with:', breakType, durationMs);
+  console.log('Document body:', document.body);
   removeBreakCard();
   
   const wrapper = document.createElement('div');
   wrapper.id = BREAK_CARD_ID;
   wrapper.className = `gia-break-overlay ${breakType}`;
+  console.log('Created wrapper:', wrapper);
   
   // Backdrop
   const backdrop = document.createElement('div');
@@ -497,7 +500,9 @@ async function classifyIntent(text) {
 
 // ===== MESSAGE LISTENERS =====
 chrome.runtime.onMessage.addListener((msg) => {
+  console.log('Content script received message:', msg);
   if (msg?.type === 'GIA_SHOW_BREAK') {
+    console.log('Showing break card with type:', msg.breakType, 'duration:', msg.durationMs);
     showBreakCard(msg.breakType, msg.durationMs);
   }
   
