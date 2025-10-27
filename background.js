@@ -321,8 +321,22 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         isDemoRunning = true;
 
         try {
-          console.log(`Starting demo sequence on tab ${msg.tabId}`);
-          const tabId = msg.tabId;
+          // Find the tab with the demo page
+          const url = msg.tabId; // This is actually a URL, not a tab ID
+          console.log(`Starting demo sequence on page ${url}`);
+          
+          // Query for tabs containing demo.html
+          const allTabs = await chrome.tabs.query({});
+          const demoTab = allTabs.find(tab => tab.url && tab.url.includes('demo.html'));
+          
+          if (!demoTab) {
+            console.error('Demo tab not found');
+            if (sendResponse) sendResponse({ error: 'Demo tab not found' });
+            return;
+          }
+          
+          const tabId = demoTab.id;
+          console.log(`Found demo tab ID: ${tabId}`);
 
           // Set initial demo settings
           await setSettings({
