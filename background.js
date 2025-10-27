@@ -219,103 +219,77 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
   // Handle the message asynchronously
   (async () => {
     try {
-      if (msg?.type === "gia.pause")  { 
-        await setSettings({ paused: true });  
-        await clearMainAlarm(); 
-        await stopAllAudioAndNotifs(); 
-        if (sendResponse) sendResponse({ paused: true }); 
-      } else if (msg?.type === "gia.resume") { 
-        await setSettings({ paused: false }); 
-        await createMainAlarm(); 
-        if (sendResponse) sendResponse({ paused: false }); 
-      } else if (msg?.type === "gia.exit")   { 
-        await setSettings({ paused: true });  
-        await clearMainAlarm(); 
-        await stopAllAudioAndNotifs(); 
-        if (sendResponse) sendResponse({ paused: true, exited: true }); 
-      } else if (msg?.type === "gia.status") { 
-        const s = await getSettings(); 
-        if (sendResponse) sendResponse({ paused: !!s.paused }); 
-      } else if (msg?.type === "GIA_RESCHEDULE") { 
-        await clearMainAlarm(); 
-        await createMainAlarm(); 
-        if (sendResponse) sendResponse({ success: true }); 
+      if (msg?.type === "gia.pause") {
+        await setSettings({ paused: true });
+        await clearMainAlarm();
+        await stopAllAudioAndNotifs();
+        if (sendResponse) sendResponse({ paused: true });
+      } else if (msg?.type === "gia.resume") {
+        await setSettings({ paused: false });
+        await createMainAlarm();
+        if (sendResponse) sendResponse({ paused: false });
+      } else if (msg?.type === "gia.exit") {
+        await setSettings({ paused: true });
+        await clearMainAlarm();
+        await stopAllAudioAndNotifs();
+        if (sendResponse) sendResponse({ paused: true, exited: true });
+      } else if (msg?.type === "gia.status") {
+        const s = await getSettings();
+        if (sendResponse) sendResponse({ paused: !!s.paused });
+      } else if (msg?.type === "GIA_RESCHEDULE") {
+        await clearMainAlarm();
+        await createMainAlarm();
+        if (sendResponse) sendResponse({ success: true });
       } else if (msg?.type === "GIA_SPEAK") {
         // Handle TTS requests from content scripts with tone-specific audio
         try {
           const tone = msg.tone || 'mindful';
-          const tone = msg.tone || 'mindful';          
           const profile = TONE_STYLES[tone] || TONE_STYLES.mindful;
-          
-          // Tone-specific audio profiles with refined characteristics
-          const toneProfiles = {
-            mindful: { rate: 0.9, pitch: 0.9, volume: 0.85 },
-            goofy: { rate: 1.0, pitch: 1.1, volume: 0.95 }
-          };
-          
-          const profile = toneProfiles[tone] || toneProfiles.mindful;
-          
+
           // Try high-quality Prompt API audio first
           if (chrome?.ai?.prompt) {
             try {
-              let toneStyle;
-              if (tone === 'goofy') {
-                toneStyle = `Speak this line in a fun, goofy tone — animated and slightly exaggerated,
-like a cartoon sidekick who's excited to help. Use playful rhythm, upbeat pacing,
-and big vocal expressions (smiles, laughter hints).
-End each line with rising intonation or comedic timing.`;
-              } else {
-                toneStyle = `Speak this line in a warm, slow, and grounded tone — imagine guiding a meditation.
-Use smooth rhythm, low volume, and no sudden inflection.
-Pause naturally between phrases.
-Do not sound robotic or overly formal.`;
-              }
-            try {              
               const prompt = `${profile.promptStyle}\n"${msg.text}"`;
-              
-              const prompt = `${toneStyle}\n"${msg.text}"`;
-              
+
               const res = await chrome.ai.prompt({
                 prompt,
                 output_audio_format: "wav"
               });
-              
+
               if (res?.output_audio) {
                 // Send audio data back to content script to play
-                if (sendResponse) sendResponse({ 
-                  success: true, 
+                if (sendResponse) sendResponse({
+                  success: true,
                   audioData: res.output_audio,
                   audioFormat: "wav"
                 });
+                return; // Prevent fallback
               }
             } catch (e) {
               console.log('Prompt API audio not available, falling back to chrome.tts');
             }
           }
-          
+
           // Fallback to chrome.tts with tone-specific parameters
           chrome.tts.speak(msg.text, {
             enqueue: false,
-            rate: msg.rate || profile.rate,
-            pitch: msg.pitch || profile.pitch,
-            volume: msg.volume !== undefined ? msg.volume : profile.volume !== undefined ? profile.volume : 0.9
             rate: profile.rate,
             pitch: profile.pitch,
             volume: profile.volume
           });
-          
+
           if (sendResponse) sendResponse({ success: true });
         } catch (e) {
           console.error('TTS speak error:', e);
           if (sendResponse) sendResponse({ error: e.message });
         }
-      } else if (msg?.type === "GIA_GET_MESSAGE") { 
+      } else if (msg?.type === "GIA_GET_MESSAGE") {
         // Get tone from message parameter, then settings, then default
         const tone = msg.tone || (await getSettings())?.tipTone || 'mindful';
         const breakType = msg.breakType || 'short';
-        
+
         let message;
-        
+
         if (breakType === 'long') {
           // Long break has special message
           message = "Take 5. Time to touch grass but here's one for the road. Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!";
@@ -336,88 +310,17 @@ Do not sound robotic or overly formal.`;
             message = "Take a 20-second break. Look 20 feet away and blink gently.";
           }
         }
-        
-        if (sendResponse) sendResponse({ text: message }); 
+
+        if (sendResponse) sendResponse({ text: message });
       } else if (msg?.type === 'GIA_START_DEMO') {
-        // Handle demo start (prevent duplicates)
         if (isDemoRunning) {
           console.log('Demo already running, ignoring duplicate request');
           if (sendResponse) sendResponse({ error: 'Demo already running' });
           return;
         }
         isDemoRunning = true;
-        
-        console.log('Starting demo sequence...');
 
         try {
-          // Find the demo page tab
-          const tabs = await chrome.tabs.query({ url: '*://*/demo.html' });
-          if (tabs && tabs.length > 0) {
-            const tab = tabs[0];
-            
-            // Trigger demo breaks on that tab
-            await chrome.storage.local.set({
-              settings: {
-                audioEnabled: true,
-                voiceCommandsEnabled: false,
-                language: 'auto',
-                tipTone: 'mindful'
-              }
-            });
-            
-            // Wait for storage to persist
-            await new Promise(resolve => setTimeout(resolve, 300));
-            
-            // Show breaks in sequence with audio cleanup
-            setTimeout(async () => {
-              // Stop any existing audio before starting
-              try {
-                chrome.tts.stop();
-              } catch (e) {}
-              
-              // Break 1: Mindful
-              await chrome.tabs.sendMessage(tab.id, {
-                type: 'GIA_SHOW_BREAK',
-                breakType: 'short',
-                durationMs: 20000,
-                demo: true,
-                tone: 'mindful'
-              });
-              
-              setTimeout(async () => {
-                // Wait extra time to ensure first break is fully dismissed
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
-                // Stop any existing audio before next break
-                try {
-                  chrome.tts.stop();
-                } catch (e) {}
-                
-                // Break 2: Goofy
-                await chrome.storage.local.set({
-                  settings: { tipTone: 'goofy' }
-                });
-                await new Promise(resolve => setTimeout(resolve, 500));
-                
-                // Make sure break card is dismissed before showing next one
-                await chrome.tabs.sendMessage(tab.id, {
-                  type: 'GIA_DISMISS_BREAK'
-                }).catch(() => {});
-                
-                await new Promise(resolve => setTimeout(resolve, 300));
-                
-                await chrome.tabs.sendMessage(tab.id, {
-                  type: 'GIA_SHOW_BREAK',
-                  breakType: 'short',
-                  durationMs: 20000,
-                  demo: true,
-                  tone: 'goofy'
-                });
-              }, 22000);
-            }, 1000);
-            
-            if (sendResponse) sendResponse({ success: true });
-          }
           console.log(`Starting demo sequence on tab ${msg.tabId}`);
           const tabId = msg.tabId;
 
@@ -468,7 +371,6 @@ Do not sound robotic or overly formal.`;
           if (sendResponse) sendResponse({ success: true });
 
           // Reset demo flag after sequence
-          // Total duration: 2s + 20s + 2s + 20s + 2s + 30s = ~76s
           const totalDemoTime = 22000 + 22000 + 32000;
           setTimeout(() => { isDemoRunning = false; }, totalDemoTime);
 
@@ -483,7 +385,7 @@ Do not sound robotic or overly formal.`;
       if (sendResponse) sendResponse({ error: e.message });
     }
   })();
-  
+
   return true; // Indicate we will send response asynchronously
 });
 
