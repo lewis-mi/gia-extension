@@ -150,6 +150,20 @@ async function runShortBreak() {
   // Simple default message (AI integration happens in content script)
   const message = "Take a 20-second break: look 20 feet away and blink gently.";
   
+  // Try to show break card in active tabs first
+  const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  for (const tab of tabs) {
+    try {
+      await chrome.tabs.sendMessage(tab.id, {
+        type: 'GIA_SHOW_BREAK',
+        breakType: 'short',
+        durationMs: 20000
+      });
+    } catch (e) {
+      // Content script not loaded on this page
+    }
+  }
+  
   if (s.audioEnabled !== false) {
     try {
       // Use chrome.tts API with more natural voice settings
