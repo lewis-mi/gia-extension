@@ -51,41 +51,35 @@ async function init() {
         
         // Create a demo page where the break card can be shown
         console.log('Opening demo page...');
-        await chrome.tabs.create({ 
+        const tab = await chrome.tabs.create({ 
           url: 'https://www.google.com',
           active: true 
         });
         
-        // Wait for the page to load completely
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // Wait for the content script to inject
+        console.log('Waiting for content script...');
+        await new Promise(resolve => setTimeout(resolve, 3000));
         
-        // Send demo break message to the new tab
-        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        for (const tab of tabs) {
-          // Try multiple times to ensure content script has loaded
-          let attempts = 0;
-          while (attempts < 5) {
-            try {
-              console.log('Sending break message to tab:', tab.id, 'attempt', attempts + 1);
-              await chrome.tabs.sendMessage(tab.id, {
-                type: 'GIA_SHOW_BREAK',
-                breakType: 'short',
-                durationMs: 20000
-              });
-              console.log('Message sent successfully on attempt', attempts + 1);
-              break;
-            } catch (e) {
-              attempts++;
-              console.log('Attempt', attempts, 'failed:', e.message);
-              if (attempts < 5) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-              }
+        // Send demo break message to the new tab with retry
+        let attempts = 0;
+        while (attempts < 10) {
+          try {
+            console.log('Sending break message to tab:', tab.id, 'attempt', attempts + 1);
+            await chrome.tabs.sendMessage(tab.id, {
+              type: 'GIA_SHOW_BREAK',
+              breakType: 'short',
+              durationMs: 20000
+            });
+            console.log('Message sent successfully on attempt', attempts + 1);
+            break;
+          } catch (e) {
+            attempts++;
+            console.log('Attempt', attempts, 'failed:', e.message);
+            if (attempts < 10) {
+              await new Promise(resolve => setTimeout(resolve, 300));
             }
           }
         }
-        
-        // Wait a moment for alarm to be created
-        await new Promise(resolve => setTimeout(resolve, 200));
         
         console.log('Closing onboarding tab...');
         // Close the onboarding tab
