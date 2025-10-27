@@ -360,7 +360,9 @@ function removeBreakCard() {
     currentRecognition = null;
   }
   
-  document.getElementById(BREAK_CARD_ID)?.remove();
+  // Remove all break cards (in case of duplicates)
+  const allCards = document.querySelectorAll(`#${BREAK_CARD_ID}`);
+  allCards.forEach(card => card.remove());
 }
 
 function startCountdown(element, durationMs) {

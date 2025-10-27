@@ -374,9 +374,10 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           // Explicitly dismiss previous card and stop audio
           try { chrome.tts.stop(); } catch (e) {}
           await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
-          await new Promise(resolve => setTimeout(resolve, 300));
+          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for dismiss animation
           
           await setSettings({ tipTone: 'goofy' });
+          await new Promise(resolve => setTimeout(resolve, 500));
           await chrome.tabs.sendMessage(tabId, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'long',
