@@ -218,21 +218,20 @@ async function showBreakCard(breakType, durationMs) {
   const message = await fetchAIMessage();
   instruction.textContent = message;
   
+  // Speak the message using TTS when card shows up
+  try {
+    chrome.tts.speak(message, {
+      enqueue: false,
+      rate: 0.85,
+      pitch: 0.9,
+      volume: 0.9
+    });
+  } catch (e) {
+    console.log('TTS not available:', e);
+  }
+  
   // Multimodal interaction section
   const multimodalSection = await createMultimodalSection(wrapper);
-  
-  // Snooze button (for short breaks)
-  let snoozeBtn = null;
-  if (breakType === 'short') {
-    snoozeBtn = document.createElement('button');
-    snoozeBtn.className = 'gia-snooze-btn';
-    snoozeBtn.textContent = 'Snooze 5 min';
-    snoozeBtn.addEventListener('click', async () => {
-      const { snoozeDuration } = await chrome.storage.local.get('snoozeDuration');
-      await chrome.runtime.sendMessage({ type: 'GIA_SNOOZE', minutes: snoozeDuration || 5 });
-      dismissBreak(wrapper);
-    });
-  }
   
   // Hint
   const hint = document.createElement('p');
@@ -246,7 +245,6 @@ async function showBreakCard(breakType, durationMs) {
   card.appendChild(subtitle);
   card.appendChild(instruction);
   if (multimodalSection) card.appendChild(multimodalSection);
-  if (snoozeBtn) card.appendChild(snoozeBtn);
   card.appendChild(hint);
   
   wrapper.appendChild(backdrop);
@@ -261,9 +259,8 @@ async function showBreakCard(breakType, durationMs) {
   // Start countdown
   startCountdown(heroCount, durationMs);
   
-  // Auto-dismiss with reflection prompt
-  endTimer = setTimeout(async () => {
-    await showReflectionPrompt(wrapper);
+  // Auto-dismiss without reflection prompt
+  endTimer = setTimeout(() => {
     dismissBreak(wrapper);
   }, durationMs);
   
@@ -359,7 +356,7 @@ async function createMultimodalSection(wrapper) {
   // Image input for screen analysis
   const imageBtn = document.createElement('button');
   imageBtn.className = 'gia-multimodal-btn';
-  imageBtn.textContent = '⏰ Remind me later';
+  imageBtn.textContent = 'Remind me in 5 minutes';
   imageBtn.title = 'Remind me in 5 minutes';
   
   imageBtn.addEventListener('click', () => {
@@ -438,19 +435,7 @@ async function analyzeScreen(wrapper, container) {
   dismissBreak(wrapper);
 }
 
-async function showReflectionPrompt(wrapper) {
-  try {
-    const reflection = prompt('How do you feel after this break? (Optional - press Cancel to skip)');
-    if (reflection && reflection.trim()) {
-      await chrome.runtime.sendMessage({
-        type: 'GIA_SAVE_REFLECTION',
-        reflection: reflection.trim()
-      });
-    }
-  } catch (e) {
-    console.log('Reflection prompt cancelled or failed:', e);
-  }
-}
+// Removed showReflectionPrompt - no longer used
 
 // Basic intent classification with fallback
 function basicIntent(text) {
