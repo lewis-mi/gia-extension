@@ -432,39 +432,10 @@ async function startVoiceInput(wrapper, container) {
 }
 
 async function analyzeScreen(wrapper, container) {
-  const status = container.querySelector('.gia-multimodal-status');
-  status.hidden = false;
-  status.textContent = 'Capturing screen...';
-  
-  try {
-    // Capture visible tab
-    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-    const dataUrl = await chrome.tabs.captureVisibleTab(tab.windowId, { format: 'png' });
-    
-    status.textContent = 'Analyzing screen...';
-    
-    // Send image to background for AI analysis
-    const response = await chrome.runtime.sendMessage({
-      type: 'GIA_ANALYZE_SCREEN',
-      imageData: dataUrl
-    });
-    
-    if (response?.analysis) {
-      status.innerHTML = `
-        <div style="text-align: left; font-size: 12px;">
-          <strong>Screen Analysis:</strong><br>
-          ${response.analysis}
-        </div>
-      `;
-    } else {
-      status.textContent = 'Analysis complete';
-    }
-  } catch (e) {
-    status.textContent = 'Screen analysis failed';
-    console.error('Screen analysis error:', e);
-  }
-  
-  setTimeout(() => status.hidden = true, 5000);
+  // This function is deprecated - replaced by "Remind me later" button
+  // Keeping for backwards compatibility but not called anymore
+  console.log('analyzeScreen called but deprecated');
+  dismissBreak(wrapper);
 }
 
 async function showReflectionPrompt(wrapper) {
