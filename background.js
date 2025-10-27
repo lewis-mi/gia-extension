@@ -1,5 +1,8 @@
 // ===== Constants =====
 const ALARM_MAIN = "gia-break";
+// Import tone styles to ensure consistency
+import { TONE_STYLES } from './toneProfiles.js';
+
 const FIXED_SHORT_MIN = 20;        // 20-20-20 cadence (not customizable)
 const SNOOZE_MIN = 5;
 
@@ -241,6 +244,8 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         // Handle TTS requests from content scripts with tone-specific audio
         try {
           const tone = msg.tone || 'mindful';
+          const tone = msg.tone || 'mindful';          
+          const profile = TONE_STYLES[tone] || TONE_STYLES.mindful;
           
           // Tone-specific audio profiles with refined characteristics
           const toneProfiles = {
@@ -265,6 +270,8 @@ Use smooth rhythm, low volume, and no sudden inflection.
 Pause naturally between phrases.
 Do not sound robotic or overly formal.`;
               }
+            try {              
+              const prompt = `${profile.promptStyle}\n"${msg.text}"`;
               
               const prompt = `${toneStyle}\n"${msg.text}"`;
               
@@ -292,6 +299,9 @@ Do not sound robotic or overly formal.`;
             rate: msg.rate || profile.rate,
             pitch: msg.pitch || profile.pitch,
             volume: msg.volume !== undefined ? msg.volume : profile.volume !== undefined ? profile.volume : 0.9
+            rate: profile.rate,
+            pitch: profile.pitch,
+            volume: profile.volume
           });
           
           if (sendResponse) sendResponse({ success: true });
@@ -338,6 +348,7 @@ Do not sound robotic or overly formal.`;
         isDemoRunning = true;
         
         console.log('Starting demo sequence...');
+
         try {
           // Find the demo page tab
           const tabs = await chrome.tabs.query({ url: '*://*/demo.html' });
@@ -407,6 +418,60 @@ Do not sound robotic or overly formal.`;
             
             if (sendResponse) sendResponse({ success: true });
           }
+          console.log(`Starting demo sequence on tab ${msg.tabId}`);
+          const tabId = msg.tabId;
+
+          // Set initial demo settings
+          await setSettings({
+            audioEnabled: true,
+            voiceCommandsEnabled: false,
+            tipTone: 'mindful',
+            onboardingComplete: true,
+            paused: false,
+          });
+
+          // --- Sequence Start ---
+
+          // 1. Mindful Break (after a short delay)
+          console.log('Demo: Triggering Mindful break...');
+          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for page to be ready
+          await chrome.tabs.sendMessage(tabId, {
+            type: 'GIA_SHOW_BREAK',
+            breakType: 'short',
+            durationMs: 20000,
+            tone: 'mindful'
+          });
+
+          // 2. Goofy Break (after the first one finishes)
+          console.log('Demo: Scheduling Goofy break...');
+          await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
+          await setSettings({ tipTone: 'goofy' });
+          await chrome.tabs.sendMessage(tabId, {
+            type: 'GIA_SHOW_BREAK',
+            breakType: 'short',
+            durationMs: 20000,
+            tone: 'goofy'
+          });
+
+          // 3. Long Break (after the second one finishes)
+          console.log('Demo: Scheduling Long break...');
+          await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
+          await chrome.tabs.sendMessage(tabId, {
+            type: 'GIA_SHOW_BREAK',
+            breakType: 'long',
+            durationMs: 30000, // 30 seconds for demo purposes
+            tone: 'goofy'
+          });
+
+          // --- Sequence End ---
+          console.log('Demo sequence complete.');
+          if (sendResponse) sendResponse({ success: true });
+
+          // Reset demo flag after sequence
+          // Total duration: 2s + 20s + 2s + 20s + 2s + 30s = ~76s
+          const totalDemoTime = 22000 + 22000 + 32000;
+          setTimeout(() => { isDemoRunning = false; }, totalDemoTime);
+
         } catch (e) {
           console.error('Demo start error:', e);
           isDemoRunning = false;
@@ -438,4 +503,3 @@ async function openPwaVibrate(kind = "start") {
     console.warn('Could not open PWA:', e);
   }
 }
-

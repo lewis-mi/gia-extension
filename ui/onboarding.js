@@ -81,7 +81,7 @@ async function init() {
           });
           
           // Wait for user to dismiss or complete
-          await new Promise(resolve => setTimeout(resolve, 25000));
+          await new Promise(resolve => setTimeout(resolve, 20000));
           
           // 2. Show short break (Goofy tone)
           console.log('Showing short break (Goofy)...');
@@ -101,7 +101,7 @@ async function init() {
             tone: 'goofy'
           });
           
-          await new Promise(resolve => setTimeout(resolve, 25000));
+          await new Promise(resolve => setTimeout(resolve, 20000));
           
           // 3. Show long break (goofy tone)
           console.log('Showing long break (Goofy)...');
