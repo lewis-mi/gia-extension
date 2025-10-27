@@ -39,11 +39,13 @@
 - Privacy-first: All processing on-device
 
 ### **Additional Features**
-- 3-screen onboarding with Demo Mode for quick testing
+- 3-screen onboarding with Demo Mode for instant testing
 - Material Design 3 UI throughout
 - Customizable tone (Mindful 🧘‍♀️ or Goofy 🤪)
-- Optional long breaks with haptics
-- Progress tracking and analytics
+- Voice-guided break reminders with text-to-speech
+- Optional long breaks every 60-120 minutes
+- Circular countdown timer for visual feedback
+- Progress tracking showing breaks taken
 
 ---
 
@@ -177,24 +179,26 @@ const result = await session.prompt(
    - AI-powered break reminders begin within 20 seconds
 
 4. **Test Features:**
-   - **Break Notifications**: Appears every 20 minutes
-   - **Voice Commands**: Say "snooze" or "dismiss" during breaks
-   - **Tone Adaptation**: Go to Settings to switch between Mindful/Goofy
-   - **Popup**: Click extension icon to see controls
-   - **Corner Logo**: Hover for quick status
+   - **Break Notifications**: Beautiful popup cards every 20 minutes
+   - **Audio Reminders**: TTS reads messages with tone-specific pacing
+   - **Tone Adaptation**: Switch between Mindful (calm) or Goofy (fun) in settings
+   - **Visual Timer**: Circular countdown shows time remaining
+   - **End Notification**: "Break complete" audio when timer finishes
+   - **Settings Menu**: Click extension icon to customize all features
 
 ### **Full Setup (Alternative):**
 
 1. Complete 3-screen onboarding:
-   - **Screen 1**: Toggle audio/voice, select language
+   - **Screen 1**: Toggle audio, voice commands, select language
    - **Screen 2**: Choose Mindful or Goofy tone
-   - **Screen 3**: Set end time, long breaks, phone haptics
+   - **Screen 3**: Set end time and long breaks
 
 2. Experience AI features:
-   - Dynamic break messages (Writer API)
-   - Voice command recognition (Prompt API)
-   - Tone-based adaptation (Rewriter API)
-   - Reflection journaling (Proofreader/Summarizer APIs)
+   - Dynamic break messages with audio (Writer API)
+   - Tone-based voice adaptation (Rewriter API)
+   - TTS with different rates/pitches for each tone
+   - Mindful: slower (0.72x), lower pitch (0.85) for calmness
+   - Goofy: normal speed (0.85x), normal pitch (0.9) for energy
 
 ---
 

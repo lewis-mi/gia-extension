@@ -13,19 +13,25 @@
 
 ### **Core Features Demo (0:30 - 1:30)**
 
-#### **1. AI-Powered Break Reminders (0:30 - 0:45)**
-**[Show: Corner logo progression and break card]**
-> "Watch as Gia's corner logo progressively changes over 20 minutes, then triggers an AI-generated break reminder using the Prompt, Writer, and Rewriter APIs."
+#### **1. AI-Powered Break Reminders with Demo Mode (0:30 - 0:50)**
+**[Show: Click 'Try Demo' button on onboarding]**
+> "Gia includes a Demo Mode that starts immediately without setup - perfect for hackathon judges to see the full experience in under a minute."
 
-**[Show: Different tone examples]**
-> "The Rewriter API adapts messages to your preference - mindful for calm guidance, motivating for energy boost, or professional for workplace settings."
+**[Show: First break with Mindful tone]**
+> "The first break demonstrates Mindful mode - calm, slower voice guiding you through a 20-second rest period. Notice how the breathing cues help you relax."
 
-#### **2. Multimodal AI Interaction (0:45 - 1:00)**
-**[Show: Voice command demo]**
-> "Say 'snooze' or 'dismiss' and Gia processes your voice using multimodal AI. The Prompt API understands natural language commands."
+**[Show: Second break with Goofy tone]**
+> "The second break shows Goofy mode - fun knock-knock jokes while you take your break. Same wellness benefits, different personality."
 
-**[Show: Screen analysis feature]**
-> "Click 'Analyze Screen' to get AI-powered insights about potential eye strain factors in your current content."
+**[Show: Long break]**
+> "Finally, Gia offers optional longer breaks with entertaining messages for extended work sessions."
+
+#### **2. Voice-Guided Experience (0:50 - 1:10)**
+**[Show: Break card with audio playing]**
+> "Each break reminder is read aloud with text-to-speech. In Mindful mode, you get gentle, slow guidance. In Goofy mode, you get a fun knock-knock joke to lighten the mood."
+
+**[Show: 'Remind me in 5 minutes' button]**
+> "The Rewriter API adapts messages based on your tone preference - creating personalized experiences without any data leaving your device."
 
 #### **3. Reflection System (1:00 - 1:30)**
 **[Show: Reflection prompt after break]**
