@@ -545,4 +545,26 @@ window.testGiaBreakCard = function() {
 };
 
 // ===== INITIALIZATION =====
-// Corner logo functionality removed
+// Auto-trigger demo if on demo page
+(async function init() {
+  // Check if we're on the demo page
+  if (window.location.pathname.includes('demo.html')) {
+    console.log('Demo page detected! Triggering demo sequence...');
+    
+    // Wait a moment for page to fully load
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    // Trigger demo breaks
+    try {
+      // Get the tab ID and trigger break sequence
+      chrome.runtime.sendMessage({
+        type: 'GIA_START_DEMO',
+        tabId: window.location.href
+      });
+      
+      console.log('Demo message sent to background');
+    } catch (e) {
+      console.log('Could not trigger demo automatically:', e);
+    }
+  }
+})();

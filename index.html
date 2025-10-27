@@ -208,6 +208,10 @@
             🚀 Launch Demo
         </button>
         
+        <p style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: #666;">
+            <small>Opens demo page - make sure Gia extension is installed!</small>
+        </p>
+        
         <div id="status"></div>
     </div>
     
@@ -301,30 +305,17 @@
     
     <script>
         function launchDemo() {
+            // Open demo page in new tab
+            window.open('demo.html', '_blank');
+            
             const statusEl = document.getElementById('status');
-            statusEl.innerHTML = '<div class="info-box" style="margin-top: 20px;"><strong>Demo Loading...</strong><br>Opening the demo page. Please ensure the Gia extension is installed!</div>';
-            
-            // Try to open the extension page or redirect
-            setTimeout(() => {
-                statusEl.innerHTML = `
-                    <div class="info-box" style="margin-top: 20px;">
-                        <strong>To complete the demo:</strong><br>
-                        1. Make sure you've installed the Gia extension<br>
-                        2. Open the extension popup by clicking the icon in your toolbar<br>
-                        3. Click "🚀 Try Demo" in the onboarding screen<br>
-                        4. Experience 3 consecutive breaks (Mindful, Goofy, Long)
-                    </div>
-                `;
-            }, 1500);
-            
-            // Try to detect if extension is installed
-            setTimeout(() => {
-                const success = `<div style="background: #C8E6C9; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #4CAF50;">
-                    <strong>✓ Extension Ready!</strong><br>
-                    Open the Gia icon in your toolbar and click "🚀 Try Demo"
-                </div>`;
-                statusEl.innerHTML = success;
-            }, 500);
+            statusEl.innerHTML = `
+                <div style="background: #C8E6C9; padding: 20px; border-radius: 8px; margin-top: 20px; border-left: 4px solid #4CAF50;">
+                    <strong>✓ Demo page opened!</strong><br>
+                    The break cards should appear on the demo page.<br>
+                    <small>If they don't appear, make sure the Gia extension is installed and enabled.</small>
+                </div>
+            `;
         }
     </script>
 </body>

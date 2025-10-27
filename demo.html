@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gia Demo — Mindful 20-20-20</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #F4F2F3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: #282829;
+        }
+        
+        .demo-container {
+            text-align: center;
+            padding: 40px;
+            max-width: 600px;
+        }
+        
+        .logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+            background: linear-gradient(135deg, #8390FA 0%, #262A48 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        h1 {
+            color: #262A48;
+            margin-bottom: 15px;
+            font-size: 2rem;
+        }
+        
+        p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            background: #E8F0FE;
+            border-left: 4px solid #8390FA;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #8390FA;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <div class="logo">G</div>
+        <h1>Gia Demo Starting...</h1>
+        <p>Gia's break cards will appear on this page shortly.</p>
+        <p>You'll experience 3 consecutive breaks:</p>
+        
+        <div class="status">
+            <div class="loading"></div>
+            <strong>Waiting for extension...</strong><br>
+            <small style="color: #666;">Make sure the Gia extension is installed and enabled</small>
+        </div>
+    </div>
+    
+    <script>
+        // This page will be opened by the extension
+        // The content script will inject and show break cards here
+        console.log('Demo page loaded');
+        
+        // Wait a moment, then show instruction
+        setTimeout(() => {
+            document.querySelector('.status').innerHTML = `
+                <strong>Ready!</strong><br>
+                <small>Gia break cards should appear automatically.</small>
+            `;
+        }, 1000);
+    </script>
+</body>
+</html>
+

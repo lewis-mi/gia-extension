@@ -281,7 +281,64 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
       }
     } catch (e) {
       console.error('Message handler error:', e);
-      if (sendResponse) sendResponse({ error: e.message });
+        if (sendResponse) sendResponse({ error: e.message });
+      }
+    }
+    
+    // Handle demo start
+    if (msg?.type === 'GIA_START_DEMO') {
+      console.log('Starting demo sequence...');
+      try {
+        // Find the demo page tab
+        const tabs = await chrome.tabs.query({ url: '*://*/demo.html' });
+        if (tabs && tabs.length > 0) {
+          const tab = tabs[0];
+          
+          // Trigger demo breaks on that tab
+          await chrome.storage.local.set({
+            settings: {
+              audioEnabled: true,
+              voiceCommandsEnabled: false,
+              language: 'auto',
+              tipTone: 'mindful'
+            }
+          });
+          
+          // Wait for storage to persist
+          await new Promise(resolve => setTimeout(resolve, 300));
+          
+          // Show breaks in sequence
+          setTimeout(async () => {
+            // Break 1: Mindful
+            await chrome.tabs.sendMessage(tab.id, {
+              type: 'GIA_SHOW_BREAK',
+              breakType: 'short',
+              durationMs: 20000,
+              demo: true,
+              tone: 'mindful'
+            });
+            
+            setTimeout(async () => {
+              // Break 2: Goofy
+              await chrome.storage.local.set({
+                settings: { tipTone: 'goofy' }
+              });
+              await chrome.tabs.sendMessage(tab.id, {
+                type: 'GIA_SHOW_BREAK',
+                breakType: 'short',
+                durationMs: 20000,
+                demo: true,
+                tone: 'goofy'
+              });
+            }, 25000);
+          }, 1000);
+          
+          if (sendResponse) sendResponse({ success: true });
+        }
+      } catch (e) {
+        console.error('Demo start error:', e);
+        if (sendResponse) sendResponse({ error: e.message });
+      }
     }
   })();
   
