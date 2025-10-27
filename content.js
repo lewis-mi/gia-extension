@@ -218,18 +218,6 @@ async function showBreakCard(breakType, durationMs) {
   const message = await fetchAIMessage();
   instruction.textContent = message;
   
-  // Speak the message using TTS when card shows up
-  try {
-    chrome.tts.speak(message, {
-      enqueue: false,
-      rate: 0.85,
-      pitch: 0.9,
-      volume: 0.9
-    });
-  } catch (e) {
-    console.log('TTS not available:', e);
-  }
-  
   // Multimodal interaction section
   const multimodalSection = await createMultimodalSection(wrapper);
   
@@ -255,6 +243,20 @@ async function showBreakCard(breakType, durationMs) {
   requestAnimationFrame(() => {
     card.classList.add('enter');
   });
+  
+  // Speak the message immediately when card appears
+  try {
+    chrome.tts.speak(message, {
+      enqueue: false,
+      rate: 0.85,
+      pitch: 0.9,
+      volume: 0.9,
+      requiredEventTypes: ['end']
+    });
+    console.log('TTS started for break card');
+  } catch (e) {
+    console.log('TTS not available:', e);
+  }
   
   // Start countdown
   startCountdown(heroCount, durationMs);
