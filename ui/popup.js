@@ -140,12 +140,26 @@ phoneHaptics.addEventListener('change', async () => {
 
 // Take break now
 takeBreakNow.addEventListener('click', async () => {
-  try {
-    await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
-    window.close();
-  } catch (e) {
-    console.error('Failed to trigger break:', e);
-  }
+  // Save all current settings
+  const currentSettings = {
+    voiceCommandsEnabled: voiceEnabled.checked,
+    audioEnabled: audioEnabled.checked,
+    language: languageSelect.value,
+    tipTone: mindfulBtn.classList.contains('selected') ? 'mindful' : 'goofy',
+    longEnabled: longEnabled.checked,
+    longBreakLength: parseInt(breakLength.value),
+    longBreakFrequency: parseInt(breakFrequency.value),
+    endTime: endTime.value,
+    phoneHapticsEnabled: phoneHaptics.checked
+  };
+  
+  await chrome.storage.local.set({ settings: currentSettings });
+  
+  // Reschedule alarms with new settings
+  await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
+  
+  // Close popup
+  window.close();
 });
 
 // Load progress data
