@@ -175,10 +175,10 @@ async function runShortBreak() {
       // Use chrome.tts API with more natural voice settings
       chrome.tts.speak(message, {
         enqueue: false,
-        voiceName: 'Feminine',  // More natural female voice
-        rate: 0.9,              // Slower, more calming
-        pitch: 1.0,             // Natural pitch
-        volume: 0.85,           // Gentle but clear
+        // Don't specify voiceName - let system choose best available
+        rate: 0.85,             // Slower, more natural
+        pitch: 0.9,             // Slightly lower for warmth
+        volume: 0.9,            // Clear but not loud
         requiredEventTypes: ['end']
       });
     } catch (e) {
