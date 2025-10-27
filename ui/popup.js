@@ -8,7 +8,6 @@ const longBreakControls = document.getElementById('longBreakControls');
 const breakLength = document.getElementById('breakLength');
 const breakFrequency = document.getElementById('breakFrequency');
 const endTime = document.getElementById('endTime');
-const phoneHaptics = document.getElementById('phoneHaptics');
 const takeBreakNow = document.getElementById('takeBreakNow');
 const breakStats = document.getElementById('breakStats');
 
@@ -42,9 +41,6 @@ const breakStats = document.getElementById('breakStats');
   
   // End time
   endTime.value = settings.endTime || '18:00';
-  
-  // Phone haptics
-  phoneHaptics.checked = settings.phoneHapticsEnabled || false;
   
   await loadProgressData();
 })();
@@ -130,14 +126,6 @@ endTime.addEventListener('change', async () => {
   });
 });
 
-// Phone haptics
-phoneHaptics.addEventListener('change', async () => {
-  const { settings = {} } = await chrome.storage.local.get(['settings']);
-  await chrome.storage.local.set({
-    settings: { ...settings, phoneHapticsEnabled: phoneHaptics.checked }
-  });
-});
-
 // Take break now
 takeBreakNow.addEventListener('click', async () => {
   // Save all current settings
@@ -149,8 +137,7 @@ takeBreakNow.addEventListener('click', async () => {
     longEnabled: longEnabled.checked,
     longBreakLength: parseInt(breakLength.value),
     longBreakFrequency: parseInt(breakFrequency.value),
-    endTime: endTime.value,
-    phoneHapticsEnabled: phoneHaptics.checked
+    endTime: endTime.value
   };
   
   await chrome.storage.local.set({ settings: currentSettings });
