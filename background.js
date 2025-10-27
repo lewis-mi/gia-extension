@@ -146,28 +146,36 @@ chrome.notifications?.onButtonClicked?.addListener(async (notifId, btnIdx) => {
 // ===== Short break runner =====
 async function runShortBreak() {
   const s = await getSettings();
-  const { elapsedMin = 0 } = await getCounters();
   
-  // Import AI message generator
-  let aiMessage = "Take a 20-second break: look 20 feet away and blink gently.";
-  
-  try {
-    const aiModule = await import(chrome.runtime.getURL('ai/breakMessageGenerator.js'));
-    const tone = s.settings?.tipTone || 'mindful';
-    aiMessage = await aiModule.generateBreakMessage(tone, elapsedMin);
-  } catch (e) {
-    console.warn('Could not generate AI message:', e);
-  }
+  // Simple default message (AI integration happens in content script)
+  const message = "Take a 20-second break: look 20 feet away and blink gently.";
   
   if (s.audioEnabled !== false) {
-    const mod = await import(chrome.runtime.getURL('tts/shortBreak.js'));
-    await mod.playShortBreakTTS(aiMessage, tone);
+    try {
+      // Use chrome.tts API directly in service worker
+      chrome.tts.speak(message, {
+        enqueue: false,
+        rate: 0.85,
+        pitch: 0.95,
+        volume: 0.8
+      });
+    } catch (e) {
+      console.warn('TTS failed:', e);
+      // Fallback to notification
+      chrome.notifications.create(`gia-short-${Date.now()}`, {
+        type: "basic",
+        iconUrl: "assets/logo.png",
+        title: "20-20-20 break",
+        message: message,
+        silent: false
+      });
+    }
   } else {
     chrome.notifications.create(`gia-short-${Date.now()}`, {
       type: "basic",
       iconUrl: "assets/logo.png",
       title: "20-20-20 break",
-      message: aiMessage,
+      message: message,
       silent: true
     });
   }
