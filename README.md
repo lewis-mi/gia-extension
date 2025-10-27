@@ -14,12 +14,12 @@ Gia — Mindful 20-20-20 is based on research showing that 20-second gaze breaks
 **Built for:** Google Chrome Built-in AI Challenge 2025
 
 **APIs Used:**
-- ✅ **Writer API**: Generates dynamic, personalized break reminder messages
-- ✅ **Rewriter API**: Adapts message tone (Mindful/Goofy) based on user preference
-- ✅ **Translator API**: Multilingual support for break reminders
-- ✅ **Proofreader API**: Cleans user reflection journal entries
-- ✅ **Summarizer API**: Generates wellness insights from reflection patterns
-- ✅ **Prompt API**: Voice command classification for natural language interaction
+- **Writer API**: Generates dynamic, personalized break reminder messages
+- **Rewriter API**: Adapts message tone (Mindful/Goofy) based on user preference
+- **Translator API**: Multilingual support for break reminders
+- **Proofreader API**: Cleans user reflection journal entries
+- **Summarizer API**: Generates wellness insights from reflection patterns
+- **Prompt API**: Voice command classification for natural language interaction
 
 **Problem Solved:** Digital eye strain affects 90% of computer users, leading to headaches, blurred vision, and long-term damage. The proven 20-20-20 rule (every 20 minutes, look 20 feet away for 20 seconds) is effective but requires consistent reminders that most people forget during focused work sessions.
 
@@ -97,10 +97,10 @@ All AI features run locally using Gemini Nano for complete privacy:
 
 ### **Privacy & Security**
 
-- ✅ **Local Processing**: All AI runs on-device with Gemini Nano
-- ✅ **No Data Transmission**: User data never leaves the browser
-- ✅ **Encrypted Storage**: Local data encrypted with Chrome's secure storage
-- ✅ **Minimal Permissions**: Only requests necessary permissions
+- **Local Processing**: All AI runs on-device with Gemini Nano
+- **No Data Transmission**: User data never leaves the browser
+- **Encrypted Storage**: Local data encrypted with Chrome's secure storage
+- **Minimal Permissions**: Only requests necessary permissions
 
 ---
 
