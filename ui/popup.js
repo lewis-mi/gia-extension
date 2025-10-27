@@ -9,6 +9,7 @@ const breakLength = document.getElementById('breakLength');
 const breakFrequency = document.getElementById('breakFrequency');
 const endTime = document.getElementById('endTime');
 const phoneHaptics = document.getElementById('phoneHaptics');
+const showCornerLogo = document.getElementById('showCornerLogo');
 const takeBreakNow = document.getElementById('takeBreakNow');
 const breakStats = document.getElementById('breakStats');
 
@@ -45,6 +46,9 @@ const breakStats = document.getElementById('breakStats');
   
   // Phone haptics
   phoneHaptics.checked = settings.phoneHapticsEnabled || false;
+  
+  // Corner logo
+  showCornerLogo.checked = settings.showCornerLogo !== false;
   
   await loadProgressData();
 })();
@@ -133,8 +137,22 @@ endTime.addEventListener('change', async () => {
 // Phone haptics
 phoneHaptics.addEventListener('change', async () => {
   const { settings = {} } = await chrome.storage.local.get(['settings']);
-  await chrome.storage.local.set({ 
+  await chrome.storage.local.set({
     settings: { ...settings, phoneHapticsEnabled: phoneHaptics.checked }
+  });
+});
+
+// Corner logo toggle
+showCornerLogo.addEventListener('change', async () => {
+  const { settings = {} } = await chrome.storage.local.get(['settings']);
+  await chrome.storage.local.set({
+    settings: { ...settings, showCornerLogo: showCornerLogo.checked }
+  });
+  
+  // Send message to all tabs to update corner logo visibility
+  chrome.runtime.sendMessage({
+    type: 'GIA_TOGGLE_CORNER',
+    enabled: showCornerLogo.checked
   });
 });
 
@@ -150,7 +168,8 @@ takeBreakNow.addEventListener('click', async () => {
     longBreakLength: parseInt(breakLength.value),
     longBreakFrequency: parseInt(breakFrequency.value),
     endTime: endTime.value,
-    phoneHapticsEnabled: phoneHaptics.checked
+    phoneHapticsEnabled: phoneHaptics.checked,
+    showCornerLogo: showCornerLogo.checked
   };
   
   await chrome.storage.local.set({ settings: currentSettings });
