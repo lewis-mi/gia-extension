@@ -49,16 +49,27 @@ async function init() {
         await chrome.alarms.create('gia-demo', { delayInMinutes: 0.5 });
         console.log('Demo alarm created');
         
-        // Also send immediate demo message to show it works
-        console.log('Sending immediate demo break...');
-        const demoTabs = await chrome.tabs.query({ active: true, currentWindow: true });
-        for (const tab of demoTabs) {
+        // Create a demo page where the break card can be shown
+        console.log('Opening demo page...');
+        await chrome.tabs.create({ 
+          url: 'https://www.google.com',
+          active: true 
+        });
+        
+        // Wait a moment for the page to load and content script to inject
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Send demo break message to the new tab
+        const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        for (const tab of tabs) {
           try {
+            console.log('Sending break message to tab:', tab.id);
             await chrome.tabs.sendMessage(tab.id, {
               type: 'GIA_SHOW_BREAK',
               breakType: 'short',
               durationMs: 20000
             });
+            console.log('Message sent successfully');
           } catch (e) {
             console.log('Could not show demo break card:', e.message);
           }
@@ -67,8 +78,8 @@ async function init() {
         // Wait a moment for alarm to be created
         await new Promise(resolve => setTimeout(resolve, 200));
         
-        console.log('Closing tab...');
-        // Close the tab
+        console.log('Closing onboarding tab...');
+        // Close the onboarding tab
         window.close();
       } catch (e) {
         console.error('Demo mode error:', e);
