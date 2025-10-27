@@ -249,25 +249,33 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           if (sendResponse) sendResponse({ error: e.message });
         }
       } else if (msg?.type === "GIA_GET_MESSAGE") { 
-        // Get tone from settings
+        // Get tone from settings and break type
         const settings = await getSettings();
         const tone = settings?.tipTone || 'mindful';
+        const breakType = msg.breakType || 'short';
         
-        // Base instruction
-        let message = "Take a 20-second break. Look 20 feet away and blink gently. ";
+        let message;
         
-        // Add tone-specific content
-        if (tone === 'mindful') {
-          message += "Let's breathe together. Inhale slowly through your nose, hold for a moment, exhale gently through your mouth. Inhale... hold... exhale.";
-        } else if (tone === 'goofy') {
-          const jokes = [
-            "Knock knock. Who's there? Boo. Boo who? Don't cry!",
-            "Knock knock. Who's there? Lettuce. Lettuce who? Lettuce in!",
-            "Knock knock. Who's there? Hawaii. Hawaii who? I'm fine, Hawaii you?",
-            "Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!"
-          ];
-          const joke = jokes[Math.floor(Math.random() * jokes.length)];
-          message += joke;
+        if (breakType === 'long') {
+          // Long break has special message
+          message = "Take 5. Touch grass here's one for the road. Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!";
+        } else {
+          // Short break messages
+          message = "Take a 20-second break. Look 20 feet away and blink gently. ";
+          
+          // Add tone-specific content for short breaks
+          if (tone === 'mindful') {
+            message += "Let's breathe together. Inhale slowly through your nose, hold for a moment, exhale gently through your mouth. Inhale... hold... exhale.";
+          } else if (tone === 'goofy') {
+            const jokes = [
+              "Knock knock. Who's there? Boo. Boo who? Don't cry!",
+              "Knock knock. Who's there? Lettuce. Lettuce who? Lettuce in!",
+              "Knock knock. Who's there? Hawaii. Hawaii who? I'm fine, Hawaii you?",
+              "Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!"
+            ];
+            const joke = jokes[Math.floor(Math.random() * jokes.length)];
+            message += joke;
+          }
         }
         
         if (sendResponse) sendResponse({ text: message }); 

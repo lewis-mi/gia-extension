@@ -241,7 +241,7 @@ async function showBreakCard(breakType, durationMs) {
   });
   
   // Fetch AI message and start audio immediately
-  const messagePromise = fetchAIMessage();
+  const messagePromise = fetchAIMessage(breakType);
   
   // Start TTS as soon as message is ready
   messagePromise.then(async (message) => {
@@ -353,11 +353,12 @@ function startCountdown(element, durationMs) {
   tickRAF = interval;
 }
 
-async function fetchAIMessage() {
+async function fetchAIMessage(breakType = 'short') {
   try {
     const response = await chrome.runtime.sendMessage({
       type: 'GIA_GET_MESSAGE',
-      locale: navigator.language
+      locale: navigator.language,
+      breakType: breakType
     });
     return response?.text || "Look 20 feet away and soften your gaze.";
   } catch (e) {
