@@ -6,12 +6,9 @@ console.log('GIA content script loaded!');
 const CORNER_LOGO_ID = "gia-corner-logo";
 const BREAK_CARD_ID = "gia-break-card";
 
-let currentStage = 0;
-let nextBreakTime = null;
 let endTimer = null;
 let tickRAF = null;
 let currentRecognition = null;
-let cornerLogoEnabled = true;
 
 // ===== CORNER LOGO =====
 async function createCornerLogo() {
