@@ -567,14 +567,4 @@ window.testGiaBreakCard = function() {
   // Update tooltip every 30 seconds
   setInterval(updateTooltip, 30000);
   
-  // Trigger context menu on hover instead of right click
-  const cornerLogo = document.getElementById('gia-corner-logo');
-  if (cornerLogo) {
-    cornerLogo.addEventListener('mouseenter', () => {
-      setTimeout(() => showContextMenu(20, window.innerHeight / 2), 300);
-    });
-    cornerLogo.addEventListener('mouseleave', () => {
-      document.getElementById('gia-context-menu')?.remove();
-    });
-  }
 })();
