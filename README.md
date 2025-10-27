@@ -88,11 +88,16 @@ All AI features run locally using Gemini Nano for complete privacy:
 ### **User Experience**
 
 - **3-Screen Onboarding**: Quick setup with Demo Mode for instant testing
+- **Demo Mode**: Click "Try Demo" to experience 3 consecutive breaks showcasing all features
+  - Break 1: Mindful tone with calm, slow voice
+  - Break 2: Goofy tone with fun knock-knock jokes
+  - Break 3: Long break with entertaining message
 - **Tone Customization**: Choose between Mindful 🧘‍♀️ or Goofy 🤪 personalities
-- **Voice Commands**: Natural language interaction without rigid structures
-- **Smart Break Timing**: Adapts to your work schedule and preferences
-- **Long Breaks**: Optional extended resets every 40-120 minutes
-- **Reflection Journal**: AI-enhanced wellness tracking and insights
+- **Voice-Guided Breaks**: Text-to-speech reads break instructions with tone-specific pacing
+- **Visual Countdown**: Circular timer shows seconds/minutes remaining
+- **Smart Break Timing**: 20-second breaks every 20 minutes
+- **Long Breaks**: Optional extended resets every 60-120 minutes
+- **End Notification**: "Break complete" audio when timer finishes
 - **Material Design 3**: Beautiful, accessible interface throughout
 
 ### **Privacy & Security**
