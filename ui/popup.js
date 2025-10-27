@@ -10,6 +10,7 @@ const breakLength = document.getElementById('breakLength');
 const breakFrequency = document.getElementById('breakFrequency');
 const endTime = document.getElementById('endTime');
 const takeBreakNow = document.getElementById('takeBreakNow');
+const quitGia = document.getElementById('quitGia');
 
 (async () => {
   const { 
@@ -163,6 +164,15 @@ takeBreakNow.addEventListener('click', async () => {
   
   // Reschedule alarms with new settings
   await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
+  
+  // Close popup
+  window.close();
+});
+
+// Quit Gia button
+quitGia.addEventListener('click', async () => {
+  // Send exit message to background script
+  await chrome.runtime.sendMessage({ type: 'gia.exit' });
   
   // Close popup
   window.close();
