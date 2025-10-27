@@ -104,7 +104,7 @@ Evidence-Based Teaching in Contact Lenses Education (2022) highlights that multi
 
 ## Hackathon Submission
 
-- **Team:** Michael Lewis
+- **Team:** Michaela Lewis
 - **API Challenge:** Chrome Built-in AI APIs (6 used)
 - **Problem Solved:** Digital eye strain prevention through automated 20-20-20 rule adherence
 - **Demo Video:** [Add YouTube link]
