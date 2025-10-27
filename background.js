@@ -176,9 +176,9 @@ async function runShortBreak() {
       chrome.tts.speak(message, {
         enqueue: false,
         // Don't specify voiceName - let system choose best available
-        rate: 0.85,             // Slower, more natural
-        pitch: 0.9,             // Slightly lower for warmth
-        volume: 0.9,            // Clear but not loud
+        rate: 0.75,             // Much slower, more calming
+        pitch: 0.85,            // Lower pitch for warmth
+        volume: 0.8,            // Quieter, less intimidating
         requiredEventTypes: ['end']
       });
     } catch (e) {

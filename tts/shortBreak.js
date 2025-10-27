@@ -11,15 +11,15 @@ const SHORT_BREAK_MESSAGES = [
 
 const TONE_PROFILES = {
   mindful: {
-    rate: 0.85,             // Slower, more natural
-    pitch: 0.95,           // Slightly lower for warmth
-    volume: 0.9,           // Clear but gentle
+    rate: 0.75,            // Slower, more calming
+    pitch: 0.85,          // Lower for warmth
+    volume: 0.8,         // Quieter, less intimidating
     lang: 'en-US'
   },
   goofy: {
-    rate: 1.05,            // Faster, energetic
-    pitch: 1.05,          // Higher pitch, playful
-    volume: 0.9,          // Clear and audible
+    rate: 0.95,           // Moderate speed
+    pitch: 0.95,         // Slightly higher, playful
+    volume: 0.85,        // Clear but not loud
     lang: 'en-US'
   },
   motivating: {
