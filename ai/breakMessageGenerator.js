@@ -9,21 +9,24 @@
  */
 export async function generateBreakMessage(tone = 'mindful', elapsedMinutes = 20) {
   try {
+    const ai = getChromeAI();
+    const writer = ai?.writer;
+
     // Check if Writer API is available
-    if (!chrome?.ai?.writer) {
+    if (!writer) {
       return getDefaultMessage(tone);
     }
 
-    const capabilities = await chrome.ai.writer.capabilities();
+    const capabilities = await writer.capabilities();
     if (capabilities?.available !== 'readily') {
       return getDefaultMessage(tone);
     }
 
     // Get tone-specific prompt
     const tonePrompt = getTonePrompt(tone);
-    
+
     // Create writer session
-    const session = await chrome.ai.writer.create({
+    const session = await writer.create({
       systemPrompt: tonePrompt
     });
 
@@ -82,12 +85,14 @@ function getDefaultMessage(tone) {
  */
 export async function rewriteMessage(message, targetTone = 'mindful') {
   try {
-    if (!chrome?.ai?.rewriter) return message;
-    
-    const capabilities = await chrome.ai.rewriter.capabilities();
+    const ai = getChromeAI();
+    const rewriter = ai?.rewriter;
+    if (!rewriter) return message;
+
+    const capabilities = await rewriter.capabilities();
     if (capabilities?.available !== 'readily') return message;
-    
-    const session = await chrome.ai.rewriter.create({
+
+    const session = await rewriter.create({
       systemPrompt: `Adapt messages to be ${targetTone} and encouraging. Keep the core meaning.`
     });
     
@@ -110,14 +115,16 @@ export async function rewriteMessage(message, targetTone = 'mindful') {
  */
 export async function translateMessage(message, targetLang = 'es') {
   try {
-    if (!chrome?.ai?.translator || targetLang === 'en' || targetLang === 'auto') {
+    const ai = getChromeAI();
+    const translator = ai?.translator;
+    if (!translator || targetLang === 'en' || targetLang === 'auto') {
       return message;
     }
-    
-    const capabilities = await chrome.ai.translator.capabilities();
+
+    const capabilities = await translator.capabilities();
     if (capabilities?.available !== 'readily') return message;
-    
-    const session = await chrome.ai.translator.create({
+
+    const session = await translator.create({
       systemPrompt: 'Translate this message naturally while keeping the friendly tone.'
     });
     
@@ -139,12 +146,14 @@ export async function translateMessage(message, targetLang = 'es') {
  */
 export async function proofreadReflection(text) {
   try {
-    if (!chrome?.ai?.proofreader) return text;
-    
-    const capabilities = await chrome.ai.proofreader.capabilities();
+    const ai = getChromeAI();
+    const proofreader = ai?.proofreader;
+    if (!proofreader) return text;
+
+    const capabilities = await proofreader.capabilities();
     if (capabilities?.available !== 'readily') return text;
-    
-    const session = await chrome.ai.proofreader.create({
+
+    const session = await proofreader.create({
       systemPrompt: 'Clean up grammar and spelling while preserving the user\'s voice and meaning.'
     });
     
@@ -166,12 +175,14 @@ export async function proofreadReflection(text) {
  */
 export async function summarizeReflections(reflections) {
   try {
-    if (!chrome?.ai?.summarizer || reflections.length < 3) return null;
-    
-    const capabilities = await chrome.ai.summarizer.capabilities();
+    const ai = getChromeAI();
+    const summarizer = ai?.summarizer;
+    if (!summarizer || reflections.length < 3) return null;
+
+    const capabilities = await summarizer.capabilities();
     if (capabilities?.available !== 'readily') return null;
-    
-    const session = await chrome.ai.summarizer.create({
+
+    const session = await summarizer.create({
       systemPrompt: 'Identify key wellness patterns and insights from user reflections. Be encouraging.'
     });
     
@@ -180,10 +191,18 @@ export async function summarizeReflections(reflections) {
     session.destroy();
     
     return summary;
-    
+
   } catch (e) {
     console.warn('Failed to summarize reflections:', e);
     return null;
   }
+}
+
+function getChromeAI() {
+  if (typeof chrome === 'undefined') {
+    return undefined;
+  }
+
+  return chrome.ai;
 }
 
