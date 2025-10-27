@@ -348,8 +348,13 @@ Do not sound robotic or overly formal.`;
             // Wait for storage to persist
             await new Promise(resolve => setTimeout(resolve, 300));
             
-            // Show breaks in sequence
+            // Show breaks in sequence with audio cleanup
             setTimeout(async () => {
+              // Stop any existing audio before starting
+              try {
+                chrome.tts.stop();
+              } catch (e) {}
+              
               // Break 1: Mindful
               await chrome.tabs.sendMessage(tab.id, {
                 type: 'GIA_SHOW_BREAK',
@@ -360,10 +365,17 @@ Do not sound robotic or overly formal.`;
               });
               
               setTimeout(async () => {
+                // Stop any existing audio before next break
+                try {
+                  chrome.tts.stop();
+                } catch (e) {}
+                
                 // Break 2: Goofy
                 await chrome.storage.local.set({
                   settings: { tipTone: 'goofy' }
                 });
+                await new Promise(resolve => setTimeout(resolve, 300));
+                
                 await chrome.tabs.sendMessage(tab.id, {
                   type: 'GIA_SHOW_BREAK',
                   breakType: 'short',
