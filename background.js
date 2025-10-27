@@ -291,8 +291,12 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         let message;
 
         if (breakType === 'long') {
-          // Long break has special message
-          message = "Take 5. Time to touch grass but here's one for the road. Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!";
+          // Long break message adapts to tone
+          if (tone === 'goofy') {
+            message = "Take 5. Time to touch grass but here's one for the road. Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!";
+          } else {
+            message = "Take a longer break. Step away from your screen, stretch your arms, and let your eyes rest. I'll let you know when time is up.";
+          }
         } else {
           // Short break messages
           if (tone === 'mindful') {
