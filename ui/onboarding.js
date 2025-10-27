@@ -9,11 +9,14 @@ async function init() {
   const languageSelect = document.getElementById('languageSelect');
   
   console.log('Demo button found:', !!demoBtn);
+  console.log('Continue button found:', !!continueBtn);
   
   // Demo mode - skip onboarding and start immediately
   if (demoBtn) {
-    demoBtn.addEventListener('click', async () => {
-      console.log('Demo button clicked!');
+    console.log('Attaching demo button listener...');
+    demoBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      console.log('Demo button clicked!', e);
       console.log('Starting demo mode setup...');
       try {
         console.log('Setting demo settings...');
