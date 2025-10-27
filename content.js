@@ -242,21 +242,23 @@ async function showBreakCard(breakType, durationMs) {
   // Animate in
   requestAnimationFrame(() => {
     card.classList.add('enter');
+    
+    // Start TTS after card animation begins
+    setTimeout(() => {
+      try {
+        chrome.tts.speak(message, {
+          enqueue: false,
+          rate: 0.85,
+          pitch: 0.9,
+          volume: 0.9,
+          requiredEventTypes: ['end']
+        });
+        console.log('TTS started for break card');
+      } catch (e) {
+        console.log('TTS not available:', e);
+      }
+    }, 300); // Small delay to ensure card is visible
   });
-  
-  // Speak the message immediately when card appears
-  try {
-    chrome.tts.speak(message, {
-      enqueue: false,
-      rate: 0.85,
-      pitch: 0.9,
-      volume: 0.9,
-      requiredEventTypes: ['end']
-    });
-    console.log('TTS started for break card');
-  } catch (e) {
-    console.log('TTS not available:', e);
-  }
   
   // Start countdown
   startCountdown(heroCount, durationMs);
