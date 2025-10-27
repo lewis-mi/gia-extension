@@ -11,34 +11,36 @@ const SHORT_BREAK_MESSAGES = [
 
 const TONE_PROFILES = {
   mindful: {
-    voice: 'default',
-    rate: 0.85,
-    pitch: 0.95,
-    volume: 0.8
+    voiceName: 'Feminine',  // More natural female voice
+    rate: 0.9,              // Slightly slower, more calming
+    pitch: 1.0,             // Natural pitch
+    volume: 0.85,           // Gentle but clear
+    lang: 'en-US'
   },
   goofy: {
-    voice: 'default',
-    rate: 1.05,
-    pitch: 1.0,
-    volume: 0.85
+    voiceName: 'Feminine',  
+    rate: 1.1,              // Faster, energetic
+    pitch: 1.1,             // Higher pitch, playful
+    volume: 0.9,           // More audible
+    lang: 'en-US'
   },
   motivating: {
-    voice: 'default',
+    voiceName: 'Neutral',
     rate: 1.0,
     pitch: 1.1,
     volume: 0.85
   },
   professional: {
-    voice: 'default',
-    rate: 0.9,
+    voiceName: 'Neutral',
+    rate: 0.92,
     pitch: 1.0,
-    volume: 0.75
+    volume: 0.8
   },
   friendly: {
-    voice: 'default',
+    voiceName: 'Feminine',
     rate: 0.95,
     pitch: 1.05,
-    volume: 0.8
+    volume: 0.85
   }
 };
 
@@ -60,6 +62,10 @@ async function speakBreakMessage(message = null, tone = 'mindful', isFirstBreak 
       await new Promise((resolve, reject) => {
         chrome.tts.speak(text, {
           enqueue: false,
+          voiceName: profile.voiceName,
+          rate: profile.rate,
+          pitch: profile.pitch,
+          volume: profile.volume,
           requiredEventTypes: ['end'],
           onEvent: (event) => {
             if (event.type === 'end') resolve();

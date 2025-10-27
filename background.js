@@ -152,12 +152,14 @@ async function runShortBreak() {
   
   if (s.audioEnabled !== false) {
     try {
-      // Use chrome.tts API directly in service worker
+      // Use chrome.tts API with more natural voice settings
       chrome.tts.speak(message, {
         enqueue: false,
-        rate: 0.85,
-        pitch: 0.95,
-        volume: 0.8
+        voiceName: 'Feminine',  // More natural female voice
+        rate: 0.9,              // Slower, more calming
+        pitch: 1.0,             // Natural pitch
+        volume: 0.85,           // Gentle but clear
+        requiredEventTypes: ['end']
       });
     } catch (e) {
       console.warn('TTS failed:', e);
