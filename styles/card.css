@@ -1,13 +1,13 @@
 :root {
   /* Material Design 3 Color Tokens */
-  --Schemes-Surface: #FFFBFE;
+  --Schemes-Surface: #F9F4F5;
   --Schemes-Surface-Variant: #E7E0EC;
   --Schemes-On-Surface: #1D1B20;
   --Schemes-On-Surface-Variant: #49454F;
   --Schemes-Outline: #79747E;
-  --Schemes-Primary: #6750A4;
-  --Schemes-Primary-Container: #EADDFF;
-  --Schemes-On-Primary-Container: #21005D;
+  --Schemes-Primary: #8390FA;
+  --Schemes-Primary-Container: #E3E6FF;
+  --Schemes-On-Primary-Container: #262A48;
   
   /* Surface gradients for cards */
   --gia-bg-top: var(--Schemes-Surface);
