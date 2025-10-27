@@ -19,7 +19,7 @@
   ],
 
   "permissions": [
-    "alarms", "notifications", "storage", "tts", "offscreen"
+    "alarms", "notifications", "storage", "tts", "offscreen", "tabs"
   ],
   "optional_permissions": [],
   "host_permissions": ["<all_urls>"],
