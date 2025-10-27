@@ -1,48 +1,174 @@
-// ===== GIA PAUSE/RESUME/EXIT TESTS =====
+// ===== GIA TRANSLATION AND REFLECTION TESTS =====
 
 import { test, expect } from '@playwright/test';
+import {
+  translateMessage,
+  proofreadReflection,
+  summarizeReflections
+} from '../ai/breakMessageGenerator.js';
 
-test.describe('Pause, Resume, and Exit Functionality', () => {
-  test('should pause session', async ({ page, context }) => {
-    // Load extension
-    await page.goto('chrome://extensions');
-    
-    // Enable extension
-    await page.click('[aria-label="Enable extension"]');
-    
-    // Wait for icon to appear
-    await expect(page.locator('#gia-corner-logo')).toBeVisible();
-    
-    // Trigger pause
-    await page.keyboard.press('F12'); // Open context menu
-    await page.click('text=Pause Session');
-    
-    // Verify alarms are cleared
-    const alarms = await context.sendMessage({ type: 'CHECK_ALARMS' });
-    expect(alarms).toEqual([]);
+const SAMPLE_MESSAGE = 'Look 20 feet away and rest your eyes for 20 seconds.';
+
+const createChromeStub = (overrides = {}) => ({
+  ai: {
+    translator: {
+      async capabilities() {
+        return { available: 'readily' };
+      },
+      async create() {
+        return {
+          async translate(message) {
+            return `translated:${message}`;
+          },
+          destroy() {}
+        };
+      },
+      ...overrides.translator
+    },
+    proofreader: {
+      async capabilities() {
+        return { available: 'readily' };
+      },
+      async create() {
+        return {
+          async proofread(text) {
+            return `clean:${text}`;
+          },
+          destroy() {}
+        };
+      },
+      ...overrides.proofreader
+    },
+    summarizer: {
+      async capabilities() {
+        return { available: 'readily' };
+      },
+      async create() {
+        return {
+          async summarize(text) {
+            return `summary:${text.length}`;
+          },
+          destroy() {}
+        };
+      },
+      ...overrides.summarizer
+    }
+  }
+});
+
+test.describe('translateMessage', () => {
+  test.afterEach(() => {
+    delete globalThis.chrome;
   });
 
-  test('should resume paused session', async ({ page }) => {
-    // After pause, trigger resume
-    await page.click('text=Resume Session');
-    
-    // Verify new alarms are created
-    const alarms = await context.sendMessage({ type: 'CHECK_ALARMS' });
-    expect(alarms.length).toBeGreaterThan(0);
+  test('returns original message when translator missing', async () => {
+    delete globalThis.chrome;
+
+    const translated = await translateMessage(SAMPLE_MESSAGE, 'es');
+
+    expect(translated).toBe(SAMPLE_MESSAGE);
   });
 
-  test('should exit/cancel break', async ({ page }) => {
-    // Trigger a break
-    await chrome.runtime.sendMessage({ type: 'GIA_IMMEDIATE_BREAK' });
-    
-    // Verify break card appears
-    await expect(page.locator('#gia-break-card')).toBeVisible();
-    
-    // Press ESC to dismiss
-    await page.keyboard.press('Escape');
-    
-    // Verify break card is removed
-    await expect(page.locator('#gia-break-card')).not.toBeVisible();
+  test('returns original message when target language is English', async () => {
+    globalThis.chrome = createChromeStub();
+
+    const translated = await translateMessage(SAMPLE_MESSAGE, 'en');
+
+    expect(translated).toBe(SAMPLE_MESSAGE);
+  });
+
+  test('returns translated message when API available', async () => {
+    globalThis.chrome = createChromeStub();
+
+    const translated = await translateMessage(SAMPLE_MESSAGE, 'es');
+
+    expect(translated).toBe(`translated:${SAMPLE_MESSAGE}`);
+  });
+
+  test('falls back when translator availability is limited', async () => {
+    globalThis.chrome = createChromeStub({
+      translator: {
+        async capabilities() {
+          return { available: 'after-download' };
+        }
+      }
+    });
+
+    const translated = await translateMessage(SAMPLE_MESSAGE, 'es');
+
+    expect(translated).toBe(SAMPLE_MESSAGE);
   });
 });
 
+test.describe('proofreadReflection', () => {
+  test.afterEach(() => {
+    delete globalThis.chrome;
+  });
+
+  test('returns original text when proofreader missing', async () => {
+    delete globalThis.chrome;
+
+    const cleaned = await proofreadReflection('i feel good');
+
+    expect(cleaned).toBe('i feel good');
+  });
+
+  test('returns proofread text when API available', async () => {
+    globalThis.chrome = createChromeStub();
+
+    const cleaned = await proofreadReflection('i feel good');
+
+    expect(cleaned).toBe('clean:i feel good');
+  });
+
+  test('falls back when proofreader availability is limited', async () => {
+    globalThis.chrome = createChromeStub({
+      proofreader: {
+        async capabilities() {
+          return { available: 'no' };
+        }
+      }
+    });
+
+    const cleaned = await proofreadReflection('i feel good');
+
+    expect(cleaned).toBe('i feel good');
+  });
+});
+
+test.describe('summarizeReflections', () => {
+  test.afterEach(() => {
+    delete globalThis.chrome;
+  });
+
+  test('returns null when not enough reflections provided', async () => {
+    delete globalThis.chrome;
+
+    const summary = await summarizeReflections(['one', 'two']);
+
+    expect(summary).toBeNull();
+  });
+
+  test('uses summarizer API when available', async () => {
+    globalThis.chrome = createChromeStub();
+
+    const summary = await summarizeReflections(['first', 'second', 'third']);
+
+    expect(summary).toBeDefined();
+    expect(summary?.startsWith('summary:')).toBeTruthy();
+  });
+
+  test('returns null when summarizer availability is limited', async () => {
+    globalThis.chrome = createChromeStub({
+      summarizer: {
+        async capabilities() {
+          return { available: 'no' };
+        }
+      }
+    });
+
+    const summary = await summarizeReflections(['a', 'b', 'c']);
+
+    expect(summary).toBeNull();
+  });
+});

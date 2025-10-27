@@ -1,60 +1,131 @@
-// ===== GIA LONG BREAK AND ONBOARDING TESTS =====
+// ===== GIA BREAK MESSAGE GENERATION TESTS =====
 
 import { test, expect } from '@playwright/test';
+import {
+  generateBreakMessage,
+  rewriteMessage
+} from '../ai/breakMessageGenerator.js';
 
-test.describe('Long Break Functionality', () => {
-  test('should trigger long break after configured interval', async ({ page }) => {
-    // Set long break frequency
-    await chrome.storage.local.set({ longBreakFrequency: 60 });
-    
-    // Wait for long break alarm
-    await page.waitForTimeout(60 * 1000);
-    
-    // Verify long break card appears
-    await expect(page.locator('#gia-break-card')).toBeVisible();
-    
-    // Verify duration is correct (default 10 min)
-    const duration = page.locator('.gia-hero-count');
-    await expect(duration).toContainText('10m');
+const MINDFUL_FALLBACK =
+  "Take a deep breath and look 20 feet away for 20 seconds. Your eyes will thank you. 🧘‍♀️";
+
+const GOOFY_FALLBACK =
+  "Time to give your peepers a break! Look far away and count to 20. One, two, twenty... go! 🤪";
+
+test.describe('generateBreakMessage', () => {
+  test.afterEach(() => {
+    delete globalThis.chrome;
   });
 
-  test('should show long break activities', async () => {
-    const activities = page.locator('.activities li');
-    await expect(activities).toHaveCount(5);
+  test('returns mindful fallback message when Writer API is unavailable', async () => {
+    delete globalThis.chrome;
+
+    const message = await generateBreakMessage('mindful', 24);
+
+    expect(message).toBe(MINDFUL_FALLBACK);
   });
 
-  test('should allow extending long break', async () => {
-    await page.click('#extend');
-    
-    const countdown = page.locator('#countdown');
-    // Should show 15 minutes after extending
-    await expect(countdown).toContainText('15');
+  test('returns tone-specific fallback message when Writer API missing', async () => {
+    delete globalThis.chrome;
+
+    const goofyMessage = await generateBreakMessage('goofy', 12);
+
+    expect(goofyMessage).toBe(GOOFY_FALLBACK);
+  });
+
+  test('uses Writer API when available', async () => {
+    const destroy = () => {};
+    globalThis.chrome = {
+      ai: {
+        writer: {
+          async capabilities() {
+            return { available: 'readily' };
+          },
+          async create() {
+            return {
+              async write() {
+                return 'Custom AI reminder';
+              },
+              destroy
+            };
+          }
+        }
+      }
+    };
+
+    const message = await generateBreakMessage('mindful', 20);
+
+    expect(message).toBe('Custom AI reminder');
+  });
+
+  test('falls back when Writer API reports limited availability', async () => {
+    globalThis.chrome = {
+      ai: {
+        writer: {
+          async capabilities() {
+            return { available: 'after-download' };
+          }
+        }
+      }
+    };
+
+    const message = await generateBreakMessage('mindful', 18);
+
+    expect(message).toBe(MINDFUL_FALLBACK);
   });
 });
 
-test.describe('Onboarding Flow', () => {
-  test('should open onboarding on first install', async ({ page, context }) => {
-    // Simulate first install
-    const extId = await chrome.tabs.create({
-      url: chrome.runtime.getURL('ui/onboarding.html')
-    });
-    
-    await expect(page).toHaveURL(/onboarding.html/);
+test.describe('rewriteMessage', () => {
+  test.afterEach(() => {
+    delete globalThis.chrome;
   });
 
-  test('should complete onboarding and start session', async ({ page }) => {
-    // Navigate through onboarding steps
-    await page.click('text=Next');
-    await page.click('text=Next');
-    await page.click('text=Get Started');
-    
-    // Verify session starts
-    const { sessionStartTime } = await chrome.storage.local.get('sessionStartTime');
-    expect(sessionStartTime).toBeDefined();
-    
-    // Verify alarms are created
-    const alarms = await context.sendMessage({ type: 'CHECK_ALARMS' });
-    expect(alarms.length).toBeGreaterThan(0);
+  test('returns original message when Rewriter API missing', async () => {
+    delete globalThis.chrome;
+
+    const rewritten = await rewriteMessage('Original message', 'motivating');
+
+    expect(rewritten).toBe('Original message');
+  });
+
+  test('returns rewritten message when API available', async () => {
+    const destroy = () => {};
+    globalThis.chrome = {
+      ai: {
+        rewriter: {
+          async capabilities() {
+            return { available: 'readily' };
+          },
+          async create() {
+            return {
+              async rewrite(message) {
+                return `${message} (rewritten)`;
+              },
+              destroy
+            };
+          }
+        }
+      }
+    };
+
+    const rewritten = await rewriteMessage('Original message', 'motivating');
+
+    expect(rewritten).toBe('Original message (rewritten)');
+  });
+
+  test('falls back to original when API availability is limited', async () => {
+    globalThis.chrome = {
+      ai: {
+        rewriter: {
+          async capabilities() {
+            return { available: 'no' };
+          }
+        }
+      }
+    };
+
+    const rewritten = await rewriteMessage('Original message', 'motivating');
+
+    expect(rewritten).toBe('Original message');
   });
 });
-
