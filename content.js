@@ -1,6 +1,8 @@
 // ===== GIA CONTENT SCRIPT =====
 // Handles corner logo, break cards, and user interactions
 
+console.log('GIA content script loaded!');
+
 const CORNER_LOGO_ID = "gia-corner-logo";
 const BREAK_CARD_ID = "gia-break-card";
 
@@ -139,6 +141,20 @@ function showContextMenu(x, y) {
 async function showBreakCard(breakType, durationMs) {
   console.log('showBreakCard called with:', breakType, durationMs);
   console.log('Document body:', document.body);
+  console.log('Document readyState:', document.readyState);
+  
+  // If document isn't ready, wait for it
+  if (document.readyState === 'loading') {
+    console.log('Waiting for DOM to load...');
+    await new Promise(resolve => {
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', resolve);
+      } else {
+        resolve();
+      }
+    });
+  }
+  
   removeBreakCard();
   
   const wrapper = document.createElement('div');
