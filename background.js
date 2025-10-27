@@ -297,7 +297,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
               "Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!"
             ];
             const joke = jokes[Math.floor(Math.random() * jokes.length)];
-            message = `Take a 20-second break. Look 20 feet away and blink gently. ${joke} I'll let you know when time is up.`;
+            message = `Look 20 feet away and blink gently. ${joke} I'll let you know when time is up.`;
           } else {
             message = "Take a 20-second break. Look 20 feet away and blink gently.";
           }
