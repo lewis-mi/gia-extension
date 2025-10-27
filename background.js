@@ -237,12 +237,38 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
       } else if (msg?.type === "GIA_SPEAK") {
         // Handle TTS requests from content scripts
         try {
+          // Try high-quality Prompt API audio first
+          const tone = msg.tone || 'mindful';
+          
+          if (chrome?.ai?.prompt) {
+            try {
+              const prompt = `Rephrase for a ${tone} wellness reminder, brief and friendly: "${msg.text}"`;
+              const res = await chrome.ai.prompt({
+                prompt,
+                output_audio_format: "wav"
+              });
+              
+              if (res?.output_audio) {
+                // Send audio data back to content script to play
+                if (sendResponse) sendResponse({ 
+                  success: true, 
+                  audioData: res.output_audio,
+                  audioFormat: "wav"
+                });
+              }
+            } catch (e) {
+              console.log('Prompt API audio not available, falling back to chrome.tts');
+            }
+          }
+          
+          // Fallback to chrome.tts
           chrome.tts.speak(msg.text, {
             enqueue: false,
             rate: msg.rate || 0.85,
             pitch: msg.pitch || 0.9,
             volume: msg.volume || 0.9
           });
+          
           if (sendResponse) sendResponse({ success: true });
         } catch (e) {
           console.error('TTS speak error:', e);

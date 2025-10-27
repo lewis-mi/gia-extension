@@ -269,14 +269,30 @@ async function showBreakCard(breakType, durationMs) {
           pitch = 0.9;
         }
         
-        await chrome.runtime.sendMessage({
-          type: 'GIA_SPEAK',
-          text: message,
-          rate: rate,
-          pitch: pitch,
-          volume: 0.9
-        });
-        console.log('TTS started for break card with message:', message);
+        try {
+          const response = await chrome.runtime.sendMessage({
+            type: 'GIA_SPEAK',
+            text: message,
+            rate: rate,
+            pitch: pitch,
+            volume: 0.9,
+            tone: tone
+          });
+          
+          // If we got audio data back, play it
+          if (response?.audioData) {
+            const blob = new Blob([response.audioData], { type: 'audio/wav' });
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio(url);
+            audio.play();
+            audio.onended = () => URL.revokeObjectURL(url);
+            console.log('Playing high-quality AI audio');
+          } else {
+            console.log('TTS started for break card with message:', message);
+          }
+        } catch (e) {
+          console.error('TTS error:', e);
+        }
       } catch (e) {
         console.error('TTS error:', e);
       }
