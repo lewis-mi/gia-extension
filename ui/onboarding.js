@@ -64,6 +64,14 @@ async function init() {
         async function showDemoBreaks() {
           // 1. Show short break (Mindful tone)
           console.log('Showing short break (Mindful)...');
+          await chrome.storage.local.set({
+            settings: {
+              audioEnabled: true,
+              voiceCommandsEnabled: false,
+              language: 'auto',
+              tipTone: 'mindful'
+            }
+          });
           await chrome.tabs.sendMessage(tab.id, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'short',
@@ -77,6 +85,14 @@ async function init() {
           
           // 2. Show short break (Goofy tone)
           console.log('Showing short break (Goofy)...');
+          await chrome.storage.local.set({
+            settings: {
+              audioEnabled: true,
+              voiceCommandsEnabled: false,
+              language: 'auto',
+              tipTone: 'goofy'
+            }
+          });
           await chrome.tabs.sendMessage(tab.id, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'short',
