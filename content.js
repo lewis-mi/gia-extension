@@ -351,16 +351,16 @@ function startCountdown(element, durationMs) {
       
       if (!isLong) {
         try {
-          chrome.tts.speak('Done', {
-            enqueue: false,
+          chrome.runtime.sendMessage({
+            type: 'GIA_SPEAK',
+            text: 'Break complete',
             rate: 1.0,
             pitch: 1.0,
-            volume: 0.7,
-            requiredEventTypes: ['end']
+            volume: 0.7
           });
-          console.log('Break complete ping played');
+          console.log('Break complete notification sent');
         } catch (e) {
-          console.log('TTS ping not available:', e);
+          console.log('Break complete notification failed:', e);
         }
       }
     }

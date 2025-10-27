@@ -265,7 +265,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           
           // Add tone-specific content for short breaks
           if (tone === 'mindful') {
-            message += "Let's breathe together. Breathe in slowly and deeply. Hold for a moment. Breathe out gently and slowly. In... pause... out. In... pause... out. Let your mind settle with each breath.";
+            message += "Let's take a little rest. I'll let you know when time is up.";
           } else if (tone === 'goofy') {
             const jokes = [
               "Knock knock. Who's there? Boo. Boo who? Don't cry!",
