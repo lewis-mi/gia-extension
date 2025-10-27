@@ -28,16 +28,12 @@ Gia: The Good Intentions Assistant is based on research showing that 20-second g
 Click "🚀 Try Demo" on the first onboarding screen for an immediate experience:
 
 **Break 1 (Mindful - 20 seconds):**
-> “Take a 20-second break. Look 20 feet away and blink gently. Let's take a little rest. I'll let you know when time is up.”  
-Slow (0.72x), calm pitch — circular countdown timer — soft audio chime when complete  
+> "Take a 20-second break. Look 20 feet away and blink gently. I'll let you know when time is up."  
+Slow, calm pitch — circular countdown timer — soft audio chime when complete
 
-**Break 2 (Goofy - 20 seconds):**
-> “Take a 20-second break. Look 20 feet away and blink gently. [Knock-knock joke]. I'll let you know when time is up.”  
-Normal speed (0.85x), energetic pitch — light humor for engagement  
-
-**Break 3 (Long - 5 minutes):**
-> “Take 5. Time to touch grass—but here’s one for the road. Knock knock. Who’s there? Cow says. Cow says who? No, a cow says moo!”  
-Demonstrates extended break mode  
+**Break 2 (Goofy Long - 30 seconds):**
+> "Take 5. Time to touch grass but here's one for the road. Knock knock. Who's there? Cow says. Cow says who? No, a cow says moo!"  
+Energetic, playful pitch — demonstrates both goofy tone and extended break features  
 
 ## 🧬 Scientific & Cognitive Foundations
 **Gia: The Good Intentions Assistant** combines research from optometry, cognitive psychology, and human-computer interaction to support digital well-being through perceptually optimized, AI-assisted design.
