@@ -255,21 +255,23 @@ async function showBreakCard(breakType, durationMs) {
         const { settings = {} } = await chrome.storage.local.get('settings');
         const tone = settings?.tipTone || 'mindful';
         
-        // Tone-specific audio profiles
+        // Tone-specific audio profiles with refined characteristics
         const toneProfiles = {
-          mindful: { rate: 0.95, pitch: 1.0 },
-          goofy: { rate: 1.1, pitch: 1.2 }
+          mindful: { rate: 0.9, pitch: 0.9, volume: 0.85 },
+          goofy: { rate: 1.25, pitch: 1.25, volume: 1.0 }
         };
         
-        let rate, pitch;
+        let rate, pitch, volume;
         if (breakType === 'long') {
           rate = 0.75;
           pitch = 0.85;
+          volume = 0.9;
         } else {
           // Use tone-specific profile
           const profile = toneProfiles[tone] || toneProfiles.mindful;
           rate = profile.rate;
           pitch = profile.pitch;
+          volume = profile.volume;
         }
         
         try {
@@ -278,7 +280,7 @@ async function showBreakCard(breakType, durationMs) {
             text: message,
             rate: rate,
             pitch: pitch,
-            volume: 0.9,
+            volume: volume,
             tone: tone
           });
           

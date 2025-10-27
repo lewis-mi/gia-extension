@@ -239,10 +239,10 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         try {
           const tone = msg.tone || 'mindful';
           
-          // Tone-specific audio profiles
+          // Tone-specific audio profiles with refined characteristics
           const toneProfiles = {
-            mindful: { rate: 0.95, pitch: 1.0 },
-            goofy: { rate: 1.1, pitch: 1.2 }
+            mindful: { rate: 0.9, pitch: 0.9, volume: 0.85 },
+            goofy: { rate: 1.25, pitch: 1.25, volume: 1.0 }
           };
           
           const profile = toneProfiles[tone] || toneProfiles.mindful;
@@ -250,9 +250,18 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           // Try high-quality Prompt API audio first
           if (chrome?.ai?.prompt) {
             try {
-              const toneStyle = tone === 'goofy' 
-                ? 'Speak this line with a lighthearted, goofy tone. Use expressive intonation and cheerful pacing.'
-                : 'Speak this line in a calm, warm tone with steady pacing. Avoid strong emotion; sound mindful and gentle.';
+              let toneStyle;
+              if (tone === 'goofy') {
+                toneStyle = `Speak this line in a fun, goofy tone — animated and slightly exaggerated,
+like a cartoon sidekick who's excited to help. Use playful rhythm, upbeat pacing,
+and big vocal expressions (smiles, laughter hints).
+End each line with rising intonation or comedic timing.`;
+              } else {
+                toneStyle = `Speak this line in a warm, slow, and grounded tone — imagine guiding a meditation.
+Use smooth rhythm, low volume, and no sudden inflection.
+Pause naturally between phrases.
+Do not sound robotic or overly formal.`;
+              }
               
               const prompt = `${toneStyle}\n"${msg.text}"`;
               
@@ -279,7 +288,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
             enqueue: false,
             rate: msg.rate || profile.rate,
             pitch: msg.pitch || profile.pitch,
-            volume: msg.volume || 0.9
+            volume: msg.volume !== undefined ? msg.volume : profile.volume !== undefined ? profile.volume : 0.9
           });
           
           if (sendResponse) sendResponse({ success: true });

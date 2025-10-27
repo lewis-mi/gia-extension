@@ -3,16 +3,24 @@
 
 export const TONE_STYLES = {
   mindful: {
-    description: "calm, centered, and soothing delivery — like a meditation guide",
-    rate: 0.95,
-    pitch: 1.0,
-    promptStyle: `Speak this line in a calm, warm tone with steady pacing. Avoid strong emotion; sound mindful and gentle.`,
+    description: "calm, centered, and soothing — like a guided meditation narrator",
+    rate: 0.9,
+    pitch: 0.9,
+    volume: 0.85,
+    promptStyle: `Speak this line in a warm, slow, and grounded tone — imagine guiding a meditation.
+Use smooth rhythm, low volume, and no sudden inflection.
+Pause naturally between phrases.
+Do not sound robotic or overly formal.`,
   },
   goofy: {
-    description: "playful, energetic, slightly silly delivery — like a friendly cartoon",
-    rate: 1.1,
-    pitch: 1.2,
-    promptStyle: `Speak this line with a lighthearted, goofy tone. Use expressive intonation and cheerful pacing.`,
+    description: "playful, expressive, and cartoonish — like a cheerful friend or sidekick",
+    rate: 1.25,
+    pitch: 1.25,
+    volume: 1.0,
+    promptStyle: `Speak this line in a fun, goofy tone — animated and slightly exaggerated,
+like a cartoon sidekick who's excited to help. Use playful rhythm, upbeat pacing,
+and big vocal expressions (smiles, laughter hints).
+End each line with rising intonation or comedic timing.`,
   },
 };
 
