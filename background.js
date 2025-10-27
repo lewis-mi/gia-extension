@@ -235,8 +235,27 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         await createMainAlarm(); 
         if (sendResponse) sendResponse({ success: true }); 
       } else if (msg?.type === "GIA_GET_MESSAGE") { 
-        // Simple fallback message for demo mode
-        if (sendResponse) sendResponse({ text: "Take a 20-second break: look 20 feet away and blink gently." }); 
+        // Get tone from settings
+        const settings = await getSettings();
+        const tone = settings?.tipTone || 'mindful';
+        
+        // Base instruction
+        let message = "Take a 20-second break. Look 20 feet away and blink gently. ";
+        
+        // Add tone-specific content
+        if (tone === 'mindful') {
+          message += "Now let's breathe together. Breathe in slowly... and out. In... and out. In... and out.";
+        } else if (tone === 'goofy') {
+          const jokes = [
+            "Knock knock. Who's there? Boo. Boo who? Don't cry!",
+            "Knock knock. Who's there? Lettuce. Lettuce who? Lettuce in!",
+            "Knock knock. Who's there? Hawaii. Hawaii who? I'm fine, Hawaii you?"
+          ];
+          const joke = jokes[Math.floor(Math.random() * jokes.length)];
+          message += joke;
+        }
+        
+        if (sendResponse) sendResponse({ text: message }); 
       }
     } catch (e) {
       console.error('Message handler error:', e);
