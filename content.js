@@ -204,10 +204,10 @@ async function showBreakCard(breakType, durationMs) {
     ? 'TAKE A LONGER BREAK' 
     : 'TAKE A 20-SECOND BREAK';
   
-  // Subtitle
+  // Subtitle (only for short breaks)
   const subtitle = document.createElement('p');
   subtitle.className = 'gia-subtitle';
-  subtitle.textContent = 'EVERY 20 MINUTES';
+  subtitle.textContent = breakType === 'long' ? '' : 'EVERY 20 MINUTES';
   
   // AI-generated instruction
   const instruction = document.createElement('p');
