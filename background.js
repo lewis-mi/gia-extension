@@ -87,6 +87,12 @@ chrome.runtime.onStartup.addListener(async () => {
 
 // ===== Short / Long break triggers =====
 chrome.alarms.onAlarm.addListener(async (alarm) => {
+  // Handle demo alarm for quick testing
+  if (alarm.name === 'gia-demo') {
+    await runShortBreak();
+    return;
+  }
+  
   if (alarm.name !== ALARM_MAIN) return;
 
   const s = await getSettings();
