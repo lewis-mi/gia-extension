@@ -182,7 +182,7 @@ async function showBreakCard(breakType, durationMs, toneOverride = null) {
   // Close button
   const closeBtn = document.createElement('button');
   closeBtn.className = 'gia-close';
-  closeBtn.textContent = '×';
+  closeBtn.textContent = 'X';
   closeBtn.setAttribute('aria-label', 'Close break reminder');
   closeBtn.addEventListener('click', () => dismissBreak(wrapper));
   
