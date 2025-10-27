@@ -216,6 +216,10 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
     if (msg?.type === "gia.exit")   { await setSettings({ paused: true });  await clearMainAlarm(); await stopAllAudioAndNotifs(); sendResponse({ paused: true, exited: true }); }
     if (msg?.type === "gia.status") { const s = await getSettings(); sendResponse({ paused: !!s.paused }); }
     if (msg?.type === "GIA_RESCHEDULE") { await clearMainAlarm(); await createMainAlarm(); sendResponse({ success: true }); }
+    if (msg?.type === "GIA_GET_MESSAGE") { 
+      // Simple fallback message for demo mode
+      sendResponse({ text: "Take a 20-second break: look 20 feet away and blink gently." }); 
+    }
   })();
   return true;
 });

@@ -31,6 +31,13 @@
     }
   },
 
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/logo.png"],
+      "matches": ["<all_urls>"]
+    }
+  ],
+
   "trial_tokens": [
     "PASTE_PROOFREADER_TOKEN_IF_USED",
     "PASTE_REWRITER_TOKEN_IF_USED"
