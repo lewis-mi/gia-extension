@@ -359,10 +359,13 @@ async function createMultimodalSection(wrapper) {
   // Image input for screen analysis
   const imageBtn = document.createElement('button');
   imageBtn.className = 'gia-multimodal-btn';
-  imageBtn.textContent = '📸 Analyze Screen';
-  imageBtn.title = 'Analyze current screen for eye strain';
+  imageBtn.textContent = '⏰ Remind me later';
+  imageBtn.title = 'Remind me in 5 minutes';
   
-  imageBtn.addEventListener('click', () => analyzeScreen(wrapper, multimodalSection));
+  imageBtn.addEventListener('click', () => {
+    dismissBreak(wrapper);
+    // Could add snooze logic here if needed
+  });
   multimodalSection.appendChild(imageBtn);
   
   // Status display
