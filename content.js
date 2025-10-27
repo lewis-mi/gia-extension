@@ -214,10 +214,6 @@ async function showBreakCard(breakType, durationMs) {
   instruction.className = 'gia-instruction';
   instruction.textContent = 'Loading...';
   
-  // Fetch AI message
-  const message = await fetchAIMessage();
-  instruction.textContent = message;
-  
   // Multimodal interaction section
   const multimodalSection = await createMultimodalSection(wrapper);
   
@@ -242,6 +238,11 @@ async function showBreakCard(breakType, durationMs) {
   // Animate in
   requestAnimationFrame(() => {
     card.classList.add('enter');
+  });
+  
+  // Fetch AI message and start audio immediately
+  fetchAIMessage().then(message => {
+    instruction.textContent = message;
     
     // Start TTS immediately when card appears
     try {
