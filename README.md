@@ -246,21 +246,6 @@ npm run cy:run
 
 ---
 
-## 🎯 Prize Categories
-
-This submission targets:
-
-- **Most Helpful - Chrome Extension** ($14,000)
-- **Best Hybrid AI Application** ($9,000)
-- **Best Multimodal AI Application** ($9,000)
-
-**Why Gia Qualifies:**
-
-- **Most Helpful**: Addresses universal eye strain problem affecting 90% of users
-- **Hybrid AI**: Local Gemini Nano processing with optional cloud integration
-- **Multimodal**: Voice commands, text-to-speech, visual cards, and haptic feedback
-
----
 
 ## 🤝 Contributing
 
