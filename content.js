@@ -243,21 +243,19 @@ async function showBreakCard(breakType, durationMs) {
   requestAnimationFrame(() => {
     card.classList.add('enter');
     
-    // Start TTS after card animation begins
-    setTimeout(() => {
-      try {
-        chrome.tts.speak(message, {
-          enqueue: false,
-          rate: 0.85,
-          pitch: 0.9,
-          volume: 0.9,
-          requiredEventTypes: ['end']
-        });
-        console.log('TTS started for break card');
-      } catch (e) {
-        console.log('TTS not available:', e);
-      }
-    }, 300); // Small delay to ensure card is visible
+    // Start TTS immediately when card appears
+    try {
+      chrome.tts.speak(message, {
+        enqueue: false,
+        rate: 0.85,
+        pitch: 0.9,
+        volume: 0.9,
+        requiredEventTypes: ['end']
+      });
+      console.log('TTS started for break card');
+    } catch (e) {
+      console.log('TTS not available:', e);
+    }
   });
   
   // Start countdown
@@ -305,7 +303,8 @@ function startCountdown(element, durationMs) {
   const start = Date.now();
   const isLong = durationMs > 60000;
   
-  const tick = () => {
+  // Use setInterval to update every 1 second instead of every frame
+  const interval = setInterval(() => {
     const remaining = Math.max(0, durationMs - (Date.now() - start));
     
     if (isLong) {
@@ -316,28 +315,30 @@ function startCountdown(element, durationMs) {
       element.textContent = `${secs}s`;
     }
     
-    // Play ping sound when countdown reaches zero
-    if (remaining === 0 && !isLong) {
-      try {
-        chrome.tts.speak('Done', {
-          enqueue: false,
-          rate: 1.0,
-          pitch: 1.0,
-          volume: 0.7,
-          requiredEventTypes: ['end']
-        });
-        console.log('Break complete ping played');
-      } catch (e) {
-        console.log('TTS ping not available:', e);
+    // Play ping sound and cleanup when countdown reaches zero
+    if (remaining === 0) {
+      clearInterval(interval);
+      
+      if (!isLong) {
+        try {
+          chrome.tts.speak('Done', {
+            enqueue: false,
+            rate: 1.0,
+            pitch: 1.0,
+            volume: 0.7,
+            requiredEventTypes: ['end']
+          });
+          console.log('Break complete ping played');
+        } catch (e) {
+          console.log('TTS ping not available:', e);
+        }
       }
     }
-    
-    if (remaining > 0) {
-      tickRAF = requestAnimationFrame(tick);
-    }
-  };
+  }, 1000); // Update every 1 second
   
-  tick();
+  // Store interval ID to cleanup on dismiss
+  if (tickRAF) clearInterval(tickRAF);
+  tickRAF = interval;
 }
 
 async function fetchAIMessage() {
