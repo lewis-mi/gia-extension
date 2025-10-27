@@ -577,6 +577,11 @@ chrome.runtime.onMessage.addListener((msg) => {
     showBreakCard(msg.breakType, msg.durationMs, msg.tone);
   }
   
+  if (msg?.type === 'GIA_DISMISS_BREAK') {
+    console.log('Received GIA_DISMISS_BREAK message');
+    removeBreakCard();
+  }
+  
   if (msg?.type === 'GIA_UPDATE_STAGE') {
     updateCornerLogoStage(msg.stage);
     nextBreakTime = msg.nextBreakTime;

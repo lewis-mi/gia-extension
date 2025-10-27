@@ -338,6 +338,10 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           // 1. Mindful Break (after a short delay)
           console.log('Demo: Triggering Mindful break...');
           await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for page to be ready
+          
+          // Stop any existing audio
+          try { chrome.tts.stop(); } catch (e) {}
+          
           await chrome.tabs.sendMessage(tabId, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'short',
@@ -348,6 +352,12 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           // 2. Goofy Break (after the first one finishes)
           console.log('Demo: Scheduling Goofy break...');
           await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
+          
+          // Explicitly dismiss previous card and stop audio
+          try { chrome.tts.stop(); } catch (e) {}
+          await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
+          await new Promise(resolve => setTimeout(resolve, 300));
+          
           await setSettings({ tipTone: 'goofy' });
           await chrome.tabs.sendMessage(tabId, {
             type: 'GIA_SHOW_BREAK',
@@ -359,6 +369,12 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
           // 3. Long Break (after the second one finishes)
           console.log('Demo: Scheduling Long break...');
           await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
+          
+          // Explicitly dismiss previous card and stop audio
+          try { chrome.tts.stop(); } catch (e) {}
+          await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
+          await new Promise(resolve => setTimeout(resolve, 300));
+          
           await chrome.tabs.sendMessage(tabId, {
             type: 'GIA_SHOW_BREAK',
             breakType: 'long',
