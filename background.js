@@ -297,9 +297,8 @@ Do not sound robotic or overly formal.`;
           if (sendResponse) sendResponse({ error: e.message });
         }
       } else if (msg?.type === "GIA_GET_MESSAGE") { 
-        // Get tone from settings and break type
-        const settings = await getSettings();
-        const tone = settings?.tipTone || 'mindful';
+        // Get tone from message parameter, then settings, then default
+        const tone = msg.tone || (await getSettings())?.tipTone || 'mindful';
         const breakType = msg.breakType || 'short';
         
         let message;
