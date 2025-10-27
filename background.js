@@ -209,6 +209,9 @@ async function stopAllAudioAndNotifs() {
   chrome.notifications.getAll(ids => Object.keys(ids||{}).forEach(id => chrome.notifications.clear(id)));
 }
 
+// Guard to prevent duplicate demo sequences
+let isDemoRunning = false;
+
 chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
   // Handle the message asynchronously
   (async () => {
@@ -326,7 +329,14 @@ Do not sound robotic or overly formal.`;
         
         if (sendResponse) sendResponse({ text: message }); 
       } else if (msg?.type === 'GIA_START_DEMO') {
-        // Handle demo start
+        // Handle demo start (prevent duplicates)
+        if (isDemoRunning) {
+          console.log('Demo already running, ignoring duplicate request');
+          if (sendResponse) sendResponse({ error: 'Demo already running' });
+          return;
+        }
+        isDemoRunning = true;
+        
         console.log('Starting demo sequence...');
         try {
           // Find the demo page tab
@@ -389,6 +399,7 @@ Do not sound robotic or overly formal.`;
           }
         } catch (e) {
           console.error('Demo start error:', e);
+          isDemoRunning = false;
           if (sendResponse) sendResponse({ error: e.message });
         }
       }
