@@ -1,16 +1,22 @@
 // ===== GIA ONBOARDING SCREEN 1: SETUP =====
 
 async function init() {
+  console.log('Onboarding init started');
   const demoBtn = document.getElementById('demoBtn');
   const continueBtn = document.getElementById('continueBtn');
   const audioToggle = document.getElementById('audioToggle');
   const voiceCommandsToggle = document.getElementById('voiceCommandsToggle');
   const languageSelect = document.getElementById('languageSelect');
   
+  console.log('Demo button found:', !!demoBtn);
+  
   // Demo mode - skip onboarding and start immediately
   if (demoBtn) {
     demoBtn.addEventListener('click', async () => {
+      console.log('Demo button clicked!');
+      console.log('Starting demo mode setup...');
       try {
+        console.log('Setting demo settings...');
         // Set demo settings in the correct structure
         await chrome.storage.local.set({
           settings: {
@@ -31,11 +37,14 @@ async function init() {
         await new Promise(resolve => setTimeout(resolve, 100));
         
         // Start the session
+        console.log('Sending GIA_RESCHEDULE message...');
         await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
+        console.log('Message sent, waiting...');
         
         // Wait a moment for alarm to be created
         await new Promise(resolve => setTimeout(resolve, 100));
         
+        console.log('Closing tab...');
         // Close the tab
         window.close();
       } catch (e) {
