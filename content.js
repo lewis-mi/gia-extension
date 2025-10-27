@@ -316,6 +316,22 @@ function startCountdown(element, durationMs) {
       element.textContent = `${secs}s`;
     }
     
+    // Play ping sound when countdown reaches zero
+    if (remaining === 0 && !isLong) {
+      try {
+        chrome.tts.speak('Done', {
+          enqueue: false,
+          rate: 1.0,
+          pitch: 1.0,
+          volume: 0.7,
+          requiredEventTypes: ['end']
+        });
+        console.log('Break complete ping played');
+      } catch (e) {
+        console.log('TTS ping not available:', e);
+      }
+    }
+    
     if (remaining > 0) {
       tickRAF = requestAnimationFrame(tick);
     }
