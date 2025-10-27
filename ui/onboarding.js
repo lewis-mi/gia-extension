@@ -49,6 +49,21 @@ async function init() {
         await chrome.alarms.create('gia-demo', { delayInMinutes: 0.5 });
         console.log('Demo alarm created');
         
+        // Also send immediate demo message to show it works
+        console.log('Sending immediate demo break...');
+        const demoTabs = await chrome.tabs.query({ active: true, currentWindow: true });
+        for (const tab of demoTabs) {
+          try {
+            await chrome.tabs.sendMessage(tab.id, {
+              type: 'GIA_SHOW_BREAK',
+              breakType: 'short',
+              durationMs: 20000
+            });
+          } catch (e) {
+            console.log('Could not show demo break card:', e.message);
+          }
+        }
+        
         // Wait a moment for alarm to be created
         await new Promise(resolve => setTimeout(resolve, 200));
         
