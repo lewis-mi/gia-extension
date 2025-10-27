@@ -19,7 +19,7 @@ function init() {
   const goofyBtn = document.getElementById('goofyBtn');
   const mindfulBtn = document.getElementById('mindfulBtn');
   const backBtn = document.getElementById('backBtn');
-  const skipBtn = document.getElementById('skipBtn');
+  const continueBtn = document.getElementById('continueBtn');
   const successMessage = document.getElementById('successMessage');
   
   // Handle tone selection and navigate to next screen
@@ -65,9 +65,9 @@ function init() {
     });
   }
   
-  // Skip button - use default Mindful tone and proceed
-  if (skipBtn) {
-    skipBtn.addEventListener('click', async () => {
+  // Continue button - use default Mindful tone and proceed
+  if (continueBtn) {
+    continueBtn.addEventListener('click', async () => {
       await proceedToNextScreen('mindful');
     });
   }
