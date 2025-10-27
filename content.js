@@ -538,6 +538,12 @@ chrome.runtime.onMessage.addListener((msg) => {
   }
 });
 
+// Test function to manually trigger break card
+window.testGiaBreakCard = function() {
+  console.log('Test function called!');
+  showBreakCard('short', 20000);
+};
+
 // ===== INITIALIZATION =====
 (async function init() {
   // Wait a bit for page to load
