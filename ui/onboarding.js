@@ -10,21 +10,21 @@ async function init() {
   // Demo mode - skip onboarding and start immediately
   if (demoBtn) {
     demoBtn.addEventListener('click', async () => {
-      // Set demo settings
+      // Set demo settings in the correct structure
       await chrome.storage.local.set({
-        'settings.audioEnabled': true,
-        'settings.voiceCommandsEnabled': false,
-        'settings.language': 'auto',
-        'settings.tipTone': 'mindful',
-        'settings.longEnabled': true,
-        'settings.endTime': '18:00',
-        'settings.longBreakLength': 5,
-        'settings.longBreakFrequency': 60,
-        'settings.phoneHapticsEnabled': false
+        settings: {
+          audioEnabled: true,
+          voiceCommandsEnabled: false,
+          language: 'auto',
+          tipTone: 'mindful',
+          longEnabled: true,
+          endTime: '18:00',
+          longBreakLength: 5,
+          longBreakFrequency: 60,
+          phoneHapticsEnabled: false
+        },
+        onboardingComplete: true
       });
-      
-      // Mark onboarding as complete
-      await chrome.storage.local.set({ onboardingComplete: true });
       
       // Start the session
       try {
@@ -50,17 +50,26 @@ async function init() {
   
   // Initialize toggles
   setupToggle(audioToggle, async (enabled) => {
-    await chrome.storage.local.set({ 'settings.audioEnabled': enabled });
+    const { settings = {} } = await chrome.storage.local.get(['settings']);
+    await chrome.storage.local.set({ 
+      settings: { ...settings, audioEnabled: enabled }
+    });
   });
   
   setupToggle(voiceCommandsToggle, async (enabled) => {
-    await chrome.storage.local.set({ 'settings.voiceCommandsEnabled': enabled });
+    const { settings = {} } = await chrome.storage.local.get(['settings']);
+    await chrome.storage.local.set({ 
+      settings: { ...settings, voiceCommandsEnabled: enabled }
+    });
   });
   
   // Language selector
   if (languageSelect) {
     languageSelect.addEventListener('change', async (e) => {
-      await chrome.storage.local.set({ 'settings.language': e.target.value });
+      const { settings = {} } = await chrome.storage.local.get(['settings']);
+      await chrome.storage.local.set({ 
+        settings: { ...settings, language: e.target.value }
+      });
     });
   }
   
@@ -73,9 +82,11 @@ async function init() {
       const language = languageSelect.value;
       
       await chrome.storage.local.set({
-        'settings.audioEnabled': audioEnabled,
-        'settings.voiceCommandsEnabled': voiceEnabled,
-        'settings.language': language
+        settings: {
+          audioEnabled,
+          voiceCommandsEnabled: voiceEnabled,
+          language
+        }
       });
       
       // Navigate to tone selection screen
