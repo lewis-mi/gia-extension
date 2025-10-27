@@ -353,6 +353,7 @@ function startCountdown(element, durationMs) {
   const start = Date.now();
   const isLong = durationMs > 60000;
   let completeAnnounced = false;
+  let lastRemaining = durationMs;
   
   // Use setInterval to update every 1 second instead of every frame
   const interval = setInterval(() => {
@@ -367,7 +368,8 @@ function startCountdown(element, durationMs) {
     }
     
     // Play ping sound and cleanup when countdown reaches zero (only once)
-    if (remaining === 0 && !completeAnnounced) {
+    // Check if we just crossed from >0 to 0
+    if (remaining === 0 && lastRemaining > 0 && !completeAnnounced) {
       completeAnnounced = true;
       clearInterval(interval);
       
@@ -386,6 +388,8 @@ function startCountdown(element, durationMs) {
         }
       }
     }
+    
+    lastRemaining = remaining;
   }, 1000); // Update every 1 second
   
   // Store interval ID to cleanup on dismiss
