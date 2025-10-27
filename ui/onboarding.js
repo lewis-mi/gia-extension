@@ -56,22 +56,31 @@ async function init() {
           active: true 
         });
         
-        // Wait a moment for the page to load and content script to inject
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Wait for the page to load completely
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
         // Send demo break message to the new tab
         const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
         for (const tab of tabs) {
-          try {
-            console.log('Sending break message to tab:', tab.id);
-            await chrome.tabs.sendMessage(tab.id, {
-              type: 'GIA_SHOW_BREAK',
-              breakType: 'short',
-              durationMs: 20000
-            });
-            console.log('Message sent successfully');
-          } catch (e) {
-            console.log('Could not show demo break card:', e.message);
+          // Try multiple times to ensure content script has loaded
+          let attempts = 0;
+          while (attempts < 5) {
+            try {
+              console.log('Sending break message to tab:', tab.id, 'attempt', attempts + 1);
+              await chrome.tabs.sendMessage(tab.id, {
+                type: 'GIA_SHOW_BREAK',
+                breakType: 'short',
+                durationMs: 20000
+              });
+              console.log('Message sent successfully on attempt', attempts + 1);
+              break;
+            } catch (e) {
+              attempts++;
+              console.log('Attempt', attempts, 'failed:', e.message);
+              if (attempts < 5) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+              }
+            }
           }
         }
         
