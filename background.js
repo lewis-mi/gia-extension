@@ -210,18 +210,41 @@ async function stopAllAudioAndNotifs() {
 }
 
 chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
+  // Handle the message asynchronously
   (async () => {
-    if (msg?.type === "gia.pause")  { await setSettings({ paused: true });  await clearMainAlarm(); await stopAllAudioAndNotifs(); sendResponse({ paused: true }); }
-    if (msg?.type === "gia.resume") { await setSettings({ paused: false }); await createMainAlarm();                 sendResponse({ paused: false }); }
-    if (msg?.type === "gia.exit")   { await setSettings({ paused: true });  await clearMainAlarm(); await stopAllAudioAndNotifs(); sendResponse({ paused: true, exited: true }); }
-    if (msg?.type === "gia.status") { const s = await getSettings(); sendResponse({ paused: !!s.paused }); }
-    if (msg?.type === "GIA_RESCHEDULE") { await clearMainAlarm(); await createMainAlarm(); sendResponse({ success: true }); }
-    if (msg?.type === "GIA_GET_MESSAGE") { 
-      // Simple fallback message for demo mode
-      sendResponse({ text: "Take a 20-second break: look 20 feet away and blink gently." }); 
+    try {
+      if (msg?.type === "gia.pause")  { 
+        await setSettings({ paused: true });  
+        await clearMainAlarm(); 
+        await stopAllAudioAndNotifs(); 
+        if (sendResponse) sendResponse({ paused: true }); 
+      } else if (msg?.type === "gia.resume") { 
+        await setSettings({ paused: false }); 
+        await createMainAlarm(); 
+        if (sendResponse) sendResponse({ paused: false }); 
+      } else if (msg?.type === "gia.exit")   { 
+        await setSettings({ paused: true });  
+        await clearMainAlarm(); 
+        await stopAllAudioAndNotifs(); 
+        if (sendResponse) sendResponse({ paused: true, exited: true }); 
+      } else if (msg?.type === "gia.status") { 
+        const s = await getSettings(); 
+        if (sendResponse) sendResponse({ paused: !!s.paused }); 
+      } else if (msg?.type === "GIA_RESCHEDULE") { 
+        await clearMainAlarm(); 
+        await createMainAlarm(); 
+        if (sendResponse) sendResponse({ success: true }); 
+      } else if (msg?.type === "GIA_GET_MESSAGE") { 
+        // Simple fallback message for demo mode
+        if (sendResponse) sendResponse({ text: "Take a 20-second break: look 20 feet away and blink gently." }); 
+      }
+    } catch (e) {
+      console.error('Message handler error:', e);
+      if (sendResponse) sendResponse({ error: e.message });
     }
   })();
-  return true;
+  
+  return true; // Indicate we will send response asynchronously
 });
 
 // ===== Keyboard shortcut =====
