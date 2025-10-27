@@ -29,7 +29,7 @@ async function createCornerLogo() {
   
   // Logo image
   const img = document.createElement('img');
-  img.src = chrome.runtime.getURL('assets/logo.png');
+  img.src = chrome.runtime.getURL('assets/logo.svg');
   img.alt = 'Gia';
   img.className = 'gia-corner-logo-img';
   
