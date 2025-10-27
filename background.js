@@ -234,6 +234,20 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         await clearMainAlarm(); 
         await createMainAlarm(); 
         if (sendResponse) sendResponse({ success: true }); 
+      } else if (msg?.type === "GIA_SPEAK") {
+        // Handle TTS requests from content scripts
+        try {
+          chrome.tts.speak(msg.text, {
+            enqueue: false,
+            rate: msg.rate || 0.85,
+            pitch: msg.pitch || 0.9,
+            volume: msg.volume || 0.9
+          });
+          if (sendResponse) sendResponse({ success: true });
+        } catch (e) {
+          console.error('TTS speak error:', e);
+          if (sendResponse) sendResponse({ error: e.message });
+        }
       } else if (msg?.type === "GIA_GET_MESSAGE") { 
         // Get tone from settings
         const settings = await getSettings();

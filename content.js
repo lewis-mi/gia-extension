@@ -186,7 +186,7 @@ async function showBreakCard(breakType, durationMs) {
   
   const heroImg = document.createElement('img');
   heroImg.className = 'gia-hero-img';
-  heroImg.src = chrome.runtime.getURL('assets/logo.png');
+  heroImg.src = chrome.runtime.getURL('assets/logo.svg');
   
   const heroCount = document.createElement('span');
   heroCount.className = 'gia-hero-count';
@@ -251,17 +251,16 @@ async function showBreakCard(breakType, durationMs) {
     const { settings = {} } = await chrome.storage.local.get('settings');
     console.log('Audio enabled?', settings.audioEnabled);
     
-    // Start TTS immediately with the fetched message if audio is enabled
+    // Start TTS via background script if audio is enabled
     if (settings.audioEnabled !== false) {
       try {
-        const ttsOptions = {
-          enqueue: false,
+        await chrome.runtime.sendMessage({
+          type: 'GIA_SPEAK',
+          text: message,
           rate: breakType === 'long' ? 0.75 : 0.85,
           pitch: breakType === 'long' ? 0.85 : 0.9,
           volume: 0.9
-        };
-        console.log('Starting TTS with options:', ttsOptions);
-        await chrome.tts.speak(message, ttsOptions);
+        });
         console.log('TTS started for break card with message:', message);
       } catch (e) {
         console.error('TTS error:', e);
