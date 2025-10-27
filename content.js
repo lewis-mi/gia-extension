@@ -244,21 +244,30 @@ async function showBreakCard(breakType, durationMs) {
   const messagePromise = fetchAIMessage();
   
   // Start TTS as soon as message is ready
-  messagePromise.then(message => {
+  messagePromise.then(async (message) => {
     instruction.textContent = message;
     
-    // Start TTS immediately with the fetched message
-    try {
-      chrome.tts.speak(message, {
-        enqueue: false,
-        rate: breakType === 'long' ? 0.75 : 0.85,
-        pitch: breakType === 'long' ? 0.85 : 0.9,
-        volume: 0.9,
-        requiredEventTypes: ['end']
-      });
-      console.log('TTS started for break card with message:', message);
-    } catch (e) {
-      console.log('TTS not available:', e);
+    // Check audio settings
+    const { settings = {} } = await chrome.storage.local.get('settings');
+    console.log('Audio enabled?', settings.audioEnabled);
+    
+    // Start TTS immediately with the fetched message if audio is enabled
+    if (settings.audioEnabled !== false) {
+      try {
+        const ttsOptions = {
+          enqueue: false,
+          rate: breakType === 'long' ? 0.75 : 0.85,
+          pitch: breakType === 'long' ? 0.85 : 0.9,
+          volume: 0.9
+        };
+        console.log('Starting TTS with options:', ttsOptions);
+        await chrome.tts.speak(message, ttsOptions);
+        console.log('TTS started for break card with message:', message);
+      } catch (e) {
+        console.error('TTS error:', e);
+      }
+    } else {
+      console.log('Audio disabled, skipping TTS');
     }
   });
   
