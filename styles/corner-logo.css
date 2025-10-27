@@ -2,8 +2,9 @@
 
 #gia-corner-logo {
   position: fixed;
-  top: 10px;
-  right: 20px;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
   width: 50px;
   height: 50px;
   z-index: 2147483645;
@@ -14,7 +15,7 @@
 
 #gia-corner-logo:hover {
   opacity: 1;
-  transform: scale(1.1);
+  transform: translateY(-50%) scale(1.1);
 }
 
 .gia-corner-logo-img {
@@ -55,21 +56,22 @@
 
 @keyframes gia-pulse {
   0%, 100% {
-    transform: scale(1);
+    transform: translateY(-50%) scale(1);
     filter: drop-shadow(0 0 12px rgba(131, 144, 250, 0.5));
   }
   50% {
-    transform: scale(1.05);
+    transform: translateY(-50%) scale(1.05);
     filter: drop-shadow(0 0 20px rgba(131, 144, 250, 0.8));
   }
 }
 
-/* Tooltip */
+  /* Tooltip */
 .gia-corner-tooltip {
   position: absolute;
-  bottom: 100%;
-  right: 0;
-  margin-bottom: 12px;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  margin-right: 0;
   background: rgba(38, 42, 72, 0.95);
   color: white;
   padding: 10px 14px;
@@ -90,10 +92,11 @@
 .gia-corner-tooltip::after {
   content: '';
   position: absolute;
-  top: 100%;
-  right: 15px;
+  left: 100%;
+  top: 50%;
+  transform: translateY(-50%);
   border: 6px solid transparent;
-  border-top-color: rgba(38, 42, 72, 0.95);
+  border-left-color: rgba(38, 42, 72, 0.95);
 }
 
 .gia-tooltip-time {
