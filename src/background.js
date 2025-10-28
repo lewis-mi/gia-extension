@@ -217,11 +217,10 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
 
         if (sendResponse) sendResponse({ text: message });
       } else if (msg?.type === 'GIA_START_DEMO_NOW') {
-        // Use setTimeout for a near-instant demo start.
-        // This is fine for short delays after a user action.
+        // Use setTimeout to give the demo tab time to load and inject the content script
         demoStartTimeout = setTimeout(() => {
           runDemoStep();
-        }, 2000); // 2-second delay. This will be cleared if an alarm starts the demo first.
+        }, 3000); // 3-second delay to ensure tab is ready
       }
     } catch (e) {
       console.error('Message handler error:', e);
