@@ -31,8 +31,10 @@ const HYBRID_AI_CONFIG = {
 
 // Firebase AI Logic configuration
 const FIREBASE_CONFIG = {
-  // Note: Replace with your actual Firebase config
-  apiKey: "demo-api-key",
+  // Note: Replace with your actual Firebase config.
+  // WARNING: Do not commit real API keys to version control.
+  // Use environment variables or a secure secret management solution.
+  apiKey: "demo-api-key", // Example: process.env.FIREBASE_API_KEY
   authDomain: "gia-extension-demo.firebaseapp.com",
   projectId: "gia-extension-demo",
   storageBucket: "gia-extension-demo.appspot.com",
@@ -42,7 +44,9 @@ const FIREBASE_CONFIG = {
 
 // Gemini Developer API configuration
 const GEMINI_CONFIG = {
-  apiKey: "demo-gemini-key", // User-provided API key
+  // WARNING: Do not commit real API keys to version control.
+  // This should be a user-provided key managed securely.
+  apiKey: "demo-gemini-key",
   model: "gemini-1.5-flash",
   safetySettings: {
     harassment: "BLOCK_MEDIUM_AND_ABOVE",
@@ -52,17 +56,4 @@ const GEMINI_CONFIG = {
   }
 };
 
-// Privacy-preserving analytics
-const ANALYTICS_CONFIG = {
-  collectMetrics: [
-    'break_frequency',
-    'reflection_sentiment',
-    'wellness_patterns',
-    'feature_usage'
-  ],
-  anonymizeData: true,
-  aggregationLevel: 'daily',
-  retentionPeriod: '90_days'
-};
-
-export { HYBRID_AI_CONFIG, FIREBASE_CONFIG, GEMINI_CONFIG, ANALYTICS_CONFIG };
+export { HYBRID_AI_CONFIG, FIREBASE_CONFIG, GEMINI_CONFIG };

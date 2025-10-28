@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Duration & Long Breaks</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --Schemes-White: #F4F2F3;
+      --Schemes-On-Surface: #1D1B20;
+      --Schemes-On-Surface-Variant: #49454F;
+      --Schemes-Outline: #79747E;
+      --Schemes-Primary: #8390FA;
+      --Schemes-Primary-Dark: #262A48;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Roboto, system-ui, -apple-system, sans-serif;
+      background: transparent;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .main-container {
+      width: 100%;
+      max-width: 560px;
+      min-width: 280px;
+      background: var(--Schemes-White);
+      overflow: hidden;
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .progress-indicator {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: var(--Schemes-Outline);
+      font-size: 12px;
+      font-family: Roboto;
+      font-weight: 500;
+    }
+    
+    .container {
+      position: relative;
+    }
+    
+    h1 {
+      font-size: 24px;
+      font-weight: 400;
+      color: var(--Schemes-On-Surface);
+      margin: 0 0 16px;
+      line-height: 32px;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+    }
+    
+    .label {
+      font-size: 14px;
+      color: var(--Schemes-On-Surface);
+      margin-bottom: 8px;
+      display: block;
+      font-weight: 400;
+    }
+    
+    .helper {
+      font-size: 12px;
+      color: var(--Schemes-On-Surface-Variant);
+      margin-top: 4px;
+      font-weight: 400;
+    }
+    
+    .time-input {
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: var(--Schemes-On-Surface);
+      width: 100%;
+      cursor: pointer;
+    }
+    
+    .toggle-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-bottom: 8px;
+    }
+    
+    .toggle-info {
+      flex: 1;
+    }
+    
+    .toggle-switch {
+      position: relative;
+      width: 48px;
+      height: 28px;
+      background: var(--Schemes-Outline);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .toggle-switch.active {
+      background: var(--Schemes-Primary);
+    }
+    
+    .toggle-switch-knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 12px;
+      transition: transform 0.2s;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    }
+    
+    .toggle-switch.active .toggle-switch-knob {
+      transform: translateX(20px);
+    }
+    
+    .duration-selects {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .duration-select {
+      flex: 1;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      font-size: 14px;
+      color: var(--Schemes-On-Surface);
+      cursor: pointer;
+    }
+    
+    .checkbox-section {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px 16px;
+      background: white;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.1);
+      margin-top: 12px;
+    }
+    
+    .checkbox {
+      width: 20px;
+      height: 20px;
+      margin-right: 12px;
+      cursor: pointer;
+      accent-color: var(--Schemes-Primary);
+    }
+    
+    .checkbox-info {
+      flex: 1;
+    }
+    
+    .button-container {
+      margin-top: 32px;
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+    }
+    
+    .button {
+      padding: 12px 24px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+      transition: all 0.2s;
+    }
+    
+    .button-outline {
+      background: transparent;
+      color: var(--Schemes-Outline);
+    }
+    
+    .button-outline:hover {
+      background: rgba(0,0,0,0.05);
+    }
+    
+    .button-primary {
+      background: var(--Schemes-Primary);
+      color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,.12);
+    }
+    
+    .button-primary:hover {
+      background: #5a43a0;
+    }
+    
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="main-container">
+    <div class="container">
+      <div class="progress-indicator">Step 3 of 3</div>
+      
+      <h1>Duration & Long Breaks</h1>
+      
+      <!-- End time -->
+      <div class="section">
+        <label class="label">End time</label>
+        <input type="time" id="endTime" class="time-input" value="18:00">
+        <div class="helper">Local time zone</div>
+      </div>
+      
+      <!-- Toggle for longer breaks -->
+      <div class="section">
+        <div class="toggle-section" id="longBreaksToggle">
+          <div class="toggle-info">
+            <div class="label">Would you like to also take long breaks?</div>
+            <div class="helper">Recommended for extended work sessions</div>
+          </div>
+          <div class="toggle-switch">
+            <div class="toggle-switch-knob"></div>
+          </div>
+        </div>
+        
+        <!-- Duration selects (hidden by default) -->
+        <div id="durationControls" class="hidden">
+          <div class="duration-selects">
+            <select id="breakLength" class="duration-select">
+              <option value="2">2 min</option>
+              <option value="5" selected>5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+            </select>
+            <select id="breakFrequency" class="duration-select">
+              <option value="40">Every 40 min</option>
+              <option value="60" selected>Every 60 min</option>
+              <option value="90">Every 90 min</option>
+              <option value="120">Every 120 min</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Phone haptics checkbox -->
+      <div class="checkbox-section">
+        <input type="checkbox" id="phoneHaptics" class="checkbox">
+        <div class="checkbox-info">
+          <div class="label">Phone haptics</div>
+          <div class="helper">Feel gentle buzz cues during long breaks</div>
+        </div>
+      </div>
+      
+      <div class="button-container">
+        <button id="backBtn" class="button button-outline">← Back</button>
+        <button id="completeBtn" class="button button-primary">Get Started</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="onboarding_duration.js"></script>
+</body>
+</html>
+

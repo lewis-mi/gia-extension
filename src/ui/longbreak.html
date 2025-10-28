@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Take a Longer Break</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles/card.css">
+  <style>
+    :root {
+      --Schemes-On-Surface: #1D1B20;
+      --Schemes-On-Surface-Variant: #49454F;
+      --Schemes-Outline: #79747E;
+      --Schemes-Primary: #6750A4;
+      --Schemes-Surface: #FFFBFE;
+      --Schemes-Primary-Container: #EADDFF;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+      background: var(--Schemes-Primary);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Roboto, system-ui, -apple-system, sans-serif;
+    }
+    
+    .container {
+      background: var(--Schemes-Surface);
+      border-radius: 28px;
+      padding: 60px 50px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    
+    .icon {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 30px;
+    }
+    
+    h1 {
+      font-size: 36px;
+      font-weight: 400;
+      color: var(--Schemes-On-Surface);
+      margin-bottom: 20px;
+      line-height: 44px;
+    }
+    
+    .duration {
+      font-size: 48px;
+      color: var(--Schemes-Primary);
+      font-weight: 500;
+      margin: 20px 0;
+      line-height: 56px;
+    }
+    
+    .message {
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--Schemes-On-Surface-Variant);
+      line-height: 24px;
+      margin: 30px 0;
+      letter-spacing: 0.5px;
+    }
+    
+    button {
+      background: var(--Schemes-Primary);
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin: 10px;
+      letter-spacing: 0.1px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.12);
+    }
+    
+    button:hover {
+      background: #5a43a0;
+      box-shadow: 0 2px 6px rgba(103, 80, 164, 0.2);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    .activities {
+      margin-top: 40px;
+      text-align: left;
+      background: var(--Schemes-Primary-Container);
+      padding: 24px;
+      border-radius: 16px;
+    }
+    
+    .activities h3 {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--Schemes-On-Surface);
+      margin-bottom: 16px;
+      line-height: 24px;
+    }
+    
+    .activities ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .activities li {
+      padding: 12px 16px;
+      margin: 8px 0;
+      background: var(--Schemes-Surface);
+      border-radius: 12px;
+      color: var(--Schemes-On-Surface);
+      font-size: 14px;
+      line-height: 20px;
+      font-weight: 400;
+      letter-spacing: 0.25px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="../../assets/logo.png" alt="Gia" class="icon">
+    <h1>Take a Longer Break</h1>
+    <div class="duration" id="countdown">10 minutes</div>
+    
+    <div class="message" id="aiMessage">
+      You've been working hard. Let's stretch your eyes, your body, and your mind.
+    </div>
+
+    <div class="activities">
+      <h3>Suggested Activities:</h3>
+      <ul id="activities">
+        <li>👁️ Look far into the distance and focus on something 20 feet away</li>
+        <li>💆 Close your eyes and gently massage your temples</li>
+        <li>🏃 Stand up and stretch your arms to the sky</li>
+        <li>🧘 Take 5 deep, slow breaths</li>
+        <li>☕ Get a glass of water</li>
+      </ul>
+    </div>
+
+    <button id="skip">Skip Break</button>
+    <button id="extend">Extend 5 Minutes</button>
+  </div>
+
+  <script src="longbreak.js"></script>
+</body>
+</html>

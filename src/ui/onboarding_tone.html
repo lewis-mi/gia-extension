@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pick your tone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+<style>
+    :root {
+      --Schemes-White: #F4F2F3;
+      --Schemes-On-Surface: #1D1B20;
+      --Schemes-On-Surface-Variant: #49454F;
+      --Schemes-Outline: #79747E;
+      --Schemes-Primary: #8390FA;
+      --Schemes-Primary-Dark: #262A48;
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: Roboto, system-ui, -apple-system, sans-serif;
+      background: transparent;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .main-container {
+      width: 100%;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .card {
+      width: 560px;
+      max-width: 560px;
+      min-width: 280px;
+      background: var(--Schemes-White);
+      overflow: hidden;
+      border-radius: 28px;
+      flex-direction: column;
+      align-items: center;
+      display: flex;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    
+    .content-wrapper {
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      display: flex;
+      width: 100%;
+    }
+    
+    .content {
+      width: 100%;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      display: flex;
+      margin-bottom: 24px;
+    }
+    
+    .heading {
+      align-self: stretch;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-On-Surface);
+      font-size: 24px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 32px;
+      word-wrap: break-word;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .subtitle {
+      align-self: stretch;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-On-Surface-Variant);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 400;
+      line-height: 20px;
+      letter-spacing: 0.25px;
+      word-wrap: break-word;
+      margin: 0;
+      text-align: center;
+    }
+    
+    .button-container {
+      width: 100%;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    
+    .tone-button {
+      height: 48px;
+      min-width: 150px;
+      border-radius: 100px;
+      justify-content: center;
+      align-items: center;
+      display: inline-flex;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: transparent;
+      border: none;
+      padding: 0 16px;
+    }
+    
+    .tone-button:focus {
+      outline: 2px solid var(--Schemes-Primary);
+      outline-offset: 2px;
+    }
+    
+    .tone-button-content {
+      overflow: hidden;
+      border-radius: 100px;
+      justify-content: center;
+      align-items: center;
+      display: flex;
+    }
+    
+    .tone-button-inner {
+      padding: 10px 16px;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      display: flex;
+    }
+    
+    .tone-button-text-outline {
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-Outline);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.10px;
+      word-wrap: break-word;
+    }
+    
+    .tone-button-text-primary {
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+      color: var(--Schemes-Primary);
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 500;
+      line-height: 20px;
+      letter-spacing: 0.10px;
+      word-wrap: break-word;
+    }
+    
+    .tone-button.selected {
+      background: rgba(103, 80, 164, 0.12);
+    }
+    
+    .tone-button.selected .tone-button-text-outline {
+      color: var(--Schemes-Primary);
+    }
+    
+    .tone-button:hover {
+      background: rgba(103, 80, 164, 0.08);
+    }
+    
+    /* Progress indicator */
+    .progress-indicator {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      color: var(--Schemes-Outline);
+      font-size: 12px;
+      font-family: Roboto;
+      font-weight: 500;
+    }
+    
+    .card {
+      position: relative;
+    }
+    
+    /* Navigation buttons */
+    .nav-buttons {
+      display: flex;
+      gap: 8px;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0,0,0,0.1);
+    }
+    
+    .nav-button {
+      height: 40px;
+      border-radius: 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-family: Roboto;
+      font-weight: 500;
+      padding: 0 20px;
+      transition: all 0.2s;
+      min-width: 80px;
+    }
+    
+    .nav-button-outline {
+      background: transparent;
+      color: var(--Schemes-Outline);
+    }
+    
+    .nav-button-outline:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    
+    .nav-button-primary {
+      background: var(--Schemes-Primary);
+      color: white;
+      box-shadow: 0 1px 3px rgba(0,0,0,.12);
+    }
+    
+    .nav-button-primary:hover {
+      background: #6d7be5;
+    }
+    
+    /* Success message */
+    .success-message {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 24px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      z-index: 1000;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .success-message.show {
+      opacity: 1;
+    }
+    
+    .success-text {
+      color: var(--Schemes-On-Surface);
+      font-size: 16px;
+      font-family: Roboto;
+      margin: 0;
+    }
+    
+    .success-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+</style>
+</head>
+<body>
+  <!-- Success message overlay -->
+  <div id="successMessage" class="success-message">
+    <div class="success-icon">✓</div>
+    <p class="success-text">Welcome to Gia!</p>
+  </div>
+  
+  <div class="main-container">
+    <div class="card">
+      <div class="progress-indicator">Step 2 of 3</div>
+      
+      <div class="content-wrapper">
+        <div class="content">
+          <h1 class="heading">Gia can be Mindful or Goofy. Which would you prefer?</h1>
+          <p class="subtitle">Choose how Gia sounds during breaks.</p>
+        </div>
+      </div>
+      
+      <div class="button-container">
+        <button id="goofyBtn" class="tone-button" data-tone="goofy">
+          <div class="tone-button-content">
+            <div class="tone-button-inner">
+              <div class="tone-button-text-outline">Goofy 🤪</div>
+            </div>
+          </div>
+        </button>
+        
+        <button id="mindfulBtn" class="tone-button selected" data-tone="mindful">
+          <div class="tone-button-content">
+            <div class="tone-button-inner">
+              <div class="tone-button-text-primary">Mindful 🧘‍♀️</div>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <div class="nav-buttons">
+        <button id="backBtn" class="nav-button nav-button-outline">← Back</button>
+        <button id="continueBtn" class="nav-button nav-button-primary">Continue</button>
+      </div>
+    </div>
+</div>
+
+  <script src="onboarding_tone.js"></script>
+</body>
+</html>

@@ -1,0 +1,146 @@
+:root {
+  /* Material Design 3 Color Tokens */
+  --Schemes-Surface: #FFFFFF;
+  --Schemes-Surface-Variant: #F4F2F3;
+  --Schemes-On-Surface: #1D1B20;
+  --Schemes-On-Surface-Variant: #49454F;
+  --Schemes-Outline: #79747E;
+  --Schemes-Primary: #8390FA;
+  --Schemes-Primary-Container: #E3E6FF;
+  --Schemes-On-Primary-Container: #262A48;
+  
+  /* Surface gradients for cards */
+  --gia-bg-top: var(--Schemes-Surface);
+  --gia-bg-bottom: var(--Schemes-Surface-Variant);
+  --gia-text: var(--Schemes-On-Surface);
+  --gia-muted: var(--Schemes-On-Surface-Variant);
+  --gia-muted-2: var(--Schemes-Outline);
+  --gia-muted-3: var(--Schemes-On-Surface-Variant);
+  --gia-muted-4: var(--Schemes-Outline);
+}
+
+/* backdrop */
+#gia-break-card .gia-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(16,24,32,.35);
+  backdrop-filter: blur(2px);
+  z-index: 2147483646;
+}
+
+/* card - Material Design 3 */
+#gia-break-card .gia-card {
+  position: fixed; left: 50%; top: 50%;
+  transform: translate(-50%, -50%) scale(.98);
+  width: 420px; max-width: 92vw;
+  padding: 24px;
+  border-radius: 28px; /* MD3 container corner radius */
+  background: var(--Schemes-Surface);
+  box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12); /* MD3 elevation */
+  border: 1px solid var(--Schemes-Outline); /* MD3 outline */
+  z-index: 2147483647;
+  opacity: 0;
+  transition: opacity .32s ease, transform .32s ease;
+  text-align: center;
+  color: var(--Schemes-On-Surface);
+  font-family: 'Roboto', system-ui, -apple-system, sans-serif;
+}
+
+#gia-break-card .gia-card.enter { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+#gia-break-card .gia-card.exit  { opacity: 0; transform: translate(-50%, -50%) scale(.98); }
+
+/* close button: simple X, no gray pill, no animation reset on hover */
+#gia-break-card .gia-close {
+  position: absolute; top: 10px; right: 12px;
+  width: 32px; height: 32px;
+  border: none; background: transparent; color: #1c2230;
+  font-size: 22px; line-height: 32px; cursor: pointer;
+}
+#gia-break-card .gia-close:hover,
+#gia-break-card .gia-close:focus { opacity: .7; }
+
+/* hero: circular countdown with plain circle */
+#gia-break-card .gia-hero {
+  width: 80px; height: 80px;
+  margin: 8px auto 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#gia-break-card .gia-hero-img {
+  display: none; /* Hide the logo image */
+}
+#gia-break-card .gia-hero-count {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--Schemes-Primary);
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--Schemes-Primary);
+}
+
+/* type */
+#gia-break-card .gia-pretitle   { margin: 0 0 6px; font-size: 12px; letter-spacing: .12em; color: var(--gia-muted); }
+#gia-break-card .gia-title      { margin: 0 0 4px; font-size: 24px; font-weight: 800; }
+#gia-break-card .gia-subtitle   { margin: 0 0 2px; font-weight: 600; color: var(--gia-muted-2); }
+#gia-break-card .gia-instruction{ margin: 8px 0 10px; color: var(--gia-muted-3); }
+#gia-break-card .gia-hint       { margin: 8px 0 0; font-size: 12px; color: var(--gia-muted-4); }
+
+/* motion accessibility */
+/* Multimodal section */
+#gia-break-card .gia-multimodal {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+#gia-break-card .gia-multimodal-btn {
+  background: var(--Schemes-Primary-Container);
+  border: none;
+  border-radius: 20px; /* MD3 button shape */
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--Schemes-On-Primary-Container);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Roboto', system-ui, sans-serif;
+  letter-spacing: 0.1px;
+}
+
+#gia-break-card .gia-multimodal-btn:hover {
+  background: var(--Schemes-Primary-Container);
+  opacity: 0.9;
+  box-shadow: 0 2px 4px rgba(0,0,0,.2);
+}
+
+#gia-break-card .gia-multimodal-btn:active {
+  opacity: 0.7;
+}
+
+#gia-break-card .gia-multimodal-status {
+  background: rgba(58, 124, 114, 0.1);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 8px 0;
+  font-size: 11px;
+  color: var(--gia-muted-3);
+  text-align: center;
+  border: 1px solid rgba(58, 124, 114, 0.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #gia-break-card .gia-card { transition: none; }
+  #gia-break-card .gia-multimodal-btn { transition: none; }
+  #gia-break-card .gia-multimodal-btn:hover { transform: none; }
+}
