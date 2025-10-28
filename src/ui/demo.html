@@ -37,7 +37,7 @@
             Open browser console and type: <code>checkGia()</code> to verify script loaded
         </p>
     </div>
-    <!-- Content script will be automatically injected by the manifest -->
-    <script src="../content.js"></script>
+    <!-- Load content script manually since manifest content scripts don't run on extension pages -->
+    <script src="src/content.js"></script>
 </body>
 </html>
