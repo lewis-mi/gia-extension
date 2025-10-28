@@ -16,8 +16,31 @@ export async function findDemoTab() {
 /**
  * Executes a step in the demo sequence.
  */
+// Helper function to check if content script is ready
+async function waitForContentScript(tabId, maxWait = 5000) {
+  const startTime = Date.now();
+  while (Date.now() - startTime < maxWait) {
+    try {
+      // Try to ping the content script to see if it's ready
+      await chrome.tabs.sendMessage(tabId, { type: 'GIA_PING' });
+      return true;
+    } catch (e) {
+      // Content script not ready yet, wait a bit
+      await new Promise(resolve => setTimeout(resolve, 200));
+    }
+  }
+  console.warn('Content script not ready after waiting');
+  return false;
+}
+
 // Helper function to safely send messages with retry
 async function sendMessageWithRetry(tabId, message, maxRetries = 5) {
+  // First wait for content script to be ready
+  const ready = await waitForContentScript(tabId);
+  if (!ready) {
+    console.warn('Content script not ready, attempting to send anyway...');
+  }
+  
   for (let i = 0; i < maxRetries; i++) {
     try {
       await chrome.tabs.sendMessage(tabId, message);

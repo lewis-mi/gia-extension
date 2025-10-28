@@ -554,6 +554,13 @@ async function classifyIntent(text) {
 // ===== MESSAGE LISTENERS =====
 chrome.runtime.onMessage.addListener((msg) => {
   console.log('Content script received message:', msg);
+  
+  // Handle ping to check if content script is ready
+  if (msg?.type === 'GIA_PING') {
+    console.log('Content script ready - ping received');
+    return;
+  }
+  
   if (msg?.type === 'GIA_SHOW_BREAK') {
     console.log('Showing break card with type:', msg.breakType, 'duration:', msg.durationMs, 'tone:', msg.tone);
     showBreakCard(msg.breakType, msg.durationMs, msg.tone);
