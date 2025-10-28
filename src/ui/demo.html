@@ -33,7 +33,21 @@
         <h1>Gia Demo In Progress</h1>
         <p>This page is ready.</p>
         <p>The first break card will appear here in a moment to begin the demo sequence.</p>
+        <p style="font-size: 0.9rem; color: #999; margin-top: 20px;">
+            Open browser console and type: <code>checkGia()</code> to verify script loaded
+        </p>
     </div>
     <!-- Content script will be automatically injected by the manifest -->
+    <script>
+        // Give the page a moment to load, then check
+        setTimeout(() => {
+            console.log('Demo page loaded. Content script should be ready.');
+            if (typeof checkGia === 'function') {
+                console.log('✓ Gia content script detected');
+            } else {
+                console.error('✗ Gia content script not detected!');
+            }
+        }, 1000);
+    </script>
 </body>
 </html>

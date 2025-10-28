@@ -577,3 +577,10 @@ window.testGiaBreakCard = function() {
   console.log('Test function called!');
   showBreakCard('short', 20000);
 };
+
+// Add a test function to check if content script is loaded
+window.checkGia = function() {
+  console.log('Gia content script is loaded and ready');
+  console.log('Document body:', document.body);
+  console.log('isShowingBreak:', isShowingBreak);
+};
