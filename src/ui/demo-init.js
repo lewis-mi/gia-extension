@@ -1,7 +1,13 @@
 // Demo initialization script
-// Load content script dynamically
+// Load content script and CSS dynamically
 (function() {
   console.log('Demo init script loaded');
+  
+  // Load card CSS
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = chrome.runtime.getURL('src/styles/card.css');
+  (document.head || document.documentElement).appendChild(link);
   
   // Load content.js from extension root
   const script = document.createElement('script');
