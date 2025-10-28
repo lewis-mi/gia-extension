@@ -20,6 +20,11 @@ export async function runDemoStep() {
   const { demoStep = 1 } = await chrome.storage.local.get('demoStep');
   const demoTab = await findDemoTab();
 
+  console.log('Demo step:', demoStep, 'Demo tab found:', !!demoTab);
+  if (demoTab) {
+    console.log('Demo tab ID:', demoTab.id, 'URL:', demoTab.url);
+  }
+
   if (!demoTab) {
     console.warn('Demo tab not found. Stopping demo sequence.');
     await chrome.storage.local.remove('demoStep');
@@ -31,12 +36,18 @@ export async function runDemoStep() {
     case 1:
       // Step 1: Mindful Short Break
       console.log('Running Demo Step 1: Mindful Short Break');
-      await chrome.tabs.sendMessage(demoTab.id, {
-        type: 'GIA_SHOW_BREAK',
-        breakType: 'short',
-        durationMs: 20000,
-        tone: 'mindful',
-      });
+      console.log('Sending GIA_SHOW_BREAK message to tab', demoTab.id);
+      try {
+        await chrome.tabs.sendMessage(demoTab.id, {
+          type: 'GIA_SHOW_BREAK',
+          breakType: 'short',
+          durationMs: 20000,
+          tone: 'mindful',
+        });
+        console.log('Message sent successfully');
+      } catch (e) {
+        console.error('Failed to send message to tab:', e);
+      }
       // Schedule next step
       // The first break is 20s long. We'll trigger the next step right after.
       // We use a new alarm name to avoid conflicts.
