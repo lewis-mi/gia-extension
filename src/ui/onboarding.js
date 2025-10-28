@@ -46,7 +46,10 @@ async function init() {
         await chrome.storage.local.set({ demoStep: 1 });
         
         // Send a message to the background script to start the demo sequence immediately.
-        chrome.runtime.sendMessage({ type: 'GIA_START_DEMO_NOW' });
+        // Don't await to avoid blocking
+        chrome.runtime.sendMessage({ type: 'GIA_START_DEMO_NOW' }, () => {
+          // Optional: Handle response or ignore errors
+        });
 
         // Open the demo page where break cards will be shown
         console.log('Opening demo page...');
