@@ -33,7 +33,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["assets/*", "src/ui/*.html"],
+      "resources": ["assets/*", "src/ui/*.html", "src/content.js"],
       "matches": ["<all_urls>"]
     }
   ],

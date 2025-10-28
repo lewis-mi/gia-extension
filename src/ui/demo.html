@@ -38,16 +38,6 @@
         </p>
     </div>
     <!-- Content script will be automatically injected by the manifest -->
-    <script>
-        // Give the page a moment to load, then check
-        setTimeout(() => {
-            console.log('Demo page loaded. Content script should be ready.');
-            if (typeof checkGia === 'function') {
-                console.log('✓ Gia content script detected');
-            } else {
-                console.error('✗ Gia content script not detected!');
-            }
-        }, 1000);
-    </script>
+    <script src="../content.js"></script>
 </body>
 </html>
