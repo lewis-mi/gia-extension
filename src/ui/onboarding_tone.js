@@ -46,12 +46,12 @@ function init() {
       if (btn.dataset.tone === tone) {
         btn.classList.add('selected');
         textDiv.className = 'tone-button-text-primary';
-        // Preserve emoji in text content
-        const label = btn.dataset.tone === 'goofy' ? 'Goofy 🤪' : 'Mindful 🧘‍♀️';
+        // No emojis in labels
+        const label = btn.dataset.tone === 'goofy' ? 'Goofy' : 'Mindful';
         textDiv.textContent = label;
       } else {
         textDiv.className = 'tone-button-text-outline';
-        const label = btn.dataset.tone === 'goofy' ? 'Goofy 🤪' : 'Mindful 🧘‍♀️';
+        const label = btn.dataset.tone === 'goofy' ? 'Goofy' : 'Mindful';
         textDiv.textContent = label;
       }
     });
@@ -65,27 +65,23 @@ function init() {
     });
   }
   
-  // Continue button - use default Mindful tone and proceed
+  // Continue button - proceed with selected tone
   if (continueBtn) {
     continueBtn.addEventListener('click', async () => {
-      await proceedToNextScreen('mindful');
+      await proceedToNextScreen(selectedTone);
     });
   }
   
-  // Tone selection buttons
+  // Tone selection buttons (just select, don't auto-navigate)
   if (goofyBtn) {
     goofyBtn.addEventListener('click', () => {
       selectTone('goofy');
-      // Navigate to next screen after brief delay
-      setTimeout(() => proceedToNextScreen('goofy'), 1000);
     });
   }
   
   if (mindfulBtn) {
     mindfulBtn.addEventListener('click', () => {
       selectTone('mindful');
-      // Navigate to next screen after brief delay
-      setTimeout(() => proceedToNextScreen('mindful'), 1000);
     });
   }
 }
