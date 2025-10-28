@@ -1,50 +1,19 @@
 // ===== Constants =====
 const ALARM_MAIN = "gia-break";
-// Import tone styles to ensure consistency
-import { TONE_STYLES } from './ai/toneProfiles.js';
-
 // Import message generator
 import { generateBreakMessage } from './ai/message-generator.js';
 
 // Import demo sequence
 import { startDemo, findDemoTab } from './lib/demo-sequence.js';
 
+// Import TTS handler
+import { speakWithTTS } from './lib/tts-handler.js';
+
+// Import settings storage
+import { getSettings, setSettings, getCounters, setCounters, migrateSettings } from './lib/settings-storage.js';
+
 const FIXED_SHORT_MIN = 20;        // 20-20-20 cadence (not customizable)
 const SNOOZE_MIN = 5;
-
-// ===== Store helpers =====
-async function getSettings() {
-  const { settings = {} } = await chrome.storage.local.get("settings");
-  return settings;
-}
-async function setSettings(patch) {
-  const settings = await getSettings();
-  const next = { ...settings, ...patch };
-  await chrome.storage.local.set({ settings: next });
-  return next;
-}
-async function getCounters() {
-  const { counters = {} } = await chrome.storage.local.get("counters");
-  return { elapsedMin: 0, ...counters };
-}
-async function setCounters(patch) {
-  const counters = await getCounters();
-  const next = { ...counters, ...patch };
-  await chrome.storage.local.set({ counters: next });
-  return next;
-}
-
-// ===== Migration: old cycles -> minutes =====
-async function migrateSettings() {
-  const s = await getSettings();
-  if (s.longEvery && !s.longEveryMinutes) {
-    const minutes = Math.max(40, Number(s.longEvery) * FIXED_SHORT_MIN);
-    await setSettings({ longEveryMinutes: minutes });
-  }
-  if (typeof s.longEnabled !== "boolean") await setSettings({ longEnabled: false });
-  if (!s.longSecs) await setSettings({ longSecs: 300 }); // 5 min
-  if (!s.longEveryMinutes) await setSettings({ longEveryMinutes: 60 }); // 60 min default
-}
 
 // ===== Offscreen guard (for AI/TTS stability) =====
 async function ensureOffscreen() {
@@ -244,48 +213,10 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         await createMainAlarm();
         if (sendResponse) sendResponse({ success: true });
       } else if (msg?.type === "GIA_SPEAK") {
-        // Handle TTS requests from content scripts with tone-specific audio
-        try {
-          const tone = msg.tone || 'mindful';
-          const profile = TONE_STYLES[tone] || TONE_STYLES.mindful;
-
-          // Try high-quality Prompt API audio first
-          if (chrome?.ai?.prompt) {
-            try {
-              const prompt = `${profile.promptStyle}\n"${msg.text}"`;
-
-              const res = await chrome.ai.prompt({
-                prompt,
-                output_audio_format: "wav"
-              });
-
-              if (res?.output_audio) {
-                // Send audio data back to content script to play
-                if (sendResponse) sendResponse({
-                  success: true,
-                  audioData: res.output_audio,
-                  audioFormat: "wav"
-                });
-                return; // Prevent fallback
-              }
-            } catch (e) {
-              console.log('Prompt API audio not available, falling back to chrome.tts');
-            }
-          }
-
-          // Fallback to chrome.tts with tone-specific parameters
-          chrome.tts.speak(msg.text, {
-            enqueue: false,
-            rate: profile.rate,
-            pitch: profile.pitch,
-            volume: profile.volume
-          });
-
-          if (sendResponse) sendResponse({ success: true });
-        } catch (e) {
-          console.error('TTS speak error:', e);
-          if (sendResponse) sendResponse({ error: e.message });
-        }
+        // Handle TTS requests using the TTS handler module
+        const tone = msg.tone || 'mindful';
+        const response = await speakWithTTS(msg.text, tone);
+        if (sendResponse) sendResponse(response);
       } else if (msg?.type === "GIA_GET_MESSAGE") {
         // Get tone from message parameter, then settings, then default
         const tone = msg.tone || (await getSettings())?.tipTone || 'mindful';
@@ -305,7 +236,7 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         }
         
         // Start the demo sequence
-        await startDemo(setSettings, demoTab.id, sendResponse);
+        await startDemo(demoTab.id, sendResponse);
       }
     } catch (e) {
       console.error('Message handler error:', e);

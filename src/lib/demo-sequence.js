@@ -1,15 +1,17 @@
 // ===== DEMO SEQUENCE MODULE =====
 // Handles the demo mode break sequence
 
+import { stopAllAudio } from './tts-handler.js';
+import { setSettings as updateSettings } from './settings-storage.js';
+
 let isDemoRunning = false;
 
 /**
  * Start the demo sequence with a series of breaks
- * @param {function} setSettings - Function to update settings
  * @param {number} tabId - The tab ID to show breaks on
  * @param {function} sendResponse - Callback to send response
  */
-export async function startDemo(setSettings, tabId, sendResponse) {
+export async function startDemo(tabId, sendResponse) {
   if (isDemoRunning) {
     console.log('Demo already running, ignoring duplicate request');
     if (sendResponse) sendResponse({ error: 'Demo already running' });
@@ -20,7 +22,7 @@ export async function startDemo(setSettings, tabId, sendResponse) {
 
   try {
     // Set initial demo settings
-    await setSettings({
+    await updateSettings({
       audioEnabled: true,
       voiceCommandsEnabled: false,
       tipTone: 'mindful',
@@ -35,7 +37,7 @@ export async function startDemo(setSettings, tabId, sendResponse) {
     await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for page to be ready
     
     // Stop any existing audio
-    try { chrome.tts.stop(); } catch (e) {}
+    stopAllAudio();
     
     await chrome.tabs.sendMessage(tabId, {
       type: 'GIA_SHOW_BREAK',
@@ -53,7 +55,7 @@ export async function startDemo(setSettings, tabId, sendResponse) {
     await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
     await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for dismiss animation
     
-    await setSettings({ tipTone: 'goofy' });
+    await updateSettings({ tipTone: 'goofy' });
     await new Promise(resolve => setTimeout(resolve, 500));
     await chrome.tabs.sendMessage(tabId, {
       type: 'GIA_SHOW_BREAK',
