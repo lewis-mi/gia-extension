@@ -30,11 +30,17 @@
 </head>
 <body>
     <div class="container">
-        <img src="assets/logo.svg" alt="Gia Logo" style="width: 120px; height: 120px; margin-bottom: 20px;">
+        <img id="logo" alt="Gia Logo" style="width: 120px; height: 120px; margin-bottom: 20px;">
         <h1>Gia Demo Starting</h1>
         <p>Welcome to the Gia demo.</p>
         <p>The first break card will appear here in a moment.</p>
     </div>
+    
+    <script>
+        // Set logo source using chrome.runtime.getURL
+        const logo = document.getElementById('logo');
+        logo.src = chrome.runtime.getURL('assets/logo.svg');
+    </script>
     <!-- Load demo initialization script -->
     <script src="demo-init.js"></script>
 </body>
