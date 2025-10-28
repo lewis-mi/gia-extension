@@ -3,6 +3,12 @@
 (function() {
   console.log('Demo init script loaded');
   
+  // Set logo
+  const logo = document.getElementById('logo');
+  if (logo) {
+    logo.src = chrome.runtime.getURL('assets/logo.svg');
+  }
+  
   // Load card CSS
   const link = document.createElement('link');
   link.rel = 'stylesheet';
