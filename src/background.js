@@ -6,6 +6,9 @@ import { TONE_STYLES } from './ai/toneProfiles.js';
 // Import message generator
 import { generateBreakMessage } from './ai/message-generator.js';
 
+// Import demo sequence
+import { startDemo, findDemoTab } from './lib/demo-sequence.js';
+
 const FIXED_SHORT_MIN = 20;        // 20-20-20 cadence (not customizable)
 const SNOOZE_MIN = 5;
 
@@ -215,9 +218,6 @@ async function stopAllAudioAndNotifs() {
   chrome.notifications.getAll(ids => Object.keys(ids||{}).forEach(id => chrome.notifications.clear(id)));
 }
 
-// Guard to prevent duplicate demo sequences
-let isDemoRunning = false;
-
 chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
   // Handle the message asynchronously
   (async () => {
@@ -240,10 +240,6 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         const s = await getSettings();
         if (sendResponse) sendResponse({ paused: !!s.paused });
       } else if (msg?.type === "GIA_RESCHEDULE") {
-        if (isDemoRunning) {
-          if (sendResponse) sendResponse({ success: true, message: "Demo is running, reschedule ignored" });
-          return;
-        }
         await clearMainAlarm();
         await createMainAlarm();
         if (sendResponse) sendResponse({ success: true });
@@ -300,87 +296,16 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
 
         if (sendResponse) sendResponse({ text: message });
       } else if (msg?.type === 'GIA_START_DEMO') {
-        if (isDemoRunning) {
-          console.log('Demo already running, ignoring duplicate request');
-          if (sendResponse) sendResponse({ error: 'Demo already running' });
+        // Find the demo tab
+        const demoTab = await findDemoTab();
+        
+        if (!demoTab) {
+          if (sendResponse) sendResponse({ error: 'Demo tab not found' });
           return;
         }
-        isDemoRunning = true;
-
-        try {
-          // Find the tab with the demo page
-          const url = msg.tabId; // This is actually a URL, not a tab ID
-          console.log(`Starting demo sequence on page ${url}`);
-          
-          // Query for tabs containing demo.html
-          const allTabs = await chrome.tabs.query({});
-          const demoTab = allTabs.find(tab => tab.url && tab.url.includes('demo.html'));
-          
-          if (!demoTab) {
-            console.error('Demo tab not found');
-            if (sendResponse) sendResponse({ error: 'Demo tab not found' });
-            return;
-          }
-          
-          const tabId = demoTab.id;
-          console.log(`Found demo tab ID: ${tabId}`);
-
-          // Set initial demo settings
-          await setSettings({
-            audioEnabled: true,
-            voiceCommandsEnabled: false,
-            tipTone: 'mindful',
-            onboardingComplete: true,
-            paused: false,
-          });
-
-          // --- Sequence Start ---
-
-          // 1. Mindful Break (after a short delay)
-          console.log('Demo: Triggering Mindful break...');
-          await new Promise(resolve => setTimeout(resolve, 2000)); // Wait for page to be ready
-          
-          // Stop any existing audio
-          try { chrome.tts.stop(); } catch (e) {}
-          
-          await chrome.tabs.sendMessage(tabId, {
-            type: 'GIA_SHOW_BREAK',
-            breakType: 'short',
-            durationMs: 20000,
-            tone: 'mindful'
-          });
-
-          // 2. Long Break with Goofy tone (after the first one finishes)
-          console.log('Demo: Scheduling Long break...');
-          await new Promise(resolve => setTimeout(resolve, 22000)); // 20s break + 2s buffer
-          
-          // Explicitly dismiss previous card and stop audio
-          try { chrome.tts.stop(); } catch (e) {}
-          await chrome.tabs.sendMessage(tabId, { type: 'GIA_DISMISS_BREAK' }).catch(() => {});
-          await new Promise(resolve => setTimeout(resolve, 1000)); // Wait for dismiss animation
-          
-          await setSettings({ tipTone: 'goofy' });
-          await new Promise(resolve => setTimeout(resolve, 500));
-          await chrome.tabs.sendMessage(tabId, {
-            type: 'GIA_SHOW_BREAK',
-            breakType: 'long',
-            durationMs: 30000, // 30 seconds for demo purposes
-            tone: 'goofy'
-          });
-
-          // --- Sequence End ---
-          console.log('Demo sequence complete.');
-          if (sendResponse) sendResponse({ success: true });
-
-          // Reset demo flag after sequence (20s mindful + 30s goofy long)
-          const totalDemoTime = 22000 + 32000;
-          setTimeout(() => { isDemoRunning = false; }, totalDemoTime);
-
-        } catch (e) {
-          console.error('Demo start error:', e);
-          isDemoRunning = false;
-          if (sendResponse) sendResponse({ error: e.message });
-        }
+        
+        // Start the demo sequence
+        await startDemo(setSettings, demoTab.id, sendResponse);
       }
     } catch (e) {
       console.error('Message handler error:', e);
