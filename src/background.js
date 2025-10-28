@@ -221,6 +221,8 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         demoStartTimeout = setTimeout(() => {
           runDemoStep();
         }, 3000); // 3-second delay to ensure tab is ready
+        
+        if (sendResponse) sendResponse({ success: true });
       }
     } catch (e) {
       console.error('Message handler error:', e);
