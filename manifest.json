@@ -33,7 +33,7 @@
 
   "web_accessible_resources": [
     {
-      "resources": ["assets/logo.png", "assets/logo.svg"],
+      "resources": ["assets/*", "src/ui/*.html"],
       "matches": ["<all_urls>"]
     }
   ],

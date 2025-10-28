@@ -260,36 +260,14 @@ async function showBreakCard(breakType, durationMs, toneOverride = null) {
     // Start TTS via background script if audio is enabled
     if (settings.audioEnabled !== false) {
       try {
-        // Get tone to adjust voice parameters (use override if in demo)
-        const { settings = {} } = await chrome.storage.local.get('settings');
         const tone = toneOverride || settings?.tipTone || 'mindful';
-        
-        // Tone-specific audio profiles with refined characteristics
-        const toneProfiles = {
-          mindful: { rate: 0.9, pitch: 0.9, volume: 0.85 },
-          goofy: { rate: 1.0, pitch: 1.1, volume: 0.95 }
-        };
-        
-        let rate, pitch, volume;
-        if (breakType === 'long') {
-          rate = 0.75;
-          pitch = 0.85;
-          volume = 0.9;
-        } else {
-          // Use tone-specific profile
-          const profile = toneProfiles[tone] || toneProfiles.mindful;
-          rate = profile.rate;
-          pitch = profile.pitch;
-          volume = profile.volume;
-        }
-        
+
+        // The background script will handle all voice parameters and profiles.
+        // We just need to send the text and the desired tone.
         try {
           const response = await chrome.runtime.sendMessage({
             type: 'GIA_SPEAK',
             text: message,
-            rate: rate,
-            pitch: pitch,
-            volume: volume,
             tone: tone
           });
           

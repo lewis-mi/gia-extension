@@ -12,6 +12,7 @@ import { runDemoStep, findDemoTab } from './lib/demo-sequence.js';
 
 const FIXED_SHORT_MIN = 20;        // 20-20-20 cadence (not customizable)
 const SNOOZE_MIN = 5;
+let demoStartTimeout = null;
 
 // ===== Offscreen guard (for AI/TTS stability) =====
 async function ensureOffscreen() {
@@ -64,11 +65,21 @@ chrome.runtime.onStartup.addListener(async () => {
 // ===== Short / Long break triggers =====
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   // Handle demo alarm for quick testing
+  if (alarm.name === 'gia-demo' && demoStartTimeout) {
+    clearTimeout(demoStartTimeout);
+    demoStartTimeout = null;
+  }
+
   if (alarm.name === 'gia-demo') {
     await runDemoStep();
     return; // Stop further processing for demo alarms
   }
   
+  if (alarm.name === 'gia-demo-step2') {
+    await runDemoStep();
+    return;
+  }
+
   if (alarm.name !== ALARM_MAIN) return;
 
   const s = await getSettings();
@@ -208,9 +219,9 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
       } else if (msg?.type === 'GIA_START_DEMO_NOW') {
         // Use setTimeout for a near-instant demo start.
         // This is fine for short delays after a user action.
-        setTimeout(() => {
+        demoStartTimeout = setTimeout(() => {
           runDemoStep();
-        }, 2000); // 2-second delay to allow the demo tab to open.
+        }, 2000); // 2-second delay. This will be cleared if an alarm starts the demo first.
       }
     } catch (e) {
       console.error('Message handler error:', e);

@@ -10,7 +10,7 @@ import { getSettings } from './settings-storage.js';
  */
 export async function findDemoTab() {
   const tabs = await chrome.tabs.query({ active: true });
-  return tabs.find(tab => tab.url && tab.url.includes('ui/demo.html')) || null;
+  return tabs.find(tab => tab.url && (tab.url.includes('ui/demo.html') || tab.url.includes('demo.html'))) || null;
 }
 
 /**
@@ -38,8 +38,11 @@ export async function runDemoStep() {
         tone: 'mindful',
       });
       // Schedule next step
+      // The first break is 20s long. We'll trigger the next step right after.
+      // We use a new alarm name to avoid conflicts.
       await chrome.storage.local.set({ demoStep: 2 });
-      await chrome.alarms.create('gia-demo', { delayInMinutes: 0.5 }); // 30 seconds later
+      // 25 seconds = 20s break + 5s buffer
+      await chrome.alarms.create('gia-demo-step2', { delayInMinutes: 25 / 60 }); 
       break;
 
     case 2:
@@ -53,7 +56,7 @@ export async function runDemoStep() {
       });
       // End of demo
       await chrome.storage.local.remove('demoStep');
-      await chrome.alarms.clear('gia-demo');
+      await chrome.alarms.clearAll(); // Clear all demo-related alarms
       console.log('Demo sequence complete.');
       break;
 
