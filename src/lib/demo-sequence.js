@@ -9,8 +9,8 @@ import { getSettings } from './settings-storage.js';
  * @returns {Promise<chrome.tabs.Tab|null>} The demo tab or null
  */
 export async function findDemoTab() {
-  const tabs = await chrome.tabs.query({ active: true });
-  return tabs.find(tab => tab.url && (tab.url.includes('ui/demo.html') || tab.url.includes('demo.html'))) || null;
+  const tabs = await chrome.tabs.query({});
+  return tabs.find(tab => tab.url && (tab.url.includes('demo.html'))) || null;
 }
 
 /**
