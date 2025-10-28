@@ -3,14 +3,12 @@ const ALARM_MAIN = "gia-break";
 // Import message generator
 import { generateBreakMessage } from './ai/message-generator.js';
 
-// Import demo sequence
-import { startDemo, findDemoTab } from './lib/demo-sequence.js';
-
 // Import TTS handler
 import { speakWithTTS } from './lib/tts-handler.js';
 
 // Import settings storage
 import { getSettings, setSettings, getCounters, setCounters, migrateSettings } from './lib/settings-storage.js';
+import { runDemoStep, findDemoTab } from './lib/demo-sequence.js';
 
 const FIXED_SHORT_MIN = 20;        // 20-20-20 cadence (not customizable)
 const SNOOZE_MIN = 5;
@@ -67,8 +65,8 @@ chrome.runtime.onStartup.addListener(async () => {
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   // Handle demo alarm for quick testing
   if (alarm.name === 'gia-demo') {
-    await runShortBreak();
-    return;
+    await runDemoStep();
+    return; // Stop further processing for demo alarms
   }
   
   if (alarm.name !== ALARM_MAIN) return;
@@ -130,47 +128,28 @@ chrome.notifications?.onButtonClicked?.addListener(async (notifId, btnIdx) => {
 // ===== Short break runner =====
 async function runShortBreak() {
   const s = await getSettings();
-  
-  // Simple default message (AI integration happens in content script)
-  const message = "Take a 20-second break: look 20 feet away and blink gently.";
-  
+
   // Try to show break card in active tabs first
   const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+  let cardShown = false;
   for (const tab of tabs) {
     try {
       await chrome.tabs.sendMessage(tab.id, {
         type: 'GIA_SHOW_BREAK',
         breakType: 'short',
-        durationMs: 20000
+        durationMs: 20000,
+        tone: s.tipTone || 'mindful'
       });
+      cardShown = true;
     } catch (e) {
       // Content script not loaded on this page
     }
   }
-  
-  if (s.audioEnabled !== false) {
-    try {
-      // Use chrome.tts API with more natural voice settings
-      chrome.tts.speak(message, {
-        enqueue: false,
-        // Don't specify voiceName - let system choose best available
-        rate: 0.75,             // Much slower, more calming
-        pitch: 0.85,            // Lower pitch for warmth
-        volume: 0.8,            // Quieter, less intimidating
-        requiredEventTypes: ['end']
-      });
-    } catch (e) {
-      console.warn('TTS failed:', e);
-      // Fallback to notification
-      chrome.notifications.create(`gia-short-${Date.now()}`, {
-        type: "basic",
-        iconUrl: "assets/logo.png",
-        title: "20-20-20 break",
-        message: message,
-        silent: false
-      });
-    }
-  } else {
+
+  // If no card was shown (e.g., on a new tab page), fall back to a simple notification.
+  // The card itself handles the audio, so we only do this if the card fails.
+  if (!cardShown) {
+    const message = "Time for a 20-second break. Look 20 feet away.";
     chrome.notifications.create(`gia-short-${Date.now()}`, {
       type: "basic",
       iconUrl: "assets/logo.png",
@@ -226,17 +205,12 @@ chrome.runtime.onMessage.addListener((msg, _s, sendResponse) => {
         const message = generateBreakMessage(tone, breakType);
 
         if (sendResponse) sendResponse({ text: message });
-      } else if (msg?.type === 'GIA_START_DEMO') {
-        // Find the demo tab
-        const demoTab = await findDemoTab();
-        
-        if (!demoTab) {
-          if (sendResponse) sendResponse({ error: 'Demo tab not found' });
-          return;
-        }
-        
-        // Start the demo sequence
-        await startDemo(demoTab.id, sendResponse);
+      } else if (msg?.type === 'GIA_START_DEMO_NOW') {
+        // Use setTimeout for a near-instant demo start.
+        // This is fine for short delays after a user action.
+        setTimeout(() => {
+          runDemoStep();
+        }, 2000); // 2-second delay to allow the demo tab to open.
       }
     } catch (e) {
       console.error('Message handler error:', e);

@@ -16,7 +16,7 @@ export async function speakWithTTS(text, tone = 'mindful') {
     // Try high-quality Prompt API audio first
     if (chrome?.ai?.prompt) {
       try {
-        const prompt = `${profile.promptStyle}\n"${text}"`;
+        const prompt = `${profile.promptStyle}\n\nText to speak: "${text}"`;
 
         const res = await chrome.ai.prompt({
           prompt,
@@ -61,4 +61,3 @@ export function stopAllAudio() {
     console.warn('Could not stop audio:', e);
   }
 }
-

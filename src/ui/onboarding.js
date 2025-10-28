@@ -39,17 +39,16 @@ async function init() {
         // Wait a moment for storage to persist
         await new Promise(resolve => setTimeout(resolve, 100));
         
-        // Start the session
-        console.log('Sending GIA_RESCHEDULE message...');
-        const response = await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
-        console.log('Message response:', response);
+        // Clear any existing alarms to ensure a clean start for the demo
+        await chrome.alarms.clearAll();
         
-        // Create immediate demo alarm for quick testing
-        console.log('Creating demo alarm (30 seconds)...');
-        await chrome.alarms.create('gia-demo', { delayInMinutes: 0.5 });
-        console.log('Demo alarm created');
+        // Set the initial demo step
+        await chrome.storage.local.set({ demoStep: 1 });
         
-        // Create a demo page where the break card can be shown
+        // Send a message to the background script to start the demo sequence immediately.
+        chrome.runtime.sendMessage({ type: 'GIA_START_DEMO_NOW' });
+
+        // Open the demo page where break cards will be shown
         console.log('Opening demo page...');
         const tab = await chrome.tabs.create({ 
           url: 'ui/demo.html',
