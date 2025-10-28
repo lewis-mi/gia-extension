@@ -51,7 +51,7 @@ async function init() {
         // Open the demo page where break cards will be shown
         console.log('Opening demo page...');
         const tab = await chrome.tabs.create({ 
-          url: 'src/ui/demo.html',
+          url: chrome.runtime.getURL('src/ui/demo.html'),
           active: true 
         });
       } catch (e) {
