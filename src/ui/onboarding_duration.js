@@ -22,7 +22,6 @@ async function init() {
   const endTimeInput = document.getElementById('endTime');
   const breakLengthSelect = document.getElementById('breakLength');
   const breakFrequencySelect = document.getElementById('breakFrequency');
-  const phoneHapticsCheckbox = document.getElementById('phoneHaptics');
   
   // Toggle for longer breaks
   if (longBreaksToggle) {
@@ -59,15 +58,13 @@ async function init() {
       const endTime = endTimeInput.value;
       const breakLength = breakLengthSelect.value;
       const breakFrequency = breakFrequencySelect.value;
-      const phoneHapticsEnabled = phoneHapticsCheckbox.checked;
       
       // Save settings
       await setSettings({
         longEnabled: longBreaksEnabled,
         endTime: endTime,
         longBreakLength: parseInt(breakLength),
-        longBreakFrequency: parseInt(breakFrequency),
-        phoneHapticsEnabled: phoneHapticsEnabled
+        longBreakFrequency: parseInt(breakFrequency)
       });
       
       // Mark onboarding as complete
