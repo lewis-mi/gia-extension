@@ -25,8 +25,9 @@ Gia: The Good Intentions Assistant is based on research showing that 20-second g
 - **Privacy-First** — Runs entirely client-side, no data collection  
 
 ## Chrome Built-in AI APIs Used
-- **Prompt API (active)** — Voice command intent classification with local fallback  
-- **Additional APIs (scaffolded, disabled by default)** — Writer, Rewriter, Translator, Proofreader, Summarizer are present behind capability checks but not used in the default flow  
+- **Prompt API** ✅ **Active** — Voice command intent classification with local fallback
+- **Translator API** 🔄 **Ready** — Automatically used when users select non-English languages
+- **Additional APIs (scaffolded)** — Writer, Rewriter, Proofreader, Summarizer are implemented with capability checks but not currently called in the default flow  
 
 ## Quick Demo Mode
 Click "🚀 Try Demo" on the first onboarding screen for an immediate experience:
@@ -72,14 +73,17 @@ Meanwhile, **Gorbatova et al. (2023)** describe *banner blindness*—a learned s
 
 ## Hackathon Submission
 **Team:** Michaela Lewis  
-**API Challenge:** Chrome Built-in AI APIs (6 used)  
+**API Challenge:** Chrome Built-in AI APIs (Prompt active, Translator ready, 4 scaffolded)  
 **Problem Solved:** Digital eye strain prevention through automated 20-20-20 rule adherence  
 **Demo Video:** [Watch on Vimeo](https://vimeo.com/1131747142)  
 **Live Demo:** Use "🚀 Try Demo" button in onboarding  
 
 ## Architecture
 **Frontend:** Chrome Extension (Manifest V3)  
-**AI Layer:** Chrome Built-in AI Prompt API (active). Writer/Rewriter/Translator/Proofreader/Summarizer are scaffolded and capability-gated but off by default.  
+**AI Layer:** Chrome Built-in AI APIs
+  - Prompt API: Active for voice command classification
+  - Translator API: Ready for multilingual support when language settings changed
+  - Writer/Rewriter/Proofreader/Summarizer: Scaffolded with capability checks, ready for integration
 **State Management:** Chrome Storage API  
 **Audio:** Chrome TTS API  
 **Scheduling:** Chrome Alarms API  

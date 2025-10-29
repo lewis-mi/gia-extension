@@ -3,7 +3,7 @@
 ## 📋 Submission Checklist
 
 - [x] **Application meets requirements**: Chrome Extension using built-in AI APIs
-- [x] **Built-in AI APIs used**: Writer, Rewriter, Translator, Proofreader, Summarizer, Prompt
+- [x] **Built-in AI APIs used**: Prompt (active), Translator (ready for multilingual), Writer/Rewriter/Proofreader/Summarizer (scaffolded)
 - [x] **New project for 2025**: Yes (not submitted to 2024 hackathon)
 - [x] **Open source**: MIT License included
 - [x] **GitHub repository**: https://github.com/lewis-mi/gia-extension
@@ -23,20 +23,20 @@
 ## ✨ Features & Functionality
 
 ### **AI-Powered Break Reminders**
-- **Writer API**: Generates dynamic, context-aware break messages
-- **Rewriter API**: Adapts tone (Mindful/Goofy based on user preference)
-- **Translator API**: Multilingual support for break reminders
-- Personalized based on work duration and user tone selection
+- **Adaptive tone-based messages**: Choose "Mindful" (calm) or "Goofy" (fun) reminder styles
+- Personalized break messages with context-aware content
+- **Translator API**: Ready to translate messages when users select non-English languages
+- Currently uses curated messages optimized for each tone
 
 ### **Voice Commands**
-- **Prompt API**: Natural language intent classification
+- **Prompt API**: Active natural language intent classification
 - Users can say "snooze", "dismiss", or "start break"
-- Intent is classified using Gemini Nano locally
+- Intent is classified using Gemini Nano locally with graceful fallback
 
-### **Reflection Journaling**
-- **Proofreader API**: Cleans and improves user reflection entries
-- **Summarizer API**: Generates insights from reflection patterns
-- Privacy-first: All processing on-device
+### **Multilingual Support**
+- **Translator API**: Implemented and ready for use when language settings are changed from default
+- Language selection available in settings and onboarding
+- Falls back to English if translation unavailable
 
 ### **Additional Features**
 - 3-screen onboarding with Demo Mode for instant testing
@@ -51,109 +51,63 @@
 
 ## 🤖 Chrome Built-in AI APIs Used
 
-### **1. Writer API** (`chrome.ai.writer`)
-**Used for:** Generating dynamic, personalized break reminder messages
-
-**Location:** `ai/breakMessageGenerator.js` → `generateBreakMessage()`
-
-**How it works:**
-```javascript
-const session = await chrome.ai.writer.create({
-  systemPrompt: tonePrompt  // Mindful or Goofy assistant
-});
-const message = await session.write(
-  `Create a ${tone} reminder for a 20-second eye break...`
-);
-```
-
-**Why:** Instead of static messages, Gia generates unique, context-aware reminders that adapt to user tone preference and work duration.
-
----
-
-### **2. Rewriter API** (`chrome.ai.rewriter`)
-**Used for:** Tone adaptation of break messages
-
-**Location:** `ai/breakMessageGenerator.js` → `rewriteMessage()`
-
-**How it works:**
-```javascript
-const session = await chrome.ai.rewriter.create({
-  systemPrompt: `Adapt messages to be ${targetTone}`
-});
-const rewritten = await session.rewrite(message);
-```
-
-**Why:** Allows users to change tone preferences and have existing messages adapted accordingly.
-
----
-
-### **3. Translator API** (`chrome.ai.translator`)
-**Used for:** Multilingual break reminders
-
-**Location:** `ai/breakMessageGenerator.js` → `translateMessage()`
-
-**How it works:**
-```javascript
-const session = await chrome.ai.translator.create({
-  systemPrompt: 'Translate naturally while keeping friendly tone'
-});
-const translated = await session.translate(message);
-```
-
-**Why:** Makes Gia accessible to global users by supporting multiple languages.
-
----
-
-### **4. Proofreader API** (`chrome.ai.proofreader`)
-**Used for:** Cleaning user reflection journal entries
-
-**Location:** `ai/breakMessageGenerator.js` → `proofreadReflection()`
-
-**How it works:**
-```javascript
-const session = await chrome.ai.proofreader.create({
-  systemPrompt: 'Clean grammar and spelling while preserving voice'
-});
-const cleaned = await session.proofread(text);
-```
-
-**Why:** Improves readability of user reflections without changing their meaning or voice.
-
----
-
-### **5. Summarizer API** (`chrome.ai.summarizer`)
-**Used for:** Generating wellness insights from reflection patterns
-
-**Location:** `ai/breakMessageGenerator.js` → `summarizeReflections()`
-
-**How it works:**
-```javascript
-const session = await chrome.ai.summarizer.create({
-  systemPrompt: 'Identify key wellness patterns from reflections'
-});
-const summary = await session.summarize(combinedReflections);
-```
-
-**Why:** Helps users understand their wellness patterns without reading through all individual reflections.
-
----
-
-### **6. Prompt API** (`chrome.ai.prompt`)
+### **1. Prompt API** (`chrome.ai.prompt`) ✅ **ACTIVE**
 **Used for:** Natural language intent classification for voice commands
 
-**Location:** `content.js` → `classifyIntent()`
+**Location:** `src/content.js` → `classifyIntent()`
 
 **How it works:**
 ```javascript
 const session = await chrome.ai.prompt.create({
-  systemPrompt: "Classify voice commands into: start, snooze, or dismiss"
+  systemPrompt: "You classify user voice commands into exactly one intent: start, snooze, or dismiss."
 });
 const result = await session.prompt(
-  `Classify: "${text}" → Answer with just one word.`
+  `Classify this phrase into one of: start, snooze, dismiss\nPhrase: "${text}"\nAnswer with just one word.`
 );
 ```
 
-**Why:** Enables natural voice interaction without rigid command structures.
+**Why:** Enables natural voice interaction without rigid command structures. Falls back to basic pattern matching if API unavailable.
+
+**Status:** Currently used in production for voice command processing during breaks.
+
+---
+
+### **2. Translator API** (`chrome.ai.translator`) 🔄 **READY FOR USE**
+**Used for:** Multilingual break reminders when users select non-English languages
+
+**Location:** `src/ai/breakMessageGenerator.js` → `translateMessage()`
+
+**How it works:**
+```javascript
+const session = await chrome.ai.translator.create({
+  systemPrompt: 'Translate this message naturally while keeping the friendly tone.'
+});
+const translated = await session.translate(message);
+```
+
+**Why:** Makes Gia accessible to global users by supporting multiple languages. Automatically called when user's language setting differs from English.
+
+**Status:** Fully implemented and will be used when language settings are changed from default (English). Currently falls back gracefully if API unavailable.
+
+---
+
+### **3. Writer API** (`chrome.ai.writer`) 📦 **SCAFFOLDED**
+**Status:** Code implemented in `src/ai/breakMessageGenerator.js` with capability checks, but currently not called in default message generation flow. Ready to be integrated for dynamic message generation.
+
+---
+
+### **4. Rewriter API** (`chrome.ai.rewriter`) 📦 **SCAFFOLDED**
+**Status:** Code implemented in `src/ai/breakMessageGenerator.js` with capability checks, but currently not called. Ready to be integrated for tone adaptation functionality.
+
+---
+
+### **5. Proofreader API** (`chrome.ai.proofreader`) 📦 **SCAFFOLDED**
+**Status:** Code implemented in `src/ai/breakMessageGenerator.js` with capability checks, but currently not called. Ready to be integrated for reflection journal enhancement.
+
+---
+
+### **6. Summarizer API** (`chrome.ai.summarizer`) 📦 **SCAFFOLDED**
+**Status:** Code implemented in `src/ai/breakMessageGenerator.js` with capability checks, but currently not called. Ready to be integrated for wellness pattern insights.
 
 ---
 
@@ -194,11 +148,12 @@ const result = await session.prompt(
    - **Screen 3**: Set end time and long breaks
 
 2. Experience AI features:
-   - Dynamic break messages with audio (Writer API)
-   - Tone-based voice adaptation (Rewriter API)
+   - Tone-based break messages with adaptive audio (Mindful or Goofy styles)
+   - Voice command recognition using Prompt API ("snooze", "dismiss")
    - TTS with different rates/pitches for each tone
    - Mindful: slower (0.72x), lower pitch (0.85) for calmness
    - Goofy: normal speed (0.85x), normal pitch (0.9) for energy
+   - Language selection: Change language in settings to trigger Translator API
 
 ---
 
