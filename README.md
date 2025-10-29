@@ -2,6 +2,14 @@
 A Chrome Extension that helps users prevent digital eyestrain and cognitive fatigue by turning the 20-20-20 rule into an effortless, mindful habit.
 Every 20 minutes, Gia reminds users to look 20 feet away for 20 seconds — using perceptually optimized design and adaptive AI for personalized wellness.
 
+## 🚀 Try it out
+
+- **[📦 View on GitHub](https://github.com/lewis-mi/gia-extension)** — Browse the code and documentation
+- **[📺 Watch Demo Video](https://vimeo.com/1131747142)** — See Gia in action
+- **[⚡ Quick Install](#installation)** — Get started in 5 minutes
+
+**Installation:** Clone the repository, load it as an unpacked extension in Chrome, and click "🚀 Try Demo" for an immediate experience. See [Installation](#installation) for detailed steps.
+
 ## Overview
 Gia transforms evidence-based visual ergonomics into a seamless, AI-powered browser experience. Built with Chrome's built-in AI models, it blends behavioral science, accessibility, and human-centered design to support visual well-being without interrupting concentration.
 
@@ -17,12 +25,8 @@ Gia: The Good Intentions Assistant is based on research showing that 20-second g
 - **Privacy-First** — Runs entirely client-side, no data collection  
 
 ## Chrome Built-in AI APIs Used
-- **Prompt API** — Voice command classification ("dismiss", "snooze")  
-- **Writer API** — Dynamic text generation for break reminders  
-- **Rewriter API** — Tone adaptation of messages (Mindful vs Goofy)  
-- **Translator API** — Multilingual support  
-- **Proofreader API** — Grammar and spelling correction  
-- **Summarizer API** — Generating insights from text  
+- **Prompt API (active)** — Voice command intent classification with local fallback  
+- **Additional APIs (scaffolded, disabled by default)** — Writer, Rewriter, Translator, Proofreader, Summarizer are present behind capability checks but not used in the default flow  
 
 ## Quick Demo Mode
 Click "🚀 Try Demo" on the first onboarding screen for an immediate experience:
@@ -55,23 +59,27 @@ Meanwhile, **Gorbatova et al. (2023)** describe *banner blindness*—a learned s
 **Design takeaway:** Gia integrates evidence from eye-health research and cognitive theory to create reminders that are gentle, visible, and trustworthy—supporting focus while protecting visual comfort.
 
 ## Installation
-1. Clone this repository
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/lewis-mi/gia-extension.git
+   cd gia-extension
+   ```
 2. Open Chrome and navigate to `chrome://extensions/`  
-3. Enable “Developer mode” (toggle in top right)  
-4. Click “Load unpacked”  
-5. Select the extension folder  
+3. Enable "Developer mode" (toggle in top right)  
+4. Click "Load unpacked"  
+5. Select the `gia-extension` folder  
 6. Click "🚀 Try Demo" in the onboarding for an immediate experience  
 
 ## Hackathon Submission
 **Team:** Michaela Lewis  
 **API Challenge:** Chrome Built-in AI APIs (6 used)  
 **Problem Solved:** Digital eye strain prevention through automated 20-20-20 rule adherence  
-**Demo Video:** [Add YouTube link]  
+**Demo Video:** [Watch on Vimeo](https://vimeo.com/1131747142)  
 **Live Demo:** Use "🚀 Try Demo" button in onboarding  
 
 ## Architecture
 **Frontend:** Chrome Extension (Manifest V3)  
-**AI Layer:** Chrome Built-in AI APIs (Prompt, Writer, Rewriter, Translator, Proofreader, Summarizer)  
+**AI Layer:** Chrome Built-in AI Prompt API (active). Writer/Rewriter/Translator/Proofreader/Summarizer are scaffolded and capability-gated but off by default.  
 **State Management:** Chrome Storage API  
 **Audio:** Chrome TTS API  
 **Scheduling:** Chrome Alarms API  
@@ -92,4 +100,3 @@ Meanwhile, **Gorbatova et al. (2023)** describe *banner blindness*—a learned s
 
 ## License
 MIT
-"""

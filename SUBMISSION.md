@@ -7,7 +7,7 @@
 - [x] **New project for 2025**: Yes (not submitted to 2024 hackathon)
 - [x] **Open source**: MIT License included
 - [x] **GitHub repository**: https://github.com/lewis-mi/gia-extension
-- [ ] **Demo video**: Coming soon (to be updated)
+- [x] **Demo video**: [Watch on Vimeo](https://vimeo.com/1131747142)
 - [x] **Working demo**: Access via Quick Demo Mode below
 
 ---
@@ -245,15 +245,12 @@ MIT License - See [LICENSE](LICENSE) file
 
 ## 📺 Demo Video
 
-*Coming Soon - Will be uploaded to YouTube/Vimeo*
+**Watch the demo:** [Gia Demo on Vimeo](https://vimeo.com/1131747142)
 
-**Plan:**
-1. Install and Quick Demo Mode (30s)
-2. Show AI-generated break reminders (1m)
-3. Test voice commands (30s)
-4. Demonstrate tone switching (30s)
-5. Show reflection journaling (30s)
-6. Wrap up and closing (30s)
-
-**Total:** Under 3 minutes
+The video demonstrates:
+1. Quick installation and Demo Mode
+2. AI-powered break reminders with voice guidance
+3. Tone adaptation (Mindful vs Goofy)
+4. Voice commands and multimodal interaction
+5. Complete feature walkthrough
 
