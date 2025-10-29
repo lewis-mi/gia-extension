@@ -145,11 +145,17 @@ async function runShortBreak() {
   let cardShown = false;
   for (const tab of tabs) {
     try {
+      // Generate the message parts: a simple title and the full instruction for audio.
+      const instruction = generateBreakMessage(s.tipTone || 'mindful', 'short');
+      const title = "Take a break";
+
       await chrome.tabs.sendMessage(tab.id, {
         type: 'GIA_SHOW_BREAK',
         breakType: 'short',
         durationMs: 20000,
-        tone: s.tipTone || 'mindful'
+        tone: s.tipTone || 'mindful',
+        title: title, // Pass the simple title for display
+        instruction: instruction // Pass the full instruction for audio
       });
       cardShown = true;
     } catch (e) {

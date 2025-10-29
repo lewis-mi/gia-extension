@@ -55,7 +55,7 @@ Meanwhile, **Gorbatova et al. (2023)** describe *banner blindness*—a learned s
 **Design takeaway:** Gia integrates evidence from eye-health research and cognitive theory to create reminders that are gentle, visible, and trustworthy—supporting focus while protecting visual comfort.
 
 ## Installation
-1. Clone this repository  
+1. Clone this repository
 2. Open Chrome and navigate to `chrome://extensions/`  
 3. Enable “Developer mode” (toggle in top right)  
 4. Click “Load unpacked”  

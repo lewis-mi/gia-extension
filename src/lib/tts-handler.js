@@ -1,63 +1,44 @@
-// ===== TTS HANDLER MODULE =====
-// Handles text-to-speech with multiple fallback methods
+// ===== TTS HANDLER =====
+// Manages text-to-speech functionality with tone-specific audio profiles.
 
 import { TONE_STYLES } from '../ai/toneProfiles.js';
+import { getSettings } from './settings-storage.js';
 
 /**
- * Speak text with tone-specific voice
- * @param {string} text - Text to speak
- * @param {string} tone - Tone style ('mindful' | 'goofy')
- * @returns {Promise<object>} Response with audio data or success status
+ * Speaks a given text using Chrome's TTS engine with tone-specific settings.
+ * @param {string} text - The text to be spoken.
+ * @param {string} tone - The desired tone ('mindful' or 'goofy').
+ * @returns {Promise<{success: boolean, error?: string}>}
  */
 export async function speakWithTTS(text, tone = 'mindful') {
-  try {
-    const profile = TONE_STYLES[tone] || TONE_STYLES.mindful;
+  return new Promise(async (resolve) => {
+    const { audioEnabled, language } = await getSettings();
 
-    // Try high-quality Prompt API audio first
-    if (chrome?.ai?.prompt) {
-      try {
-        const prompt = `${profile.promptStyle}\n\nText to speak: "${text}"`;
-
-        const res = await chrome.ai.prompt({
-          prompt,
-          output_audio_format: "wav"
-        });
-
-        if (res?.output_audio) {
-          // Return audio data for content script to play
-          return {
-            success: true,
-            audioData: res.output_audio,
-            audioFormat: "wav"
-          };
-        }
-      } catch (e) {
-        console.log('Prompt API audio not available, falling back to chrome.tts');
-      }
+    // Do not speak if audio is disabled in settings
+    if (audioEnabled === false) {
+      return resolve({ success: false, error: 'Audio is disabled' });
     }
 
-    // Fallback to chrome.tts with tone-specific parameters
-    chrome.tts.speak(text, {
-      enqueue: false,
-      rate: profile.rate,
-      pitch: profile.pitch,
-      volume: profile.volume
-    });
+    // Get the audio characteristics (rate, pitch, volume) for the selected tone
+    const toneProfile = TONE_STYLES[tone] || TONE_STYLES.mindful;
 
-    return { success: true };
-  } catch (e) {
-    console.error('TTS speak error:', e);
-    return { error: e.message };
-  }
-}
+    const ttsOptions = {
+      lang: language && language !== 'auto' ? language : 'en-US',
+      rate: toneProfile.rate,
+      pitch: toneProfile.pitch,
+      volume: toneProfile.volume,
+      onEvent: (event) => {
+        if (event.type === 'end') {
+          resolve({ success: true });
+        } else if (event.type === 'error') {
+          console.error('TTS Error:', event.errorMessage);
+          resolve({ success: false, error: event.errorMessage });
+        }
+      },
+    };
 
-/**
- * Stop all currently playing TTS audio
- */
-export function stopAllAudio() {
-  try { 
-    chrome.tts.stop(); 
-  } catch (e) {
-    console.warn('Could not stop audio:', e);
-  }
+    // Stop any currently speaking audio before starting new audio
+    chrome.tts.stop();
+    chrome.tts.speak(text, ttsOptions);
+  });
 }

@@ -1,4 +1,3 @@
-const giaEnabled = document.getElementById('giaEnabled');
 const voiceEnabled = document.getElementById('voiceEnabled');
 const audioEnabled = document.getElementById('audioEnabled');
 const languageSelect = document.getElementById('languageSelect');
@@ -18,7 +17,6 @@ const quitGia = document.getElementById('quitGia');
   } = await chrome.storage.local.get(['settings']);
   
   // Load settings from storage
-  giaEnabled.checked = !settings.paused; // Invert paused to get enabled state
   voiceEnabled.checked = settings.voiceCommandsEnabled || false;
   audioEnabled.checked = settings.audioEnabled !== false;
   languageSelect.value = settings.language || 'auto';
@@ -45,24 +43,6 @@ const quitGia = document.getElementById('quitGia');
   endTime.value = settings.endTime || '18:00';
   
 })();
-
-// Enable/Disable Gia toggle
-giaEnabled.addEventListener('change', async () => {
-  const paused = !giaEnabled.checked;
-  
-  // Update the paused setting
-  const { settings = {} } = await chrome.storage.local.get(['settings']);
-  await chrome.storage.local.set({ 
-    settings: { ...settings, paused }
-  });
-  
-  // If enabling Gia, reschedule alarms; if disabling, clear them
-  if (giaEnabled.checked) {
-    await chrome.runtime.sendMessage({ type: 'GIA_RESCHEDULE' });
-  } else {
-    await chrome.runtime.sendMessage({ type: 'gia.pause' });
-  }
-});
 
 // Voice commands toggle
 voiceEnabled.addEventListener('change', async () => {
@@ -149,7 +129,7 @@ endTime.addEventListener('change', async () => {
 takeBreakNow.addEventListener('click', async () => {
   // Save all current settings
   const currentSettings = {
-    paused: !giaEnabled.checked,
+    paused: false, // Gia is always enabled from the settings popup
     voiceCommandsEnabled: voiceEnabled.checked,
     audioEnabled: audioEnabled.checked,
     language: languageSelect.value,
